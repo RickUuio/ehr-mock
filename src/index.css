@@ -23,7 +23,7 @@ code {
 
 body {
   font-family: "Poppins", sans-serif;
-  background-color: azure; /* lightgrey; */
+  background-color: lightgrey;
   height: 100%;
 }
 
@@ -47,7 +47,6 @@ body {
 
 .btn {
   display: inline-block;
-  background: #000;
   color: #fff;
   border: none;
   padding: 10px 20px;
