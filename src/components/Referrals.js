@@ -30,11 +30,12 @@ function Referrals({ onCreate, referralList, currentEncounter, sendNotificationU
           />
         ) : null}
         <div className="referralList">
+          <div className="h5 py-3">This encounter has {referralList.length > 1 ? referralList.length + ' referrals.' : referralList.length === 1 ? ' 1 referral.' : ' no referrals.'}</div>
           {referralList.length > 0
             ? referralList.map((referral, index) => (
                 <ReferralSummary key={index} referral = {referral}/>
               ))
-            : <div className="py-3">No referrals on this encounter.</div>}
+            : null}
         </div>
       </div>
     </div>

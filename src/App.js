@@ -12,20 +12,22 @@ function App() {
     dob: "10/26/1989",
     mrn: "smart-9995679",
     fhirId: "smart-9995679",
-    uuid: "3f58fa83-f730-462b-9fcf-4a0268471303",
+    uuid: "74216479-7594-413c-9835-9f00a51e5686"
   };
 
   const defaultProvider = {
     firstName: "Demo",
     lastName: "Provider",
     fhirId: "smart-Practitioner-71482713",
-    uuid: "5977d8b0-a56d-4c8a-8b64-89e4c60b16f2",
+    uuid: "94e5f7ee-1425-42bc-8833-3474b687b125",
+    groupId: "bf4aa373-81eb-4da5-9980-2d3e51c57b3c",
+    networkId: "145ca925-ba86-490d-b404-35f4fe5ada66"
   };
 
   const defaultEncounter = "smart-2";
   const defaultBaseUrl = "https://api.logicahealth.org/uufhircrn/open";
   const defaultNotificationUrl =
-    "https://fhir-crn.uniteusdev.com/v1/FhirNotificationWebService";
+    "https://fhir-crn.uniteustraining.com/rick/FhirNotificationWebService";
   const [referrals, setReferrals] = useState([]);
   const [encounters, setEncounters] = useState([]);
   const [patient, setPatient] = useState(defaultPatient);
@@ -282,7 +284,7 @@ function App() {
       method: "POST",
       headers: {
         "Content-type": "application/json",
-        "x-api-key": "wOvYlZbrIW6THlB68QcJk6UlCwNPKYHfibNCMj03",
+        "x-api-key": "sfsdfddfdsfsdfs32342343", //"wOvYlZbrIW6THlB68QcJk6UlCwNPKYHfibNCMj03",
         "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify(notification),
