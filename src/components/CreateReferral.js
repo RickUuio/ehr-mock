@@ -76,6 +76,7 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
                 >
                   <option>Select a service ...</option>
                   <option value="e281c5da-5fbd-41ea-a32e-6efc32f0a156">Clothing and Household Goods</option>
+                  <option value="f020d616-5016-4fb7-9fad-91d8d99cd7a1">Emergency Food</option>
                   <option value="f6760383-7fc4-442b-b686-fc5055bfec06">Emergency Housing</option>
                   <option value="ba3eb996-9647-453f-abe4-c04dc84c319e">Food Assistance</option>
                   <option value="5c7dec03-e340-4b48-8d4b-f24af7410a3a">Housing and Shelter</option>
