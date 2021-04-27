@@ -76,6 +76,7 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
                 >
                   <option>Select a service ...</option>
                   <option value="e281c5da-5fbd-41ea-a32e-6efc32f0a156">Clothing and Household Goods</option>
+                  <option value="f6760383-7fc4-442b-b686-fc5055bfec06">Emergency Housing</option>
                   <option value="ba3eb996-9647-453f-abe4-c04dc84c319e">Food Assistance</option>
                   <option value="5c7dec03-e340-4b48-8d4b-f24af7410a3a">Housing and Shelter</option>
                   <option value="eceb120f-4888-4c42-957f-c90fd5582f83">Transportation</option>
@@ -112,6 +113,7 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
                   <option value="ebea1516-6343-4f76-980f-a637e580cfd3">Housing California</option>
                   <option value="3491714a-aa7e-4a9c-a4d7-c8fe7c6b0bc0">River City Food Bank</option>
                   <option value="9dd692cb-4eb3-46cb-a178-ab9eda2c83f6">St. Mary's Shelter</option>
+                  <option value="8d18165d-0c32-4f82-b331-ef537f4382aa">The Food Pantries for the Capital District</option>
                 </select>
               </div>
             </div>
