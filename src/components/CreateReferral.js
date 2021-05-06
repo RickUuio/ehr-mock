@@ -166,17 +166,17 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
           </div>
         </div>
 
-        <div className="row my-2">
+        <div className="row d-inline">
           <input
             value="Cancel"
-            className="btn btn-warning d-inline float-end"
+            className="btn btn-warning col-md-6 mt-4"
             onClick={cancelReferralCreation}
             readOnly
           />
 
           <input
             value="Submit"
-            className="btn btn-primary d-inline float-end"
+            className="btn btn-primary col-md-6 mt-4"
             onClick={onSubmit}
             readOnly
           />
