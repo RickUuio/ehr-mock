@@ -37,8 +37,8 @@ const Encounters = ({ encounterList, currentEncounter = 'smart-2', changeCurrent
               <a href={encounter.fullUrl}>{encounter.resource.id} <FaCalendarCheck className={visible} /></a>
             </dt>
             <dd>
-              <div>{encounter.resource.period.start.split("T")[0]}</div>
-              <div> {encounter.resource.type[0].text}</div>
+              { <div>{encounter.resource.period.start.split("T")[0]}</div> }
+              { <div> {encounter.resource.class.display}</div> }
             </dd>
           </div>
         }

@@ -12,6 +12,7 @@ const Patient = ({patient}) => {
       <span className='badge badge-light'>Gender</span> : {patient.gender}
       </h6>
       <h6><span className='badge badge-light'>MRN</span> : {patient.mrn}</h6>
+      <h6><span className='badge badge-light'>FHIR ID</span> : {patient.fhirId}</h6>
     </div>
   );
 };

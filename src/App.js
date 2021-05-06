@@ -3,43 +3,34 @@ import Header from "./components/Header";
 import Encounters from "./components/Encounters";
 import Referrals from "./components/Referrals";
 import { useState, useEffect } from "react";
+import { Profile_Epic, Profile_Logica } from "./components/Profiles";
 
 function App() {
-  const defaultPatient = {
-    firstName: "Aaron",
-    lastName: "Alexis",
-    gender: "Male",
-    dob: "10/26/1989",
-    mrn: "smart-9995679",
-    fhirId: "smart-9995679",
-    uuid: "74216479-7594-413c-9835-9f00a51e5686"
-  };
-
-  const defaultProvider = {
-    firstName: "Demo",
-    lastName: "Provider",
-    fhirId: "smart-Practitioner-71482713",
-    uuid: "94e5f7ee-1425-42bc-8833-3474b687b125",
-    groupId: "bf4aa373-81eb-4da5-9980-2d3e51c57b3c",
-    networkId: "145ca925-ba86-490d-b404-35f4fe5ada66"
-  };
-
-  const defaultEncounter = "smart-2";
-  const defaultBaseUrl = "https://api.logicahealth.org/uufhircrn/open";
-  const defaultNotificationUrl =
-    "https://fhir-crn.uniteustraining.com/rick/FhirNotificationWebService";
+  const defaultProfile = Profile_Epic;
+  const [profile, setProfile] = useState(defaultProfile);
+  const [patient, setPatient] = useState(profile.defaultPatient);
+  const [provider, setProvider] = useState(profile.defaultProvider);
+  const [currentEncounter, setCurrentEncounter] = useState();
   const [referrals, setReferrals] = useState([]);
   const [encounters, setEncounters] = useState([]);
-  const [patient, setPatient] = useState(defaultPatient);
-  const [provider, setProvider] = useState(defaultProvider);
-  const [currentEncounter, setCurrentEncounter] = useState(defaultEncounter);
+
+  let defaultBaseUrl = profile.defaultBaseUrl;
+  let defaultNotificationUrl = profile.defaultNotificationUrl;
+  let accessToken = profile.accessToken;
+
+  const switchProfile = (profileName) => {
+    console.log("Switch to profile: ", profileName);
+    profileName === "Logica"
+      ? setProfile(Profile_Logica)
+      : setProfile(Profile_Epic);
+  };
 
   // Create a referral
   const createReferral = async (referral) => {
     console.log("create referral: ", referral);
     const nowISO = new Date().toISOString();
 
-    let url = "https://api.logicahealth.org/uufhircrn/open/ServiceRequest";
+    let url = defaultBaseUrl + "/ServiceRequest";
     let resource = {
       resourceType: "ServiceRequest",
       status: "active",
@@ -97,7 +88,7 @@ function App() {
     let newId = data.id;
     console.log("server request id: ", newId);
 
-    url = "https://api.logicahealth.org/uufhircrn/open/Task";
+    url = defaultBaseUrl + "/Task";
     resource = {
       resourceType: "Task",
       basedOn: [
@@ -168,28 +159,47 @@ function App() {
       baseUrl +
       "/Task?encounter=" +
       encounterId +
-      "&_include=Task%3Afor%3APatient&_include=Task%3Aencounter&_include=Task%3Arequester&_include=Task%3Abased-on%3AServiceRequest";
+      "&_include=Task%3Afor%3APatient&_include=Task%3Aencounter&_include=Task%3Arequester&_include=Task%3A" + 
+      (profile.name === "Epic" ? "basedon" : "based-on") + 
+      "%3AServiceRequest&_include=Task%3Aowner%3AOrganization";
 
     const res = await fetch(url, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
         Accept: "application/json",
+        Authorization: accessToken.length > 0 ? "bearer " + accessToken : "",
       },
     });
     const data = await res.json();
+    let entryList = data.total === 0 ? [] : data.entry;
+    if (!entryList) return [];
+    console.log("Task bundle received: ", entryList);
+
+    // //_include works at Epic, no need to fetch ServiceRequest seperatedly
+    // const url2 = baseUrl + "/ServiceRequest?encounter=" + encounterId;
+    // const res2 = await fetch(url2, {
+    //   method: "GET",
+    //   headers: {
+    //     "Content-type": "application/json",
+    //     Accept: "application/json",
+    //     Authorization: accessToken.length > 0 ? "bearer " + accessToken : "",
+    //   },
+    // });
+    // const data2 = await res2.json();
+    // let entryList2 = data2.total === 0 ? [] : data2.entry;
+    // entryList = entryList.concat(entryList2);
 
     //filter ServiceRequest and Task
-    let entryList = data.total === 0 ? [] : data.entry;
-    if (entryList.length > 0) {
-      entryList = entryList.filter((entry) => {
-        return (
-          entry.resource.resourceType === "ServiceRequest" ||
-          entry.resource.resourceType === "Task"
-        );
-      });
-    }
-    const referralList = [];
+    // if (entryList.length > 0) {
+    //   entryList = entryList.filter((entry) => {
+    //     return (
+    //       entry.resource.resourceType === "ServiceRequest" ||
+    //       entry.resource.resourceType === "Task"
+    //     );
+    //   });
+    // }
+    let referralList = [];
     entryList.forEach((entry, index) => {
       if (entry.resource.resourceType === "ServiceRequest") {
         let referral = {
@@ -212,14 +222,14 @@ function App() {
       }
     });
 
+    referralList = referralList.filter((entry) => {
+      return entry.Task;
+    });
+
     console.log("referral list", referralList);
     referralList.sort((a, b) => {
-      const timeA = new Date(
-        a.ServiceRequest.resource.meta.lastUpdated
-      ).getTime();
-      const timeB = new Date(
-        b.ServiceRequest.resource.meta.lastUpdated
-      ).getTime();
+      const timeA = new Date(a.ServiceRequest.resource.authoredOn).getTime();
+      const timeB = new Date(b.ServiceRequest.resource.authoredOn).getTime();
       return timeB - timeA;
     });
     return referralList;
@@ -235,6 +245,7 @@ function App() {
       headers: {
         "Content-type": "application/json",
         Accept: "application/json",
+        Authorization: accessToken.length > 0 ? "bearer " + accessToken : "",
       },
     });
     const data = await res.json();
@@ -265,7 +276,10 @@ function App() {
   };
 
   const getEncounters = async () => {
-    const data = await fetchEncounters();
+    const data = await fetchEncounters(
+      profile.defaultBaseUrl,
+      profile.defaultPatient.fhirId
+    );
     setEncounters(data);
   };
 
@@ -285,7 +299,6 @@ function App() {
       headers: {
         "Content-type": "application/json",
         "x-api-key": "sfsdfddfdsfsdfs32342343", //"wOvYlZbrIW6THlB68QcJk6UlCwNPKYHfibNCMj03",
-        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify(notification),
     });
@@ -294,19 +307,46 @@ function App() {
     return data;
   };
 
+  const getAccessToken = async () => {
+    const url =
+      "https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/authentication/token";
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        "Accept": "application/json",
+        "x-api-key": "sfsdfddfdsfsdfs32342343", //"wOvYlZbrIW6THlB68QcJk6UlCwNPKYHfibNCMj03",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        privateKey: null
+      }),
+    });
+    const data = await res.json();
+    profile.accessToken = data.body.access_token;
+    console.log("access token ", profile.accessToken);
+  };
+
   useEffect(() => {
-    setPatient(defaultPatient);
-    setProvider(defaultProvider);
-    setCurrentEncounter("smart-2");
+    //setProfile(Profile_Epic);
+    setPatient(profile.defaultPatient);
+    setProvider(profile.defaultProvider);
+    if (profile.name === "Epic") getAccessToken();
     getEncounters();
-    getReferrals();
-    const now = new Date();
-    console.log("now is ", new Date().toISOString(), now);
-  }, []);
+    if (encounters.length > 0) {
+      setCurrentEncounter(encounters[0].resource.id);
+      getReferrals();
+    }
+  }, [profile]);
 
   return (
     <div className="App">
-      <Header patient={patient} provider={provider} />
+      <Header
+        patient={patient}
+        provider={provider}
+        profileName={profile.name}
+        switchProfile={switchProfile}
+      />
       <div className="row mt-1 mx-0">
         <Encounters
           encounterList={encounters}
@@ -319,6 +359,7 @@ function App() {
           referralList={referrals}
           currentEncounter={currentEncounter}
           sendNotificationUU={sendNotificationUU}
+          profileName={profile.name}
         />
       </div>
     </div>

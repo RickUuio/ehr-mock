@@ -2,7 +2,8 @@ const EncounterSummary = ({
   toggleShowNewReferral,
   showNewReferral,
   currentEncounter,
-  sendNotificationUU
+  sendNotificationUU,
+  profileName,
 }) => {
   const toggle = () => {
     toggleShowNewReferral();
@@ -15,19 +16,25 @@ const EncounterSummary = ({
 
   return (
     <div className="encounterSummary">
-        <div className="h4 pt-2 d-inline-block">Current Encounter: {currentEncounter}</div>
+      <div className="h4 pt-2 d-inline-block">
+        Current Encounter: {currentEncounter}
+      </div>
       <div
-        className="btn btn-primary d-inline float-right"
+        className="btn btn-primary d-inline float-end"
         onClick={sendNotification}
       >
         Send Notification to Unite Us
       </div>
       {!showNewReferral ? (
-        <div className="btn btn-primary d-inline float-right" onClick={toggle}>
+        <button
+          className="btn btn-primary d-inline float-end"
+          onClick={toggle}
+          disabled = {profileName === 'Epic'}
+        >
           Create new referral
-        </div>
+        </button>
       ) : (
-        <div className="btn btn-warning d-inline float-right" onClick={toggle}>
+        <div className="btn btn-warning d-inline float-end" onClick={toggle}>
           Cancel New Referral
         </div>
       )}

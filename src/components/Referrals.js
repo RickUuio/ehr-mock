@@ -3,7 +3,7 @@ import CreateReferral from "./CreateReferral";
 import { useState } from "react";
 import ReferralSummary from "./ReferralSummary";
 
-function Referrals({ onCreate, referralList, currentEncounter, sendNotificationUU }) {
+function Referrals({ onCreate, referralList, currentEncounter, sendNotificationUU, profileName }) {
   const [showNewReferral, setShowNewReferral] = useState(false);
 
   const toggleShowNewReferral = () => {
@@ -22,6 +22,7 @@ function Referrals({ onCreate, referralList, currentEncounter, sendNotificationU
           showNewReferral={showNewReferral}
           currentEncounter={currentEncounter}
           sendNotificationUU={sendNotificationUU}
+          profileName={profileName}
         />
         {showNewReferral ? (
           <CreateReferral

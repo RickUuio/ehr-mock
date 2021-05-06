@@ -70,6 +70,10 @@ body {
   width: 100%;
 }
 
+.btn-check {
+  padding-top: 10px;
+}
+
 .task {
   background: #f4f4f4;
   margin: 5px;
