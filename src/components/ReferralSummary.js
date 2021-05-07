@@ -91,9 +91,6 @@ function ReferralSummary({ referral }) {
           <Button variant="warning" onClick={closeWindow}>
             Close
           </Button>
-          <Button variant="primary" onClick={closeWindow}>
-            Save Changes
-          </Button>
         </Modal.Footer>
       </Modal>
     </>
