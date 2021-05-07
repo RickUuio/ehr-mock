@@ -308,24 +308,24 @@ function App() {
     return encounterList;
   };
 
-  const fetchCommunications = (referralId, baseUrl) => {
-    const url =
-    referralBaseUrl +
-    "/Task?encounter=" +
-    encounterId +
-    "&_include=Task%3Apatient&_include=Task%3Aencounter&_include=Task%3Arequester&_include=Task%3A" +
-    "based-on" +  //(currentProfileName === "Epic" ? "basedon" : "based-on") + "%3AServiceRequest" +
-    "&_include=Task%3Aowner%3AOrganization";
+  const fetchCommunications = async (referralId, baseUrl) => {
+  //   const url =
+  //   referralBaseUrl +
+  //   "/Task?encounter=" +
+  //   encounterId +
+  //   "&_include=Task%3Apatient&_include=Task%3Aencounter&_include=Task%3Arequester&_include=Task%3A" +
+  //   "based-on" +  //(currentProfileName === "Epic" ? "basedon" : "based-on") + "%3AServiceRequest" +
+  //   "&_include=Task%3Aowner%3AOrganization";
 
-  const res = await fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-type": "application/json",
-      Accept: "application/json",
-      Authorization: accessToken?.length > 0 ? "bearer " + accessToken : "",
-    },
-  });
-  const data = await res.json();
+  // const res = await fetch(url, {
+  //   method: "GET",
+  //   headers: {
+  //     "Content-type": "application/json",
+  //     Accept: "application/json",
+  //     Authorization: accessToken?.length > 0 ? "bearer " + accessToken : "",
+  //   },
+  // });
+  // const data = await res.json();
   }
 
   const changeCurrentEncounter = async (encounterSelected, currentBaseUrl) => {
