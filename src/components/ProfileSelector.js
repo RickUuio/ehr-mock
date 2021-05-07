@@ -6,14 +6,14 @@ const ProfileSelector = ({ profileName, switchProfile }) => {
         className="btn-check"
         name="btnradio"
         id="profileEpic"
-        autocomplete="off"
-        checked={profileName === "Epic"}
+        autoComplete="off"
+        defaultChecked={profileName === "Epic"}
         onClick={() => {
           profileName = "Epic";
           switchProfile("Epic");
         }}
       />
-      <label class="btn btn-outline-danger" for="profileEpic">
+      <label class="btn btn-outline-danger" htmlFor="profileEpic">
         Epic AppOrchard
       </label>
 
@@ -22,14 +22,14 @@ const ProfileSelector = ({ profileName, switchProfile }) => {
         className="btn-check"
         name="btnradio"
         id="profileLogica"
-        autocomplete="off"
-        checked={profileName === "Logica"}
+        autoComplete="off"
+        defaultChecked={profileName === "Logica"}
         onClick={() => {
           profileName = "Logica";
           switchProfile("Logica");
         }}
       />
-      <label class="btn btn-outline-info" for="profileLogica">
+      <label className="btn btn-outline-info" htmlFor="profileLogica">
         Logica Health
       </label>
     </div>

@@ -7,22 +7,45 @@ import { Profile_Epic, Profile_Logica } from "./components/Profiles";
 
 function App() {
   const defaultProfile = Profile_Epic;
-  const [profile, setProfile] = useState(defaultProfile);
-  const [patient, setPatient] = useState(profile.defaultPatient);
-  const [provider, setProvider] = useState(profile.defaultProvider);
-  const [currentEncounter, setCurrentEncounter] = useState();
+  const defaultProfileName = defaultProfile.name;
+  const [currentProfileName, setCurrentProfileName] = useState(
+    defaultProfileName
+  );
+  //const [profile, setProfile] = useState(defaultProfile);
+  const [patient, setPatient] = useState(defaultProfile.defaultPatient);
+  const [provider, setProvider] = useState(defaultProfile.defaultProvider);
+  const [currentEncounter, setCurrentEncounter] = useState(
+    defaultProfile.defaultEncounter
+  );
+  const [accessToken, setAccessToken] = useState(defaultProfile.access_token);
+  const [baseUrl, setBaseUrl] = useState(defaultProfile.defaultBaseUrl);
+  const [notificationUrl, setNotificationUrl] = useState(
+    defaultProfile.defaultNotificationUrl
+  );
   const [referrals, setReferrals] = useState([]);
   const [encounters, setEncounters] = useState([]);
 
-  let defaultBaseUrl = profile.defaultBaseUrl;
-  let defaultNotificationUrl = profile.defaultNotificationUrl;
-  let accessToken = profile.accessToken;
+  const switchProfile = async (profileName) => {
+    //if (profileName === currentProfileName) return
 
-  const switchProfile = (profileName) => {
     console.log("Switch to profile: ", profileName);
-    profileName === "Logica"
-      ? setProfile(Profile_Logica)
-      : setProfile(Profile_Epic);
+    setCurrentProfileName(profileName);
+    const newProfile = profileName === "Logica" ? Profile_Logica : Profile_Epic;
+    setPatient(newProfile.defaultPatient);
+    setProvider(newProfile.defaultProvider);
+    setBaseUrl(newProfile.defaultBaseUrl);
+    setNotificationUrl(newProfile.defaultNotificationUrl);
+    if (newProfile.name === "Epic") {
+      let token = await getAccessToken();
+      setAccessToken(token);
+    } else setAccessToken(newProfile.accessToken);
+  };
+
+  const refreshProfileSettings = async () => {
+    const encounterList = await getEncounters(patient.fhirId, baseUrl);
+    if (encounterList?.length > 0) {
+      await changeCurrentEncounter(encounterList[0].resource.id, baseUrl);
+    }
   };
 
   // Create a referral
@@ -30,7 +53,7 @@ function App() {
     console.log("create referral: ", referral);
     const nowISO = new Date().toISOString();
 
-    let url = defaultBaseUrl + "/ServiceRequest";
+    let url = baseUrl + "/ServiceRequest";
     let resource = {
       resourceType: "ServiceRequest",
       status: "active",
@@ -88,7 +111,7 @@ function App() {
     let newId = data.id;
     console.log("server request id: ", newId);
 
-    url = defaultBaseUrl + "/Task";
+    url = baseUrl + "/Task";
     resource = {
       resourceType: "Task",
       basedOn: [
@@ -146,29 +169,27 @@ function App() {
     newId = data.id;
     console.log("Task id: ", newId);
 
-    data = await fetchReferrals();
-    console.log("new referral list: ", data);
-    setReferrals(data);
+    await getReferrals();
   };
 
   const fetchReferrals = async (
-    baseUrl = defaultBaseUrl,
-    encounterId = currentEncounter
+    encounterId = currentEncounter,
+    referralBaseUrl = baseUrl
   ) => {
     const url =
-      baseUrl +
+      referralBaseUrl +
       "/Task?encounter=" +
       encounterId +
-      "&_include=Task%3Afor%3APatient&_include=Task%3Aencounter&_include=Task%3Arequester&_include=Task%3A" + 
-      (profile.name === "Epic" ? "basedon" : "based-on") + 
-      "%3AServiceRequest&_include=Task%3Aowner%3AOrganization";
+      "&_include=Task%3Apatient&_include=Task%3Aencounter&_include=Task%3Arequester&_include=Task%3A" +
+      "based-on" +  //(currentProfileName === "Epic" ? "basedon" : "based-on") + "%3AServiceRequest" +
+      "&_include=Task%3Aowner%3AOrganization";
 
     const res = await fetch(url, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
         Accept: "application/json",
-        Authorization: accessToken.length > 0 ? "bearer " + accessToken : "",
+        Authorization: accessToken?.length > 0 ? "bearer " + accessToken : "",
       },
     });
     const data = await res.json();
@@ -199,32 +220,58 @@ function App() {
     //     );
     //   });
     // }
+
+    // First take all the Task
     let referralList = [];
     entryList.forEach((entry, index) => {
-      if (entry.resource.resourceType === "ServiceRequest") {
+      if (entry.resource.resourceType === "Task") {
         let referral = {
-          id: "ServiceRequest/" + entry.resource.id,
-          ServiceRequest: entry,
+          id: "Task/" + entry.resource.id,
+          Task: entry,
         };
         referralList.push(referral);
       }
     });
 
-    entryList.forEach((entry, index) => {
-      if (entry.resource.resourceType === "Task") {
-        let serviceRequestId = entry.resource.basedOn[0].reference;
-        let referral = referralList.find((entry, index) => {
-          return entry.id === serviceRequestId;
-        });
-        if (referral) {
-          referral.Task = entry;
+    referralList.forEach((referral, index) => {
+      const resource = referral?.Task?.resource;
+      if (!resource) return;
+
+      const patientId = resource.for?.reference;
+      const serviceRequestId = resource.basedOn[0].reference;
+      const practitionerId = resource.requester?.reference;
+      const organizationId = resource.owner?.reference;
+
+      entryList.forEach((entry, index) => {
+        let entryId = entry.resource.id;
+        switch (entry.resource.resourceType) {
+          case "ServiceRequest": {
+            if (serviceRequestId === `ServiceRequest/${entryId}`)
+              referral.ServiceRequest = entry;
+            break;
+          }
+          case "Patient": {
+            if (patientId === `Patient/${entryId}`) referral.Patient = entry;
+            break;
+          }
+          case "Organization": {
+            if (organizationId === `Organization/${entryId}`)
+              referral.Organization = entry;
+            break;
+          }
+          case "Practitioner": {
+            if (practitionerId === `Practitioner/${entryId}`)
+              referral.Practitioner = entry;
+            break;
+          }
+          default:
         }
-      }
+      });
     });
 
-    referralList = referralList.filter((entry) => {
-      return entry.Task;
-    });
+    //referralList = referralList.filter((entry) => {
+    //  return entry.Task;
+    //});
 
     console.log("referral list", referralList);
     referralList.sort((a, b) => {
@@ -236,16 +283,16 @@ function App() {
   };
 
   const fetchEncounters = async (
-    baseUrl = defaultBaseUrl,
-    patientId = patient.fhirId
+    patientId = patient.fhirId,
+    encounterBaseUrl = baseUrl
   ) => {
-    const url = baseUrl + "/Encounter?patient=" + patientId;
+    const url = encounterBaseUrl + "/Encounter?patient=" + patientId;
     const res = await fetch(url, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
         Accept: "application/json",
-        Authorization: accessToken.length > 0 ? "bearer " + accessToken : "",
+        Authorization: accessToken?.length > 0 ? "bearer " + accessToken : "",
       },
     });
     const data = await res.json();
@@ -261,36 +308,33 @@ function App() {
     return encounterList;
   };
 
-  const changeCurrentEncounter = async (encounterSelected) => {
+  const changeCurrentEncounter = async (encounterSelected, currentBaseUrl) => {
     if (encounterSelected === currentEncounter) return;
 
     setCurrentEncounter(encounterSelected);
-    const data = await fetchReferrals(defaultBaseUrl, encounterSelected);
-    setReferrals(data);
+    await getReferrals(encounterSelected, currentBaseUrl);
     return;
   };
 
-  const getReferrals = async () => {
-    const data = await fetchReferrals();
+  const getReferrals = async (encounterSelected, referralBaseUrl) => {
+    const data = await fetchReferrals(encounterSelected, referralBaseUrl);
     setReferrals(data);
   };
 
-  const getEncounters = async () => {
-    const data = await fetchEncounters(
-      profile.defaultBaseUrl,
-      profile.defaultPatient.fhirId
-    );
+  const getEncounters = async (patientId, encounterBaseUrl) => {
+    const data = await fetchEncounters(patientId, encounterBaseUrl);
     setEncounters(data);
+    return data;
   };
 
   const sendNotificationUU = async () => {
-    const url = defaultNotificationUrl;
+    const url = notificationUrl;
     const notification = {
       resourceType: "Bundle",
       type: "Event",
       entry: [
         {
-          fullUrl: defaultBaseUrl + "/Encounter/" + currentEncounter,
+          fullUrl: baseUrl + "/Encounter/" + currentEncounter,
         },
       ],
     };
@@ -314,37 +358,42 @@ function App() {
       method: "POST",
       headers: {
         "Content-type": "application/json",
-        "Accept": "application/json",
+        Accept: "application/json",
         "x-api-key": "sfsdfddfdsfsdfs32342343", //"wOvYlZbrIW6THlB68QcJk6UlCwNPKYHfibNCMj03",
         "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify({
-        privateKey: null
+        privateKey: null,
       }),
     });
     const data = await res.json();
-    profile.accessToken = data.body.access_token;
-    console.log("access token ", profile.accessToken);
+    const token = data.body.access_token;
+    console.log("access token ", token);
+    return token;
   };
 
   useEffect(() => {
-    //setProfile(Profile_Epic);
-    setPatient(profile.defaultPatient);
-    setProvider(profile.defaultProvider);
-    if (profile.name === "Epic") getAccessToken();
-    getEncounters();
-    if (encounters.length > 0) {
-      setCurrentEncounter(encounters[0].resource.id);
-      getReferrals();
-    }
-  }, [profile]);
+    const setProfile = async (profileName) => {
+      await switchProfile(profileName);
+    };
+
+    setProfile(defaultProfileName);
+  }, []);
+
+  useEffect(() => {
+    const updateFhir = async () => {
+      await refreshProfileSettings();
+    };
+
+    updateFhir();
+  }, [accessToken]);
 
   return (
     <div className="App">
       <Header
         patient={patient}
         provider={provider}
-        profileName={profile.name}
+        profileName={currentProfileName}
         switchProfile={switchProfile}
       />
       <div className="row mt-1 mx-0">
@@ -359,7 +408,7 @@ function App() {
           referralList={referrals}
           currentEncounter={currentEncounter}
           sendNotificationUU={sendNotificationUU}
-          profileName={profile.name}
+          profileName={currentProfileName}
         />
       </div>
     </div>

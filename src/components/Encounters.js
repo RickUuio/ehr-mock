@@ -1,4 +1,4 @@
-import {FcRefresh, FcCalendar} from 'react-icons/fc'
+import {FcRefresh} from 'react-icons/fc'
 import {FaCalendarCheck} from 'react-icons/fa'
 
 const Encounters = ({ encounterList, currentEncounter = 'smart-2', changeCurrentEncounter, refreshEncounters }) => {
