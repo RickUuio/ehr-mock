@@ -274,7 +274,7 @@ function App() {
     for (let referral of referralList) {
       const referralId = referral?.Task?.resource?.id;
       const communications = await fetchCommunications(referralId);
-      referral.Communication = communications;
+      referral.Communication = communications.entry;
     };
 
     //referralList = referralList.filter((entry) => {
@@ -330,7 +330,7 @@ function App() {
     });
     const data = await res.json();
     console.log("communications: ", data);
-    return data.entry;
+    return data;
   };
 
   const changeCurrentEncounter = async (encounterSelected, currentBaseUrl) => {

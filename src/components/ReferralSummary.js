@@ -74,7 +74,7 @@ function ReferralSummary({ referral }) {
                 </td>
               </tr>
             ) : null}
-            {referral.Communication.map((communication, index) => {
+            {referral.Communication?.map((communication, index) => {
               return (
                 <tr>
                   <th scoope="row">{communication.resource.resourceType}</th>
