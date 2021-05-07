@@ -277,6 +277,12 @@ function App() {
       referral.Communication = communications.entry;
     };
 
+    // Fetch DocumentReferences for each ServiceRequest
+    for (let referral of referralList) {
+      const documentReferences = await fetchDocumentReferences(referral);
+      if (documentReferences?.length > 0) referral.DocumentReference = documentReferences;
+    }
+
     //referralList = referralList.filter((entry) => {
     //  return entry.Task;
     //});
@@ -331,6 +337,31 @@ function App() {
     const data = await res.json();
     console.log("communications: ", data);
     return data;
+  };
+
+  // Fetch DocumentReferences for a ServiceRequest
+  const fetchDocumentReferences = async (referral) => {
+    const documentList = [];
+    const supportingInfo = referral?.ServiceRequest?.resource?.supportingInfo;
+
+    if (!supportingInfo) return documentList;
+
+    for (let entry of supportingInfo) {
+      const url = baseUrl + "/" + entry.reference
+      const res = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          Accept: "application/json",
+          Authorization: accessToken?.length > 0 ? "bearer " + accessToken : "",
+        },
+      });
+      const data = await res.json();
+      console.log("documentReference: ", data);
+      if (data?.resourceType === 'DocumentReference') documentList.push(data)
+    }
+
+    return documentList;
   };
 
   const changeCurrentEncounter = async (encounterSelected, currentBaseUrl) => {

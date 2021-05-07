@@ -18,7 +18,7 @@ const Encounters = ({ encounterList, currentEncounter = 'smart-2', changeCurrent
         onClick={refresh}
       >
         All Encounters
-        <div className="badge badge-primary mx-2">{encounterList.length}</div>
+        <div className="badge bg-primary mx-2">{encounterList.length}</div>
         <FcRefresh />
       </div>
 

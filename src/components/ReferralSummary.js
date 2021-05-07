@@ -26,7 +26,7 @@ function ReferralSummary({ referral }) {
                 <button
                   type="button"
                   className="btn btn-link"
-                  onClick={() => showSource(referral.ServiceRequest)}
+                  onClick={() => showSource(referral.ServiceRequest.resource)}
                 >
                   {referral.ServiceRequest.resource.id} <IoOpenOutline />
                 </button>
@@ -38,12 +38,26 @@ function ReferralSummary({ referral }) {
                 <button
                   type="button"
                   className="btn btn-link"
-                  onClick={() => showSource(referral.Task)}
+                  onClick={() => showSource(referral.Task.resource)}
                 >
                   {referral.Task.resource.id} <IoOpenOutline />
                 </button>
               </td>
             </tr>
+            {referral.Organization ? (
+              <tr>
+                <th scoope="row">{referral.Organization.resource.resourceType}</th>
+                <td>
+                  <button
+                    type="button"
+                    className="btn btn-link"
+                    onClick={() => showSource(referral.Organization.resource)}
+                  >
+                    {referral.Organization.resource.id} <IoOpenOutline />
+                  </button>
+                </td>
+              </tr>
+            ) : null}
             {referral.Patient ? (
               <tr>
                 <th scoope="row">{referral.Patient.resource.resourceType}</th>
@@ -51,7 +65,7 @@ function ReferralSummary({ referral }) {
                   <button
                     type="button"
                     className="btn btn-link"
-                    onClick={() => showSource(referral.Patient)}
+                    onClick={() => showSource(referral.Patient.resource)}
                   >
                     {referral.Patient.resource.id} <IoOpenOutline />
                   </button>
@@ -67,7 +81,7 @@ function ReferralSummary({ referral }) {
                   <button
                     type="button"
                     className="btn btn-link"
-                    onClick={() => showSource(referral.Practitioner)}
+                    onClick={() => showSource(referral.Practitioner.resource)}
                   >
                     {referral.Practitioner.resource.id} <IoOpenOutline />
                   </button>
@@ -76,15 +90,31 @@ function ReferralSummary({ referral }) {
             ) : null}
             {referral.Communication?.map((communication, index) => {
               return (
-                <tr>
+                <tr key={index}>
                   <th scoope="row">{communication.resource.resourceType}</th>
                   <td>
                     <button
                       type="button"
                       className="btn btn-link"
-                      onClick={() => showSource(communication)}
+                      onClick={() => showSource(communication.resource)}
                     >
                       {communication.resource.id} <IoOpenOutline />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+            {referral.DocumentReference?.map((documentReference, index) => {
+              return (
+                <tr key={index}>
+                  <th scoope="row">{documentReference.resourceType}</th>
+                  <td>
+                    <button
+                      type="button"
+                      className="btn btn-link"
+                      onClick={() => showSource(documentReference)}
+                    >
+                      {documentReference.id} <IoOpenOutline />
                     </button>
                   </td>
                 </tr>
@@ -97,7 +127,7 @@ function ReferralSummary({ referral }) {
       <Modal size="lg" show={show} onHide={closeWindow}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {fullJson?.resource.resourceType} : {fullJson?.resource.id}
+            {fullJson?.resourceType} : {fullJson?.id}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
