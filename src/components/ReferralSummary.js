@@ -74,6 +74,22 @@ function ReferralSummary({ referral }) {
                 </td>
               </tr>
             ) : null}
+            {referral.Communication.map((communication, index) => {
+              return (
+                <tr>
+                  <th scoope="row">{communication.resource.resourceType}</th>
+                  <td>
+                    <button
+                      type="button"
+                      className="btn btn-link"
+                      onClick={() => showSource(communication)}
+                    >
+                      {communication.resource.id} <IoOpenOutline />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

@@ -181,7 +181,7 @@ function App() {
       "/Task?encounter=" +
       encounterId +
       "&_include=Task%3Apatient&_include=Task%3Aencounter&_include=Task%3Arequester&_include=Task%3A" +
-      "based-on" +  //(currentProfileName === "Epic" ? "basedon" : "based-on") + "%3AServiceRequest" +
+      "based-on" + //(currentProfileName === "Epic" ? "basedon" : "based-on") + "%3AServiceRequest" +
       "&_include=Task%3Aowner%3AOrganization";
 
     const res = await fetch(url, {
@@ -221,7 +221,7 @@ function App() {
     //   });
     // }
 
-    // First take all the Task
+    // Take all the Task
     let referralList = [];
     entryList.forEach((entry, index) => {
       if (entry.resource.resourceType === "Task") {
@@ -233,6 +233,7 @@ function App() {
       }
     });
 
+    // Group the other resources with the Task
     referralList.forEach((referral, index) => {
       const resource = referral?.Task?.resource;
       if (!resource) return;
@@ -268,6 +269,13 @@ function App() {
         }
       });
     });
+
+    // Fetch Communications for each Task
+    for (let referral of referralList) {
+      const referralId = referral?.Task?.resource?.id;
+      const communications = await fetchCommunications(referralId);
+      referral.Communication = communications;
+    };
 
     //referralList = referralList.filter((entry) => {
     //  return entry.Task;
@@ -308,25 +316,22 @@ function App() {
     return encounterList;
   };
 
-  const fetchCommunications = async (referralId, baseUrl) => {
-  //   const url =
-  //   referralBaseUrl +
-  //   "/Task?encounter=" +
-  //   encounterId +
-  //   "&_include=Task%3Apatient&_include=Task%3Aencounter&_include=Task%3Arequester&_include=Task%3A" +
-  //   "based-on" +  //(currentProfileName === "Epic" ? "basedon" : "based-on") + "%3AServiceRequest" +
-  //   "&_include=Task%3Aowner%3AOrganization";
+  // Fetch Communications for a Task
+  const fetchCommunications = async (taskId) => {
+    const url = baseUrl + "/Communication?part-of=" + taskId;
 
-  // const res = await fetch(url, {
-  //   method: "GET",
-  //   headers: {
-  //     "Content-type": "application/json",
-  //     Accept: "application/json",
-  //     Authorization: accessToken?.length > 0 ? "bearer " + accessToken : "",
-  //   },
-  // });
-  // const data = await res.json();
-  }
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Accept: "application/json",
+        Authorization: accessToken?.length > 0 ? "bearer " + accessToken : "",
+      },
+    });
+    const data = await res.json();
+    console.log("communications: ", data);
+    return data.entry;
+  };
 
   const changeCurrentEncounter = async (encounterSelected, currentBaseUrl) => {
     //if (encounterSelected === currentEncounter) return;
