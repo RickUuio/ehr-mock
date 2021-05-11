@@ -179,6 +179,44 @@ function ReferralSummary({ referral }) {
               </tr>
             ) : null}
 
+            {referral.Consent?.map((consent, index) => {
+              return (
+                <tr key={index}>
+                  <th scoope="row">
+                    <button
+                      type="button"
+                      className="btn btn-link"
+                      onClick={() => showSource(consent.resource)}
+                    >
+                      {consent.resource.resourceType}
+                      <IoOpenOutline />
+                    </button>
+                  </th>
+                  <td>
+                    <span>
+                      Consent status is{" "}
+                      <div className="btn btn-outline-primary disabled">
+                        {consent.resource.status}
+                      </div>
+                      . Scope is{" "}
+                      <div className="btn btn-outline-primary disabled">
+                        {consent.resource.scope?.text}
+                      </div>.
+                      {" "}Provision period is from 
+                      <div className="btn btn-outline-primary disabled">
+                        {consent.resource.provision?.period?.start}
+                      </div>
+                       to 
+                       <div className="btn btn-outline-primary disabled">
+                        {consent.resource.provision?.period?.end}
+                      </div>
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
+
+
             {referral.DocumentReference?.map((documentReference, index) => {
               return (
                 <tr key={index}>

@@ -275,17 +275,26 @@ function App() {
       const referralId = referral?.Task?.resource?.id;
       const communications = await fetchCommunications(referralId);
       referral.Communication = communications.entry;
-    };
+    }
 
     // Fetch DocumentReferences for each ServiceRequest
     for (let referral of referralList) {
       const documentReferences = await fetchDocumentReferences(referral);
-      if (documentReferences?.length > 0) referral.DocumentReference = documentReferences;
+      if (documentReferences?.length > 0)
+        referral.DocumentReference = documentReferences;
     }
 
     //referralList = referralList.filter((entry) => {
     //  return entry.Task;
     //});
+
+    // Fetch Consents
+    const consentList = await fetchConsents();
+    if (consentList?.length > 0) {
+      referralList.forEach((entry, index) => {
+        entry.Consent = consentList;
+      });
+    }
 
     console.log("referral list", referralList);
     referralList.sort((a, b) => {
@@ -347,7 +356,7 @@ function App() {
     if (!supportingInfo) return documentList;
 
     for (let entry of supportingInfo) {
-      const url = baseUrl + "/" + entry.reference
+      const url = baseUrl + "/" + entry.reference;
       const res = await fetch(url, {
         method: "GET",
         headers: {
@@ -358,10 +367,30 @@ function App() {
       });
       const data = await res.json();
       console.log("documentReference: ", data);
-      if (data?.resourceType === 'DocumentReference') documentList.push(data)
+      if (data?.resourceType === "DocumentReference") documentList.push(data);
     }
 
     return documentList;
+  };
+
+  // Fetch Consent for a Patient
+  const fetchConsents = async (
+    patientFhirId = patient.fhirId,
+    category = "http://loinc.org|59284-0",
+    status = "active"
+  ) => {
+    const url = `${baseUrl}/Consent?patient=${patientFhirId}&category=${category}&status=${status}`;
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Accept: "application/json",
+        Authorization: accessToken?.length > 0 ? "bearer " + accessToken : "",
+      },
+    });
+    const data = await res.json();
+    console.log("consent: ", data);
+    return data.entry;
   };
 
   const changeCurrentEncounter = async (encounterSelected, currentBaseUrl) => {
