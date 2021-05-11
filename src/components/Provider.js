@@ -6,8 +6,8 @@ const Provider = ({ provider }) => {
       <h4 style={{ color: "HotPink" }}>
         {provider.firstName} {provider.lastName} <FaUserMd></FaUserMd>
       </h4>
-      <h6><span className='badge badge-light'>FHIR ID</span> : {provider.fhirId}</h6>
-      <h6><span className='badge badge-light'>UUID </span> : {provider.uuid}</h6>
+      <h6><span className='badge bg-light text-dark'>FHIR ID</span> : {provider.fhirId}</h6>
+      <h6><span className='badge bg-light text-dark'>UUID </span> : {provider.uuid}</h6>
     </div>
   );
 };
