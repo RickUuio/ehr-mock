@@ -237,13 +237,13 @@ function ReferralSummary({ referral }) {
                       .
                     </span>
                     {communication.resource.payload ? (
-                      <span>
+                      <p>
                         {" "}
                         Note message:{" "}
                         <div className="btn btn-outline-primary disabled">
                           {communication.resource.payload[0].contentString}
                         </div>
-                      </span>
+                      </p>
                     ) : (
                       <span> Note message is empty.</span>
                     )}
