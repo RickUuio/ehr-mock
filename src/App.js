@@ -284,16 +284,28 @@ function App() {
         referral.DocumentReference = documentReferences;
     }
 
+    // Fetch Binaries for all DocumentReferences
+    for (let referral of referralList) {
+      if (referral.DocumentReference?.length > 0) {
+        const binaryList = await fetchBinaries(referral.DocumentReference);
+        if (binaryList?.length > 0) {
+          referral.Binary = binaryList;
+        }
+      }
+    }
+
     //referralList = referralList.filter((entry) => {
     //  return entry.Task;
     //});
 
     // Fetch Consents
-    const consentList = await fetchConsents();
-    if (consentList?.length > 0) {
-      referralList.forEach((entry, index) => {
-        entry.Consent = consentList;
-      });
+    if (currentProfileName === "Epic") {
+      const consentList = await fetchConsents();
+      if (consentList?.length > 0) {
+        referralList.forEach((entry, index) => {
+          entry.Consent = consentList;
+        });
+      }
     }
 
     console.log("referral list", referralList);
@@ -371,6 +383,36 @@ function App() {
     }
 
     return documentList;
+  };
+
+  // Fetch DocumentReferences for a ServiceRequest
+  const fetchBinaries = async (documentReferenceList) => {
+    const binaryList = [];
+
+    if (!documentReferenceList) return binaryList;
+
+    for (let entry of documentReferenceList) {
+      const url = baseUrl + "/" + entry.content[0]?.attachment?.url;
+      const res = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          Accept: "application/fhir+json",
+          Authorization: accessToken?.length > 0 ? "bearer " + accessToken : "",
+        },
+      });
+      const data = await res.json();
+      if (data?.resourceType === "Binary") {
+        const binary = {
+          resourceType: "Binary",
+          id: data.id,
+          contentType: data.contentType,
+        };
+        binaryList.push(data);
+      }
+    }
+
+    return binaryList;
   };
 
   // Fetch Consent for a Patient

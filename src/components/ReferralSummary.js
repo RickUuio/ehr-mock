@@ -1,4 +1,4 @@
-import { IoOpenOutline } from "react-icons/io5";
+import { IoOpenOutline, IoOpenSharp, IoCloudDownloadSharp, IoCloudDownloadOutline } from "react-icons/io5";
 import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 
@@ -86,7 +86,8 @@ function ReferralSummary({ referral }) {
                   className="btn btn-link"
                   onClick={() => showSource(referral.Task.resource)}
                 >
-                  {referral.Task.resource.resourceType} <IoOpenOutline />
+                  {referral.Task.resource.resourceType}{" "}
+                  <IoOpenOutline />
                 </button>
               </th>
               <td>
@@ -106,7 +107,8 @@ function ReferralSummary({ referral }) {
                     className="btn btn-outline-primary"
                     onClick={() => showSource(referral.Organization?.resource)}
                   >
-                    {referral.Task?.resource?.owner?.display} <IoOpenOutline />
+                    {referral.Task?.resource?.owner?.display}{" "}
+                    <IoOpenOutline />
                   </div>
                 </span>
               </td>
@@ -149,7 +151,8 @@ function ReferralSummary({ referral }) {
                     className="btn btn-link"
                     onClick={() => showSource(referral.Patient.resource)}
                   >
-                    {referral.Patient.resource.resourceType} <IoOpenOutline />
+                    {referral.Patient.resource.resourceType}{" "}
+                    <IoOpenOutline />
                   </button>
                 </th>
                 <td>
@@ -188,7 +191,7 @@ function ReferralSummary({ referral }) {
                       className="btn btn-link"
                       onClick={() => showSource(consent.resource)}
                     >
-                      {consent.resource.resourceType}
+                      {consent.resource.resourceType}{" "}
                       <IoOpenOutline />
                     </button>
                   </th>
@@ -226,7 +229,7 @@ function ReferralSummary({ referral }) {
                       className="btn btn-link"
                       onClick={() => showSource(documentReference)}
                     >
-                      {documentReference.resourceType}
+                      {documentReference.resourceType}{" "}
                       <IoOpenOutline />
                     </button>
                   </th>
@@ -236,11 +239,39 @@ function ReferralSummary({ referral }) {
                       <div className="btn btn-outline-primary disabled">
                         {documentReference.type.text}
                       </div>
-                      . Document filename is{" "}
+                      . Document description is{" "}
                       <div className="btn btn-outline-primary disabled">
                         {documentReference.description}
                       </div>
                     </span>
+                  </td>
+                </tr>
+              );
+            })}
+
+
+            {referral.Binary?.map((binary, index) => {
+              return (
+                <tr key={index}>
+                  <th scoope="row">
+                    <button
+                      type="button"
+                      className="btn btn-link"
+                      onClick={() => showSource(binary)}
+                    >
+                      {binary.resourceType}{" "}
+                      <IoOpenOutline />
+                    </button>
+                  </th>
+                  <td>
+                    <span>
+                      Content type is{" "}
+                      <div className="btn btn-outline-primary disabled">
+                        {binary.contentType}
+                      </div>.
+                    </span>
+                    {" "}
+                    <div className="btn btn-link"><a download='Epic_CRN.pdf' href={`data:application/pdf;base64,${binary.data}`} title='Download pdf document'>Click to download PDF file <IoCloudDownloadSharp /></a></div>
                   </td>
                 </tr>
               );
@@ -255,7 +286,8 @@ function ReferralSummary({ referral }) {
                       className="btn btn-link"
                       onClick={() => showSource(communication.resource)}
                     >
-                      {communication.resource.resourceType} <IoOpenOutline />
+                      {communication.resource.resourceType}{" "}
+                      <IoOpenOutline />
                     </button>
                   </th>
                   <td>
@@ -296,7 +328,7 @@ function ReferralSummary({ referral }) {
                             showSource(referral.DocumentReference[0])
                           }
                         >
-                          document <IoOpenOutline />
+                          document{" "}<IoOpenOutline />
                         </div>{" "}
                         was attached to the communication.
                       </p>
