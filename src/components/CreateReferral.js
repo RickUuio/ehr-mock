@@ -65,27 +65,45 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
                 />
               </div>
             </div>
-          
+
             <div className="form-group">
               <label className="col-form-label">SERVICE TYPE</label>
               <div>
                 <select
                   className="form-control"
                   value={serviceType.value}
-                  onChange={(e) => setServiceType({value: e.target.value, text: e.target.options[e.target.selectedIndex].text})}
+                  onChange={(e) =>
+                    setServiceType({
+                      value: e.target.value,
+                      text: e.target.options[e.target.selectedIndex].text,
+                    })
+                  }
                 >
                   <option>Select a service ...</option>
-                  <option value="e281c5da-5fbd-41ea-a32e-6efc32f0a156">Clothing and Household Goods</option>
-                  <option value="ba3eb996-9647-453f-abe4-c04dc84c319e">Food Assistance</option>
-                  <option value="5c7dec03-e340-4b48-8d4b-f24af7410a3a">Housing and Shelter</option>
-                  <option value="eceb120f-4888-4c42-957f-c90fd5582f83">Transportation</option>
+                  <option value="e281c5da-5fbd-41ea-a32e-6efc32f0a156">
+                    Clothing and Household Goods
+                  </option>
+                  <option value="f020d616-5016-4fb7-9fad-91d8d99cd7a1">
+                    Emergency Food
+                  </option>
+                  <option value="f6760383-7fc4-442b-b686-fc5055bfec06">
+                    Emergency Housing
+                  </option>
+                  <option value="ba3eb996-9647-453f-abe4-c04dc84c319e">
+                    Food Assistance
+                  </option>
+                  <option value="5c7dec03-e340-4b48-8d4b-f24af7410a3a">
+                    Housing and Shelter
+                  </option>
+                  <option value="eceb120f-4888-4c42-957f-c90fd5582f83">
+                    Transportation
+                  </option>
                 </select>
               </div>
             </div>
           </div>
           <div className="col-lg-6">
-
-          <div className="form-group">
+            <div className="form-group">
               <label className="col-form-label">RECEIVING NETWORK</label>
               <div>
                 <input
@@ -105,17 +123,32 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
                 <select
                   className="form-control"
                   value={referredToGroupIds.value}
-                  onChange={(e) => setReferredToGroupIds({value: e.target.value, text: e.target.options[e.target.selectedIndex].text})}
+                  onChange={(e) =>
+                    setReferredToGroupIds({
+                      value: e.target.value,
+                      text: e.target.options[e.target.selectedIndex].text,
+                    })
+                  }
                 >
                   <option>Select an organization ...</option>
-                  <option value="b8835025-bf3f-455f-9b1d-5efda6772b98">BusRides Sustainable Transportation Act</option>
-                  <option value="ebea1516-6343-4f76-980f-a637e580cfd3">Housing California</option>
-                  <option value="3491714a-aa7e-4a9c-a4d7-c8fe7c6b0bc0">River City Food Bank</option>
-                  <option value="9dd692cb-4eb3-46cb-a178-ab9eda2c83f6">St. Mary's Shelter</option>
+                  <option value="b8835025-bf3f-455f-9b1d-5efda6772b98">
+                    BusRides Sustainable Transportation Act
+                  </option>
+                  <option value="ebea1516-6343-4f76-980f-a637e580cfd3">
+                    Housing California
+                  </option>
+                  <option value="3491714a-aa7e-4a9c-a4d7-c8fe7c6b0bc0">
+                    River City Food Bank
+                  </option>
+                  <option value="9dd692cb-4eb3-46cb-a178-ab9eda2c83f6">
+                    St. Mary's Shelter
+                  </option>
+                  <option value="8d18165d-0c32-4f82-b331-ef537f4382aa">
+                    The Food Pantries for the Capital District
+                  </option>
                 </select>
               </div>
             </div>
-            
 
             <div className="form-group">
               <label className="col-form-label">DESCRIPTION</label>
@@ -133,22 +166,20 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
           </div>
         </div>
 
-        <div className="row my-2 float-right">
-
-        <input
+        <div className="row d-inline">
+          <input
             value="Cancel"
-            className="btn btn-warning"
+            className="btn btn-warning col-md-6 mt-4"
             onClick={cancelReferralCreation}
             readOnly
           />
 
           <input
             value="Submit"
-            className="btn btn-primary"
+            className="btn btn-primary col-md-6 mt-4"
             onClick={onSubmit}
             readOnly
           />
-
         </div>
       </form>
     </div>

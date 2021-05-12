@@ -7,11 +7,12 @@ const Patient = ({patient}) => {
           <FaRegUser /> {patient.firstName} {patient.lastName}
       </h4>
       <h6>
-      <span className='badge badge-light'>DOB</span> : {patient.dob}
+      <span className='badge bg-light text-dark'>DOB</span> : {patient.dob}
       <span>    </span> 
-      <span className='badge badge-light'>Gender</span> : {patient.gender}
+      <span className='badge bg-light text-dark'>Gender</span> : {patient.gender}
       </h6>
-      <h6><span className='badge badge-light'>MRN</span> : {patient.mrn}</h6>
+      <h6><span className='badge bg-light text-dark'>MRN</span> : {patient.mrn}</h6>
+      <h6><span className='badge bg-light text-dark'>FHIR ID</span> : {patient.fhirId}</h6>
     </div>
   );
 };
