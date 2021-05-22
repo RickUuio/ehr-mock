@@ -32,25 +32,25 @@ export const Profile_Logica = {
   name: 'Logica',
 
   defaultPatient: {
-    firstName: "Aaron",
-    lastName: "Alexis",
-    gender: "Male",
-    dob: "10/26/1989",
-    mrn: "smart-9995679",
-    fhirId: "smart-9995679",
-    uuid: "74216479-7594-413c-9835-9f00a51e5686",
+    firstName: "Beverly",
+    lastName: "Ccm",
+    gender: "Female",
+    dob: "01/01/1940",
+    mrn: "203722",
+    fhirId: "14730",
+    uuid: "b5318891-3dc8-426a-af50-531e106ad1a1",
   },
 
   defaultProvider: {
     firstName: "Demo",
     lastName: "Provider",
-    fhirId: "smart-Practitioner-71482713",
+    fhirId: "14734",
     uuid: "94e5f7ee-1425-42bc-8833-3474b687b125",
     groupId: "bf4aa373-81eb-4da5-9980-2d3e51c57b3c",
     networkId: "145ca925-ba86-490d-b404-35f4fe5ada66",
   },
 
-  defaultEncounter: "smart-5",
+  defaultEncounter: "14732",
 
   defaultBaseUrl: "https://api.logicahealth.org/uufhircrn/open",
 

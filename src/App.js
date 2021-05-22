@@ -299,14 +299,14 @@ function App() {
     //});
 
     // Fetch Consents
-    if (currentProfileName === "Epic") {
+    //if (currentProfileName === "Epic") {
       const consentList = await fetchConsents();
       if (consentList?.length > 0) {
         referralList.forEach((entry, index) => {
           entry.Consent = consentList;
         });
       }
-    }
+    //}
 
     console.log("referral list", referralList);
     referralList.sort((a, b) => {
@@ -418,7 +418,7 @@ function App() {
   // Fetch Consent for a Patient
   const fetchConsents = async (
     patientFhirId = patient.fhirId,
-    category = "http://loinc.org|59284-0",
+    category = (currentProfileName === "Epic") ? "http://loinc.org|59284-0" : "59284-0",
     status = "active"
   ) => {
     const url = `${baseUrl}/Consent?patient=${patientFhirId}&category=${category}&status=${status}`;
