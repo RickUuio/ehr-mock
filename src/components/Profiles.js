@@ -21,6 +21,7 @@ export const Profile_Epic = {
   },
 
   defaultEncounter: "eFBT3k94CLm3fCPMNlKH2DQ3", //"enZf6GWN2rMGQWF1rqqDgNg3",
+  defaultDocumentReference: "e.-1q0eXQDEZ.9mNdXwVjYA3",
   defaultBaseUrl:
     "https://apporchard.epic.com/interconnect-aocurprd-oauth/api/FHIR/R4",
   defaultNotificationUrl:
@@ -51,6 +52,7 @@ export const Profile_Logica = {
   },
 
   defaultEncounter: "14732",
+  defaultDocumentReference: "14740",
 
   defaultBaseUrl: "https://api.logicahealth.org/uufhircrn/open",
 

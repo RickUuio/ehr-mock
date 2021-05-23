@@ -25,6 +25,8 @@ function App() {
   const [referrals, setReferrals] = useState([]);
   const [encounters, setEncounters] = useState([]);
 
+  const [sampleDocumentReference, setSampleDocumentReference] = useState("");
+
   const switchProfile = async (profileName) => {
     //if (profileName === currentProfileName) return
 
@@ -53,6 +55,7 @@ function App() {
     console.log("create referral: ", referral);
     const nowISO = new Date().toISOString();
 
+    // Create ServiceRequest
     let url = baseUrl + "/ServiceRequest";
     let resource = {
       resourceType: "ServiceRequest",
@@ -64,7 +67,7 @@ function App() {
             {
               system: "http://snomed.info/sct",
               code: "307835004",
-              display: "Referral by service (finding)",
+              display: "Referral by service",
             },
           ],
           text: "Referral by service",
@@ -73,11 +76,10 @@ function App() {
       priority: "routine",
       subject: {
         reference: `Patient/${patient.fhirId}`,
-        display: patient.firstName + " " + patient.lastName,
+        display: patient.lastName + ", " + patient.firstName,
       },
       encounter: {
-        reference: `Encounter/${currentEncounter}`,
-        display: "Hospital Admission",
+        reference: `Encounter/${currentEncounter}`
       },
       authoredOn: nowISO,
       requester: [
@@ -86,17 +88,25 @@ function App() {
           display: provider.firstName + " " + provider.lastName,
         },
       ],
-      orderDetail: {
-        text: referral.serviceType.text,
-        coding: [
-          {
-            system: "Unite Us",
-            code: referral.serviceType.value,
-            display: referral.serviceType.text,
-          },
-        ],
-      },
+      // orderDetail: {
+      //   text: referral.serviceType.text,
+      //   coding: [
+      //     {
+      //       system: "Unite Us",
+      //       code: referral.serviceType.value,
+      //       display: referral.serviceType.text,
+      //     },
+      //   ],
+      // },
     };
+
+    if (referral.attachDocument && sampleDocumentReference.length > 0) {
+      resource.supportingInfo = [
+        {
+          reference: `DocumentReference/${sampleDocumentReference}`
+        }
+      ]
+    }
 
     let res = await fetch(url, {
       method: "POST",
@@ -107,16 +117,16 @@ function App() {
     });
 
     let data = await res.json();
-    console.log("new referral: ", data);
-    let newId = data.id;
-    console.log("server request id: ", newId);
+    let newServiceRequestId = data.id;
+    console.log("server request id: ", newServiceRequestId);
 
+    // Create Task
     url = baseUrl + "/Task";
     resource = {
       resourceType: "Task",
       basedOn: [
         {
-          reference: `ServiceRequest/${newId}`,
+          reference: `ServiceRequest/${newServiceRequestId}`,
         },
       ],
       status: "requested",
@@ -124,13 +134,12 @@ function App() {
       priority: "routine",
       for: {
         reference: `Patient/${patient.fhirId}`,
-        display: patient.firstName + " " + patient.lastName,
+        display: patient.lastName + ", " + patient.firstName,
       },
       encounter: {
-        reference: `Encounter/${currentEncounter}`,
-        display: "Hospital Admission",
+        reference: `Encounter/${currentEncounter}`
       },
-      authoredOn: nowISO, //"2020-09-20T15:41:39Z",
+      authoredOn: nowISO,
       lastModified: nowISO,
       requester: [
         {
@@ -138,20 +147,15 @@ function App() {
           display: provider.firstName + " " + provider.lastName,
         },
       ],
-      description:
-        referral.description +
-        "/n referred to : " +
-        referral.referredToGroupIds.text +
-        " [" +
-        referral.referredToGroupIds.value +
-        "]",
+      // description:
+      //   referral.description +
+      //   "/n referred to : " +
+      //   referral.referredToGroupIds.text +
+      //   " [" +
+      //   referral.referredToGroupIds.value +
+      //   "]",
       owner: {
-        type: "Organization",
-        identifier: {
-          use: "usual",
-          system: "Unite Us",
-          value: referral.referredToGroupIds.value,
-        },
+        reference: `Organization/${referral.referredToGroupIds.value}`,
         display: referral.referredToGroupIds.text,
       },
     };
@@ -165,9 +169,73 @@ function App() {
     });
 
     data = await res.json();
-    console.log("new referral: ", data);
-    newId = data.id;
-    console.log("Task id: ", newId);
+    let newTaskId = data.id;
+    console.log("Task id: ", newTaskId);
+
+    // Create initial Communication
+    url = baseUrl + "/Communication";
+    resource = {
+      resourceType: "Communication",
+      basedOn: [
+        {
+          reference: `ServiceRequest/${newServiceRequestId}`,
+        },
+      ],
+      partOf: [
+        {
+          reference: `Task/${newTaskId}`,
+        },
+      ],
+      status: "in-progress",
+      subject: {
+        reference: `Patient/${patient.fhirId}`,
+        display: patient.lastName + ", " + patient.firstName,
+      },
+      encounter: {
+        reference: `Encounter/${currentEncounter}`
+      },
+      sent: nowISO,
+      recipient: [
+        {
+          reference: `Organization/${referral.referredToGroupIds.value}`,
+          display: referral.referredToGroupIds.text,
+        }
+      ],
+      sender: {
+        reference: `Practitioner/${provider.fhirId}`,
+        display: provider.firstName + " " + provider.lastName,
+      }
+    }
+
+    if (referral.description.length > 0 ){
+      resource.payload = [
+        {
+          contentString: referral.description
+        }
+      ]
+    }
+
+    if (referral.attachDocument && sampleDocumentReference.length > 0){
+      resource.payload = [ ...resource.payload, 
+        {
+          contentReference: {
+            reference: `DocumentReference/${sampleDocumentReference}`
+          }
+        }
+      ]
+    }
+
+    res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(resource),
+    });
+
+    data = await res.json();
+    let newCommunicationId = data.id;
+    console.log("Communication id: ", newCommunicationId);
 
     await getReferrals();
   };
@@ -280,8 +348,12 @@ function App() {
     // Fetch DocumentReferences for each ServiceRequest
     for (let referral of referralList) {
       const documentReferences = await fetchDocumentReferences(referral);
-      if (documentReferences?.length > 0)
+      if (documentReferences?.length > 0){
         referral.DocumentReference = documentReferences;
+        setSampleDocumentReference(referral.DocumentReference[0].id);
+        console.log('documentReference', referral.DocumentReference);
+        console.log('sampleDocumentReference', sampleDocumentReference);
+      }
     }
 
     // Fetch Binaries for all DocumentReferences

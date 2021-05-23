@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { GrAttachment } from "react-icons/gr";
 
 export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
   const [referredToGroupIds, setReferredToGroupIds] = useState("");
@@ -6,6 +7,7 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
   const [networkId, setNetworkId] = useState("");
   const [serviceType, setServiceType] = useState("");
   const [description, setDescription] = useState("");
+  const [attachDocument, setAttachDocument] = useState(false);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -21,6 +23,7 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
       referredToGroupIds,
       referredFromGroupId,
       networkId,
+      attachDocument,
     });
 
     setReferredToGroupIds("");
@@ -28,6 +31,7 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
     setNetworkId("demo-network");
     setServiceType("");
     setDescription("");
+    setAttachDocument(false);
   };
 
   const cancelReferralCreation = () => {
@@ -80,23 +84,11 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
                   }
                 >
                   <option>Select a service ...</option>
-                  <option value="e281c5da-5fbd-41ea-a32e-6efc32f0a156">
-                    Clothing and Household Goods
-                  </option>
                   <option value="f020d616-5016-4fb7-9fad-91d8d99cd7a1">
                     Emergency Food
                   </option>
                   <option value="f6760383-7fc4-442b-b686-fc5055bfec06">
                     Emergency Housing
-                  </option>
-                  <option value="ba3eb996-9647-453f-abe4-c04dc84c319e">
-                    Food Assistance
-                  </option>
-                  <option value="5c7dec03-e340-4b48-8d4b-f24af7410a3a">
-                    Housing and Shelter
-                  </option>
-                  <option value="eceb120f-4888-4c42-957f-c90fd5582f83">
-                    Transportation
                   </option>
                 </select>
               </div>
@@ -131,20 +123,11 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
                   }
                 >
                   <option>Select an organization ...</option>
-                  <option value="b8835025-bf3f-455f-9b1d-5efda6772b98">
-                    BusRides Sustainable Transportation Act
-                  </option>
-                  <option value="ebea1516-6343-4f76-980f-a637e580cfd3">
+                  <option value="14742">
                     Housing California
                   </option>
-                  <option value="3491714a-aa7e-4a9c-a4d7-c8fe7c6b0bc0">
+                  <option value="14733">
                     River City Food Bank
-                  </option>
-                  <option value="9dd692cb-4eb3-46cb-a178-ab9eda2c83f6">
-                    St. Mary's Shelter
-                  </option>
-                  <option value="8d18165d-0c32-4f82-b331-ef537f4382aa">
-                    The Food Pantries for the Capital District
                   </option>
                 </select>
               </div>
@@ -163,6 +146,14 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
                 />
               </div>
             </div>
+
+            <div className="form-group">
+              <div className="form-check form-switch mx-2 text-start">
+                <input className="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked={attachDocument} onChange={(e) => setAttachDocument(e.target.checked)}/>
+                <label className="form-check-label" for="flexSwitchCheckDefault" >Attach document to the communication <GrAttachment></GrAttachment></label>
+              </div>
+            </div>
+
           </div>
         </div>
 
