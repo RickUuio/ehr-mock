@@ -7,7 +7,7 @@ export const Profile_Epic = {
     gender: "Female",
     dob: "01/01/1940",
     mrn: "203722",
-    fhirId: "egHmZUd91rLItB1AqGV49Pg3",
+    fhirId: "e4ikKcC2Rp3EsZQh8Ac6C5A3",
     uuid: "b5318891-3dc8-426a-af50-531e106ad1a1",
   },
 
@@ -25,7 +25,7 @@ export const Profile_Epic = {
   defaultBaseUrl:
     "https://apporchard.epic.com/interconnect-aocurprd-oauth/api/FHIR/R4",
   defaultNotificationUrl:
-    "https://fhir-crn.uniteusdev.com/v1/FhirNotificationWebService",
+    "https://fhir-crn.uniteustraining.com/rick/FhirNotificationWebService",
   accessToken : "e2a4575581b3f57203e182b0b1f3dcea479baecd31bef125cc57f6dd4b8905ac"
 };
 
