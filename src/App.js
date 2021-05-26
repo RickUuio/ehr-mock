@@ -8,9 +8,8 @@ import { Profile_Epic, Profile_Logica } from "./components/Profiles";
 function App() {
   const defaultProfile = Profile_Epic;
   const defaultProfileName = defaultProfile.name;
-  const [currentProfileName, setCurrentProfileName] = useState(
-    defaultProfileName
-  );
+  const [currentProfileName, setCurrentProfileName] =
+    useState(defaultProfileName);
   //const [profile, setProfile] = useState(defaultProfile);
   const [patient, setPatient] = useState(defaultProfile.defaultPatient);
   const [provider, setProvider] = useState(defaultProfile.defaultProvider);
@@ -79,7 +78,7 @@ function App() {
         display: patient.lastName + ", " + patient.firstName,
       },
       encounter: {
-        reference: `Encounter/${currentEncounter}`
+        reference: `Encounter/${currentEncounter}`,
       },
       authoredOn: nowISO,
       requester: [
@@ -103,9 +102,9 @@ function App() {
     if (referral.attachDocument && sampleDocumentReference.length > 0) {
       resource.supportingInfo = [
         {
-          reference: `DocumentReference/${sampleDocumentReference}`
-        }
-      ]
+          reference: `DocumentReference/${sampleDocumentReference}`,
+        },
+      ];
     }
 
     let res = await fetch(url, {
@@ -137,7 +136,7 @@ function App() {
         display: patient.lastName + ", " + patient.firstName,
       },
       encounter: {
-        reference: `Encounter/${currentEncounter}`
+        reference: `Encounter/${currentEncounter}`,
       },
       authoredOn: nowISO,
       lastModified: nowISO,
@@ -192,37 +191,38 @@ function App() {
         display: patient.lastName + ", " + patient.firstName,
       },
       encounter: {
-        reference: `Encounter/${currentEncounter}`
+        reference: `Encounter/${currentEncounter}`,
       },
       sent: nowISO,
       recipient: [
         {
           reference: `Organization/${referral.referredToGroupIds.value}`,
           display: referral.referredToGroupIds.text,
-        }
+        },
       ],
       sender: {
         reference: `Practitioner/${provider.fhirId}`,
         display: provider.firstName + " " + provider.lastName,
-      }
-    }
+      },
+    };
 
-    if (referral.description.length > 0 ){
+    if (referral.description.length > 0) {
       resource.payload = [
         {
-          contentString: referral.description
-        }
-      ]
+          contentString: referral.description,
+        },
+      ];
     }
 
-    if (referral.attachDocument && sampleDocumentReference.length > 0){
-      resource.payload = [ ...resource.payload, 
+    if (referral.attachDocument && sampleDocumentReference.length > 0) {
+      resource.payload = [
+        ...resource.payload,
         {
           contentReference: {
-            reference: `DocumentReference/${sampleDocumentReference}`
-          }
-        }
-      ]
+            reference: `DocumentReference/${sampleDocumentReference}`,
+          },
+        },
+      ];
     }
 
     res = await fetch(url, {
@@ -348,11 +348,11 @@ function App() {
     // Fetch DocumentReferences for each ServiceRequest
     for (let referral of referralList) {
       const documentReferences = await fetchDocumentReferences(referral);
-      if (documentReferences?.length > 0){
+      if (documentReferences?.length > 0) {
         referral.DocumentReference = documentReferences;
         setSampleDocumentReference(referral.DocumentReference[0].id);
-        console.log('documentReference', referral.DocumentReference);
-        console.log('sampleDocumentReference', sampleDocumentReference);
+        console.log("documentReference", referral.DocumentReference);
+        console.log("sampleDocumentReference", sampleDocumentReference);
       }
     }
 
@@ -372,12 +372,12 @@ function App() {
 
     // Fetch Consents
     //if (currentProfileName === "Epic") {
-      const consentList = await fetchConsents();
-      if (consentList?.length > 0) {
-        referralList.forEach((entry, index) => {
-          entry.Consent = consentList;
-        });
-      }
+    const consentList = await fetchConsents();
+    if (consentList?.length > 0) {
+      referralList.forEach((entry, index) => {
+        entry.Consent = consentList;
+      });
+    }
     //}
 
     console.log("referral list", referralList);
@@ -399,7 +399,10 @@ function App() {
       headers: {
         "Content-type": "application/json",
         Accept: "application/json",
-        Authorization: accessToken?.length > 0 ? "bearer " + accessToken : "",
+        Authorization:
+          accessToken?.length > 0 && currentProfileName === "Epic"
+            ? "bearer " + accessToken
+            : "",
       },
     });
     const data = await res.json();
@@ -490,7 +493,9 @@ function App() {
   // Fetch Consent for a Patient
   const fetchConsents = async (
     patientFhirId = patient.fhirId,
-    category = (currentProfileName === "Epic") ? "http://loinc.org|59284-0" : "59284-0",
+    category = currentProfileName === "Epic"
+      ? "http://loinc.org|64292-6"
+      : "64292-6",
     status = "active"
   ) => {
     const url = `${baseUrl}/Consent?patient=${patientFhirId}&category=${category}&status=${status}`;
