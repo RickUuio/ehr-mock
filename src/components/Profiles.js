@@ -2,9 +2,9 @@ export const Profile_Epic = {
   name: 'Epic',
 
   defaultPatient: {
-    firstName: "Beverly",
+    firstName: "Calvin",
     lastName: "Ccm",
-    gender: "Female",
+    gender: "Male",
     dob: "01/01/1940",
     mrn: "203722",
     fhirId: "e4ikKcC2Rp3EsZQh8Ac6C5A3",
