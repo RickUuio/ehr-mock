@@ -478,11 +478,6 @@ function App() {
       });
       const data = await res.json();
       if (data?.resourceType === "Binary") {
-        const binary = {
-          resourceType: "Binary",
-          id: data.id,
-          contentType: data.contentType,
-        };
         binaryList.push(data);
       }
     }
@@ -600,20 +595,22 @@ function App() {
         profileName={currentProfileName}
         switchProfile={switchProfile}
       />
-      <div className="row mt-1 mx-0">
-        <Encounters
-          encounterList={encounters}
-          currentEncounter={currentEncounter}
-          changeCurrentEncounter={changeCurrentEncounter}
-          refreshEncounters={getEncounters}
-        />
-        <Referrals
-          onCreate={createReferral}
-          referralList={referrals}
-          currentEncounter={currentEncounter}
-          sendNotificationUU={sendNotificationUU}
-          profileName={currentProfileName}
-        />
+      <div className="container-fluid">
+        <div className="row mt-1 mx-0">
+          <Encounters
+            encounterList={encounters}
+            currentEncounter={currentEncounter}
+            changeCurrentEncounter={changeCurrentEncounter}
+            refreshEncounters={getEncounters}
+          />
+          <Referrals
+            onCreate={createReferral}
+            referralList={referrals}
+            currentEncounter={currentEncounter}
+            sendNotificationUU={sendNotificationUU}
+            profileName={currentProfileName}
+          />
+        </div>
       </div>
     </div>
   );

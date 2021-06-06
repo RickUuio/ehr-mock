@@ -26,8 +26,8 @@ const Encounters = ({ encounterList, currentEncounter = 'smart-2', changeCurrent
         {encounterList.map((encounter, index) => {
           const selected = (encounter.resource.id === currentEncounter)
           const eClassName = selected
-            ? "row table-hover m-0 px-2 selected"
-            : "row table-hover m-0 px-2";
+            ? "row list-hover m-0 px-2 selected"
+            : "row list-hover m-0 px-2";
           const visible = selected
             ? "visible"
             : "invisible";

@@ -3,7 +3,13 @@ import CreateReferral from "./CreateReferral";
 import { useState } from "react";
 import ReferralSummary from "./ReferralSummary";
 
-function Referrals({ onCreate, referralList, currentEncounter, sendNotificationUU, profileName }) {
+function Referrals({
+  onCreate,
+  referralList,
+  currentEncounter,
+  sendNotificationUU,
+  profileName,
+}) {
   const [showNewReferral, setShowNewReferral] = useState(false);
 
   const toggleShowNewReferral = () => {
@@ -31,12 +37,34 @@ function Referrals({ onCreate, referralList, currentEncounter, sendNotificationU
           />
         ) : null}
         <div className="referralList">
-          <div className="h5 py-3">This encounter has {referralList.length > 1 ? referralList.length + ' referrals.' : referralList.length === 1 ? ' 1 referral.' : ' no referrals.'}</div>
+          <div className="h5 py-3">
+            This encounter has{" "}
+            {referralList.length > 1
+              ? referralList.length + " referrals."
+              : referralList.length === 1
+              ? " 1 referral."
+              : " no referrals."}
+          </div>
           {referralList.length > 0
-            ? referralList.map((referral, index) => (
-                <ReferralSummary key={index} referral = {referral}/>
-              ))
-            : null}
+                ? 
+          <table className="table table-hover">
+            <thead>
+              <tr>
+                <th>DATE SENT</th>
+                <th>STATUS</th>
+                <th>SERVICE TYPE</th>
+                <th>RECEIPIENT</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {referralList.map((referral, index) => (
+                    <ReferralSummary key={index} referral={referral} />
+                  ))
+              }
+            </tbody>
+          </table>
+          : null}
         </div>
       </div>
     </div>

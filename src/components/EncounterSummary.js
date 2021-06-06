@@ -16,28 +16,39 @@ const EncounterSummary = ({
 
   return (
     <div className="encounterSummary">
-      <div className="h4 pt-2 d-inline-block">
-        Current Encounter: {currentEncounter}
-      </div>
-      <div
-        className="btn btn-primary d-inline float-end"
-        onClick={sendNotification}
-      >
-        Send Notification to Unite Us
-      </div>
-      {!showNewReferral ? (
-        <button
-          className="btn btn-primary d-inline float-end"
-          onClick={toggle}
-          disabled = {profileName === 'Epic'}
-        >
-          Create new referral
-        </button>
-      ) : (
-        <div className="btn btn-warning d-inline float-end" onClick={toggle}>
-          Cancel New Referral
+      <div className="row pt-2 row-cols-1 row-cols-lg-3 mx-auto" style={{flex_shrink: 1}}>
+        <div className="col mx-auto">
+          <h4>Current Encounter: {currentEncounter}</h4>
         </div>
-      )}
+        <div className="col">
+        {!showNewReferral ? (
+          
+          <button
+            className="btn btn-primary btn-block mx-1"
+            onClick={toggle}
+            disabled={profileName === "Epic"}
+          >
+            Create New Referral
+          </button>
+     
+        ) : (
+          <button
+            className="btn btn-warning btn-block col mx-1"
+            onClick={toggle}
+          >
+            Cancel New Referral
+          </button>
+        )}
+     </div>
+     <div className="col">
+        <button
+          className="btn btn-primary btn-block col mx-1"
+          onClick={sendNotification}
+        >
+          Send Notification to Unite Us
+        </button>
+      </div>
+      </div>
     </div>
   );
 };

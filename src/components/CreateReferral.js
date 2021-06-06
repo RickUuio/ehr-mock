@@ -46,35 +46,54 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
               <label className="col-form-label">SENDING NETWORK</label>
               <div>
                 <input
-                  className="form-control"
+                  className="form-select"
                   type="text"
                   placeholder="Healthy Demo Network"
                   readOnly
+                  disabled
                   value={networkId}
                   onChange={(e) => setNetworkId(e.target.value)}
                 />
               </div>
             </div>
-
+            
+            <div className="form-group">
+              <label className="col-form-label">RECEIVING NETWORK</label>
+              <div>
+                <input
+                  className="form-select"
+                  type="text"
+                  readOnly
+                  disabled
+                  placeholder="Healthy Demo Network"
+                  value={networkId}
+                  onChange={(e) => setNetworkId(e.target.value)}
+                />
+              </div>
+            </div>
+            
             <div className="form-group">
               <label className="col-form-label">SENDER</label>
               <div>
                 <input
-                  className="form-control"
+                  className="form-select"
                   type="text"
                   readOnly
+                  disabled
                   placeholder="Local Hospital Center"
                   value={referredFromGroupId}
                   onChange={(e) => setReferredFromGroupId(e.target.value)}
                 />
               </div>
             </div>
-
+          </div>
+          
+          <div className="col-lg-6">
             <div className="form-group">
               <label className="col-form-label">SERVICE TYPE</label>
               <div>
                 <select
-                  className="form-control"
+                  className="form-select"
                   value={serviceType.value}
                   onChange={(e) =>
                     setServiceType({
@@ -93,27 +112,12 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
                 </select>
               </div>
             </div>
-          </div>
-          <div className="col-lg-6">
-            <div className="form-group">
-              <label className="col-form-label">RECEIVING NETWORK</label>
-              <div>
-                <input
-                  className="form-control"
-                  type="text"
-                  readOnly
-                  placeholder="Healthy Demo Network"
-                  value={networkId}
-                  onChange={(e) => setNetworkId(e.target.value)}
-                />
-              </div>
-            </div>
 
             <div className="form-group">
               <label className="col-form-label">RECEIPIENT</label>
               <div>
                 <select
-                  className="form-control"
+                  className="form-select"
                   value={referredToGroupIds.value}
                   onChange={(e) =>
                     setReferredToGroupIds({
@@ -123,12 +127,8 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
                   }
                 >
                   <option>Select an organization ...</option>
-                  <option value="14742">
-                    Housing California
-                  </option>
-                  <option value="14733">
-                    River City Food Bank
-                  </option>
+                  <option value="14742">Housing California</option>
+                  <option value="14733">River City Food Bank</option>
                 </select>
               </div>
             </div>
@@ -149,11 +149,22 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
 
             <div className="form-group">
               <div className="form-check form-switch mx-2 text-start">
-                <input className="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked={attachDocument} onChange={(e) => setAttachDocument(e.target.checked)}/>
-                <label className="form-check-label" for="flexSwitchCheckDefault" >Attach document to the communication <GrAttachment></GrAttachment></label>
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="flexSwitchCheckDefault"
+                  checked={attachDocument}
+                  onChange={(e) => setAttachDocument(e.target.checked)}
+                />
+                <label
+                  className="form-check-label"
+                  for="flexSwitchCheckDefault"
+                >
+                  Attach document to the communication{" "}
+                  <GrAttachment></GrAttachment>
+                </label>
               </div>
             </div>
-
           </div>
         </div>
 
