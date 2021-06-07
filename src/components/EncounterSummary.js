@@ -16,7 +16,7 @@ const EncounterSummary = ({
 
   return (
     <div className="encounterSummary">
-      <div className="row pt-2 row-cols-1 row-cols-lg-3 mx-auto" style={{flex_shrink: 1}}>
+      <div className="row pt-2 row-cols-1 row-cols-lg-3">
         <div className="col mx-auto">
           <h4>Current Encounter: {currentEncounter}</h4>
         </div>

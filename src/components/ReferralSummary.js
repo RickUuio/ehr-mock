@@ -1,6 +1,7 @@
 import { IoOpenOutline, IoCloudDownloadSharp } from "react-icons/io5";
 import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
+import { MdExpandLess, MdExpandMore} from "react-icons/md";
 
 function ReferralSummary({ referral }) {
   const [show, setShow] = useState(false);
@@ -57,7 +58,6 @@ function ReferralSummary({ referral }) {
     <>
       <tr
         className={rowColor(referral.Task?.resource?.status)}
-        role="button"
         data-bs-toggle="collapse"
         data-bs-target={"#referral" + referral.ServiceRequest.resource.id}
         aria-expanded="false"
@@ -72,7 +72,7 @@ function ReferralSummary({ referral }) {
         </td>
         <td>{referral.Task?.resource?.owner?.display}</td>
         <td>
-          <a class="btn btn-primary" role="button" 
+{/*           <a class="btn btn-primary" role="button" 
             data-bs-toggle="collapse"
             href={"#referral" + referral.ServiceRequest.resource.id}
             aria-expanded="false"
@@ -80,7 +80,23 @@ function ReferralSummary({ referral }) {
             onClick={() => toggleExpand(referral.ServiceRequest.resource.id)}
           >
             Fhir Resources
-          </a>
+          </a> */}
+          <div className="form-check form-switch mx-2 text-start">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  role="button"
+                  id ={"flexSwitchCheck" + referral.ServiceRequest.resource.id }
+                  checked={expandStatus(referral.ServiceRequest.resource.id)}
+                  onChange={() => toggleExpand(referral.ServiceRequest.resource.id)}
+                />
+                <label
+                  className="form-check-label"
+                  for={"flexSwitchCheck" + referral.ServiceRequest.resource.id }
+                >
+                  Fhir Resources {expandStatus(referral.ServiceRequest.resource.id) ? <MdExpandLess></MdExpandLess> : <MdExpandMore></MdExpandMore>}
+                </label>
+              </div>
         </td>
       </tr>
       <tr
