@@ -179,7 +179,7 @@ footer {
   border-color: lightgray;
   border-style: solid;
   border-width: thin;
-  background-color: ghostwhite;
+  background-color: aliceblue;
 }
 
 .referrals {
@@ -239,7 +239,7 @@ footer {
 }
 
 .list-hover.selected {
-  background-color: aliceblue;
+  background-color: ghostwhite;
 }
 
 .table-hover {

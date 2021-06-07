@@ -92,6 +92,7 @@ function ReferralSummary({ referral }) {
                 />
                 <label
                   className="form-check-label"
+                  role="button"
                   for={"flexSwitchCheck" + referral.ServiceRequest.resource.id }
                 >
                   Fhir Resources {expandStatus(referral.ServiceRequest.resource.id) ? <MdExpandLess></MdExpandLess> : <MdExpandMore></MdExpandMore>}
