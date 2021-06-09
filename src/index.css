@@ -155,13 +155,14 @@ footer {
   color: #fff;
   box-shadow: 1px 2px 10px 1px rgba(0, 0, 0, 0.16),
     1px 2px 5px 1px rgba(0, 0, 0, 0.26);
-  background-image: linear-gradient(
+  background-color: rgb(0, 80, 120);
+  /*   background-image: linear-gradient(
     to right,
     rgb(0, 120, 160) 10%,
     rgb(0, 80, 120) 30%,
     rgb(0, 80, 120) 70%,
     rgb(0, 120, 160) 90%
-  );
+  ); */
   display: container-fluid;
   /*   background-image: linear-gradient(
       141deg,
@@ -169,6 +170,23 @@ footer {
       rgb(49, 97, 71) 51%,
       rgb(29, 56, 54) 75%
     ); */
+}
+
+
+.toast {
+  color: black;
+  width: 600px;
+  height: auto;
+  position: fixed;
+  padding: 3px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.toast-body {
+  background-color: ghostwhite;
+  font-size: larger;
 }
 
 .encounter {
@@ -201,7 +219,7 @@ footer {
 
 .encounterSummary {
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.16),
-    1px 2px 5px 1px rgba(0, 0, 0, 0.26); 
+    1px 2px 5px 1px rgba(0, 0, 0, 0.26);
   border-color: lightgray;
   border-style: solid;
   border-width: thin;
@@ -213,7 +231,7 @@ footer {
 
 .referralList {
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.16),
-  1px 2px 5px 1px rgba(0, 0, 0, 0.26);
+    1px 2px 5px 1px rgba(0, 0, 0, 0.26);
   border-color: lightgray;
   border-style: solid;
   border-width: thin;
@@ -243,7 +261,6 @@ footer {
 }
 
 .table-hover {
-
   margin-bottom: 0px;
   margin-top: 0px;
   border-top-color: lightgray;
@@ -300,11 +317,10 @@ footer {
   font: bold;
 }
 
-
 /* For Mobile */
 @media screen and (min-width: 7800px) {
   .encounter {
-      height: 100vh;
+    height: 100vh;
   }
 }
 

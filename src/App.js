@@ -26,8 +26,13 @@ function App() {
 
   const [sampleDocumentReference, setSampleDocumentReference] = useState("");
 
+  const [toastMessage, setToastMessage] = useState("Retrieving FHIR resources ... " );
+  const [showMessageToast, setShowMessageToast] = useState(true);
+  const toggleShowMessageToast = () => setShowMessageToast(!showMessageToast);
+
   const switchProfile = async (profileName) => {
     //if (profileName === currentProfileName) return
+    setShowMessageToast(true)
 
     console.log("Switch to profile: ", profileName);
     setCurrentProfileName(profileName);
@@ -40,6 +45,9 @@ function App() {
       let token = await getAccessToken();
       setAccessToken(token);
     } else setAccessToken(newProfile.accessToken);
+
+    setShowMessageToast(false)
+    //setToastMessage("");
   };
 
   const refreshProfileSettings = async () => {
@@ -244,6 +252,10 @@ function App() {
     encounterId = currentEncounter,
     referralBaseUrl = baseUrl
   ) => {
+
+    // fetching Task + ServiceRequest
+    //setToastMessage("Fetching FHIR resources: \n Tasks ... \n ServiceRequests ... ");
+
     const url =
       referralBaseUrl +
       "/Task?encounter=" +
@@ -339,6 +351,7 @@ function App() {
     });
 
     // Fetch Communications for each Task
+    //setToastMessage((a) => { return a + "\n Communications ... "});
     for (let referral of referralList) {
       const referralId = referral?.Task?.resource?.id;
       const communications = await fetchCommunications(referralId);
@@ -346,6 +359,7 @@ function App() {
     }
 
     // Fetch DocumentReferences for each ServiceRequest
+    //setToastMessage((a) => { return a + "\n DocumentReferences ... "});
     for (let referral of referralList) {
       const documentReferences = await fetchDocumentReferences(referral);
       if (documentReferences?.length > 0) {
@@ -357,6 +371,7 @@ function App() {
     }
 
     // Fetch Binaries for all DocumentReferences
+    //setToastMessage((a) => { return a + "\nBinaries ... "});
     for (let referral of referralList) {
       if (referral.DocumentReference?.length > 0) {
         const binaryList = await fetchBinaries(referral.DocumentReference);
@@ -372,6 +387,7 @@ function App() {
 
     // Fetch Consents
     //if (currentProfileName === "Epic") {
+    //setToastMessage((a) => { return a + "\n Consents ... "});
     const consentList = await fetchConsents();
     if (consentList?.length > 0) {
       referralList.forEach((entry, index) => {
@@ -510,8 +526,14 @@ function App() {
   const changeCurrentEncounter = async (encounterSelected, currentBaseUrl) => {
     //if (encounterSelected === currentEncounter) return;
 
+    setShowMessageToast(true);
+
     setCurrentEncounter(encounterSelected);
     await getReferrals(encounterSelected, currentBaseUrl);
+    
+    setShowMessageToast(false);
+    //setToastMessage("");
+    
     return;
   };
 
@@ -521,8 +543,14 @@ function App() {
   };
 
   const getEncounters = async (patientId, encounterBaseUrl) => {
+    setShowMessageToast(true);
+    
     const data = await fetchEncounters(patientId, encounterBaseUrl);
     setEncounters(data);
+
+    setShowMessageToast(false);
+    //setToastMessage("");
+    
     return data;
   };
 
@@ -595,6 +623,26 @@ function App() {
         profileName={currentProfileName}
         switchProfile={switchProfile}
       />
+
+      <div
+        class={showMessageToast ? "toast bg-warning text-secondary show" : "toast"}
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        id="messageToast"
+        
+      >
+        <div class="toast-header">
+          <strong class="me-auto">Please Wait ...</strong>
+        </div>
+        <div class="toast-body">
+          {toastMessage}  
+          <div class="spinner-border text-warning" role="status">
+            <span class="visually-hidden">...</span>
+          </div>
+        </div>
+      </div>
+
       <div className="container-fluid">
         <div className="row mt-1 mx-0">
           <Encounters
