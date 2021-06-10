@@ -26,13 +26,18 @@ function App() {
 
   const [sampleDocumentReference, setSampleDocumentReference] = useState("");
 
-  const [toastMessage, setToastMessage] = useState("Retrieving FHIR resources ... " );
+  const [toastMessage, setToastMessage] = useState(
+    "Retrieving FHIR resources ... "
+  );
   const [showMessageToast, setShowMessageToast] = useState(true);
   const toggleShowMessageToast = () => setShowMessageToast(!showMessageToast);
 
+  const [progress, setProgress] = useState("0%");
+
   const switchProfile = async (profileName) => {
     //if (profileName === currentProfileName) return
-    setShowMessageToast(true)
+    setProgress("0%");
+    setShowMessageToast(true);
 
     console.log("Switch to profile: ", profileName);
     setCurrentProfileName(profileName);
@@ -46,7 +51,8 @@ function App() {
       setAccessToken(token);
     } else setAccessToken(newProfile.accessToken);
 
-    setShowMessageToast(false)
+    setShowMessageToast(false);
+    setProgress("0%");
     //setToastMessage("");
   };
 
@@ -252,9 +258,9 @@ function App() {
     encounterId = currentEncounter,
     referralBaseUrl = baseUrl
   ) => {
-
     // fetching Task + ServiceRequest
     //setToastMessage("Fetching FHIR resources: \n Tasks ... \n ServiceRequests ... ");
+    setProgress("10%");
 
     const url =
       referralBaseUrl +
@@ -352,6 +358,7 @@ function App() {
 
     // Fetch Communications for each Task
     //setToastMessage((a) => { return a + "\n Communications ... "});
+    setProgress("40%");
     for (let referral of referralList) {
       const referralId = referral?.Task?.resource?.id;
       const communications = await fetchCommunications(referralId);
@@ -360,6 +367,7 @@ function App() {
 
     // Fetch DocumentReferences for each ServiceRequest
     //setToastMessage((a) => { return a + "\n DocumentReferences ... "});
+    setProgress("70%");
     for (let referral of referralList) {
       const documentReferences = await fetchDocumentReferences(referral);
       if (documentReferences?.length > 0) {
@@ -372,6 +380,7 @@ function App() {
 
     // Fetch Binaries for all DocumentReferences
     //setToastMessage((a) => { return a + "\nBinaries ... "});
+    setProgress("95%");
     for (let referral of referralList) {
       if (referral.DocumentReference?.length > 0) {
         const binaryList = await fetchBinaries(referral.DocumentReference);
@@ -402,6 +411,8 @@ function App() {
       const timeB = new Date(b.ServiceRequest.resource.authoredOn).getTime();
       return timeB - timeA;
     });
+
+    setProgress("100%");
     return referralList;
   };
 
@@ -525,15 +536,16 @@ function App() {
 
   const changeCurrentEncounter = async (encounterSelected, currentBaseUrl) => {
     //if (encounterSelected === currentEncounter) return;
-
+    setProgress("0%");
     setShowMessageToast(true);
 
     setCurrentEncounter(encounterSelected);
     await getReferrals(encounterSelected, currentBaseUrl);
-    
+
     setShowMessageToast(false);
+    setProgress("0%");
     //setToastMessage("");
-    
+
     return;
   };
 
@@ -543,14 +555,16 @@ function App() {
   };
 
   const getEncounters = async (patientId, encounterBaseUrl) => {
+    setProgress("0%");
     setShowMessageToast(true);
-    
+
     const data = await fetchEncounters(patientId, encounterBaseUrl);
     setEncounters(data);
 
     setShowMessageToast(false);
+    setProgress("0%");
     //setToastMessage("");
-    
+
     return data;
   };
 
@@ -625,20 +639,31 @@ function App() {
       />
 
       <div
-        class={showMessageToast ? "toast bg-warning text-secondary show" : "toast"}
+        className={
+          showMessageToast ? "toast bg-warning text-secondary show" : "toast"
+        }
         role="alert"
         aria-live="assertive"
         aria-atomic="true"
         id="messageToast"
-        
       >
-        <div class="toast-header">
-          <strong class="me-auto">Please Wait ...</strong>
+        <div className="toast-header">
+          <strong className="me-auto">Please Wait ...</strong>
         </div>
-        <div class="toast-body">
-          {toastMessage}  
-          <div class="spinner-border text-warning" role="status">
-            <span class="visually-hidden">...</span>
+        <div className="toast-body">
+          {toastMessage}
+          <div className="spinner-border text-warning" role="status">
+            <span className="visually-hidden">...</span>
+          </div>
+          <div className="progress my-2">
+            <div
+              className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
+              role="progressbar"
+              style={{width: progress}}
+              aria-valuenow="0"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
           </div>
         </div>
       </div>
