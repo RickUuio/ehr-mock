@@ -65,6 +65,9 @@ function App() {
 
   // Create a referral
   const createReferral = async (referral) => {
+    setProgress("0%");
+    setShowMessageToast(true);
+
     console.log("create referral: ", referral);
     const nowISO = new Date().toISOString();
 
@@ -173,6 +176,8 @@ function App() {
       },
     };
 
+    setProgress("5%");
+
     res = await fetch(url, {
       method: "POST",
       headers: {
@@ -252,6 +257,9 @@ function App() {
     console.log("Communication id: ", newCommunicationId);
 
     await getReferrals();
+
+    setProgress("100%");
+    setShowMessageToast(false);
   };
 
   const fetchReferrals = async (
