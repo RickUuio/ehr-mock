@@ -17,7 +17,7 @@ const EncounterSummary = ({
   return (
     <div className="encounterSummary">
       <div className="row pt-2 row-cols-1 row-cols-lg-3">
-        <div className="col mx-auto">
+        <div className="col mx-auto text-break">
           <h4>Current Encounter: {currentEncounter}</h4>
         </div>
         <div className="col">

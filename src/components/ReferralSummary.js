@@ -1,19 +1,18 @@
 import { IoOpenOutline, IoCloudDownloadSharp } from "react-icons/io5";
 import { useState } from "react";
-import { Modal, Button } from "react-bootstrap";
-import { MdExpandLess, MdExpandMore} from "react-icons/md";
+import { MdExpandLess, MdExpandMore } from "react-icons/md";
+import {FaEdit} from "react-icons/fa";
 
-function ReferralSummary({ referral }) {
-  const [show, setShow] = useState(false);
-  const [fullJson, setFullJson] = useState();
+function ReferralSummary({ referral, showFhirSource, editReferralStatus }) {
   const [expandReferralId, setExpandReferralId] = useState("");
 
   const showSource = (fullJson) => {
-    setFullJson(fullJson);
-    setShow(true);
+    showFhirSource(fullJson, true);
   };
 
-  const closeWindow = () => setShow(false);
+  const editStatus = (referralId, currentStatus) => {
+    editReferralStatus(referralId, currentStatus);
+  }
 
   let findUUID = (resource) => {
     const cboUUID = resource.identifier.find(
@@ -27,44 +26,49 @@ function ReferralSummary({ referral }) {
   const toggleExpand = (referralId) => {
     if (expandReferralId === referralId) setExpandReferralId("");
     else setExpandReferralId(referralId);
-    console.log("expand row: ", expandReferralId);
   };
 
   const expandStatus = (referralId) => {
-    console.log("expand ", referralId);
     return expandReferralId === referralId;
   };
 
   const rowColor = (status) => {
     switch (status) {
       case "accepted":
-        return "table-primary";
+        return "primary";
       case "in-progress":
-        return "table-info";
+        return "info";
       case "rejected":
-        return "table-warning";
+        return "danger";
       case "failed":
-        return "table-danger";
+        return "danger";
       case "completed":
-        return "table-success";
+        return "success";
       case "cancelled":
-        return "table-secondary";
+        return "danger";
       default:
-        return "table-ghostwhite";
+        return "light";
     }
   };
 
   return (
     <>
       <tr
-        className={rowColor(referral.Task?.resource?.status)}
+        className={"align-middle table-" + rowColor(referral.Task?.resource?.status)}
         data-bs-toggle="collapse"
         data-bs-target={"#referral" + referral.ServiceRequest.resource.id}
         aria-expanded="false"
         aria-controls={"referral" + referral.ServiceRequest.resource.id}
       >
         <td>{referral.ServiceRequest.resource.authoredOn}</td>
-        <td>{referral.Task?.resource?.status}</td>
+        <td>
+          <div
+            className="btn btn-outline-primary my-0"
+            onClick={() => editStatus(referral.Task?.resource?.id, referral.Task?.resource?.status)}
+          >
+            {referral.Task?.resource?.status}  <FaEdit></FaEdit>
+          </div>
+        </td>
         <td>
           {referral.ServiceRequest.resource.orderDetail
             ? referral.ServiceRequest.resource.orderDetail[0].text
@@ -72,36 +76,36 @@ function ReferralSummary({ referral }) {
         </td>
         <td>{referral.Task?.resource?.owner?.display}</td>
         <td>
-{/*           <a class="btn btn-primary" role="button" 
-            data-bs-toggle="collapse"
-            href={"#referral" + referral.ServiceRequest.resource.id}
-            aria-expanded="false"
-            aria-controls={"referral" + referral.ServiceRequest.resource.id}
-            onClick={() => toggleExpand(referral.ServiceRequest.resource.id)}
-          >
-            Fhir Resources
-          </a> */}
           <div className="form-check form-switch mx-2 text-start">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  role="button"
-                  id ={"flexSwitchCheck" + referral.ServiceRequest.resource.id }
-                  checked={expandStatus(referral.ServiceRequest.resource.id)}
-                  onChange={() => toggleExpand(referral.ServiceRequest.resource.id)}
-                />
-                <label
-                  className="form-check-label"
-                  role="button"
-                  for={"flexSwitchCheck" + referral.ServiceRequest.resource.id }
-                >
-                  Fhir Resources {expandStatus(referral.ServiceRequest.resource.id) ? <MdExpandLess></MdExpandLess> : <MdExpandMore></MdExpandMore>}
-                </label>
-              </div>
+            <input
+              className="form-check-input"
+              type="checkbox"
+              role="button"
+              id={"flexSwitchCheck" + referral.ServiceRequest.resource.id}
+              checked={expandStatus(referral.ServiceRequest.resource.id)}
+              onChange={() => toggleExpand(referral.ServiceRequest.resource.id)}
+            />
+            <label
+              className="form-check-label"
+              role="button"
+              for={"flexSwitchCheck" + referral.ServiceRequest.resource.id}
+            >
+              Fhir Resources{" "}
+              {expandStatus(referral.ServiceRequest.resource.id) ? (
+                <MdExpandLess></MdExpandLess>
+              ) : (
+                <MdExpandMore></MdExpandMore>
+              )}
+            </label>
+          </div>
         </td>
       </tr>
       <tr
-        className={expandStatus(referral.ServiceRequest.resource.id) ? "table-light" : "collapse"}
+        className={
+          expandStatus(referral.ServiceRequest.resource.id)
+            ? "table-light"
+            : "collapse"
+        }
         id={"referral" + referral.ServiceRequest.resource.id}
       >
         <td colspan="5">
@@ -434,22 +438,6 @@ function ReferralSummary({ referral }) {
               </tbody>
             </table>
           </div>
-
-          <Modal size="lg" show={show} onHide={closeWindow}>
-            <Modal.Header closeButton>
-              <Modal.Title>
-                {fullJson?.resourceType} : {fullJson?.id}
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <pre id="json">{JSON.stringify(fullJson, undefined, 2)}</pre>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="warning" onClick={closeWindow}>
-                Close
-              </Button>
-            </Modal.Footer>
-          </Modal>
         </td>
       </tr>
     </>

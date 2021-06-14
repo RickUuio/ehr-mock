@@ -4,7 +4,8 @@ const Patient = ({patient}) => {
   return (
     <div className="p-2">
       <h4 style = {{ color: "yellow"}}>
-          <FaRegUser /> {patient.firstName} {patient.lastName}
+          <FaRegUser />
+          {patient.firstName} {patient.lastName}
       </h4>
       <h6>
       <span className='badge bg-light text-dark'>DOB</span> : {patient.dob}

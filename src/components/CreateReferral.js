@@ -134,7 +134,7 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
             </div>
 
             <div className="form-group">
-              <label className="col-form-label">DESCRIPTION</label>
+              <label className="col-form-label">INITIAL COMMUNICATION</label>
               <div>
                 <textarea
                   className="form-control"

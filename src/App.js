@@ -3,7 +3,11 @@ import Header from "./components/Header";
 import Encounters from "./components/Encounters";
 import Referrals from "./components/Referrals";
 import { useState, useEffect } from "react";
-import { Profile_Epic, Profile_Logica } from "./components/Profiles";
+import {
+  Profile_Epic,
+  Profile_Epic_2,
+  Profile_Logica,
+} from "./components/Profiles";
 
 function App() {
   const defaultProfile = Profile_Epic;
@@ -41,15 +45,27 @@ function App() {
 
     console.log("Switch to profile: ", profileName);
     setCurrentProfileName(profileName);
-    const newProfile = profileName === "Logica" ? Profile_Logica : Profile_Epic;
+    let newProfile; //'= profileName === "Logica" ? Profile_Logica : Profile_Epic;
+    switch (profileName) {
+      case "Logica":
+        newProfile = Profile_Logica;
+        break;
+      case "Epic2":
+        newProfile = Profile_Epic_2;
+        break;
+      default:
+        newProfile = Profile_Epic;
+    }
     setPatient(newProfile.defaultPatient);
     setProvider(newProfile.defaultProvider);
     setBaseUrl(newProfile.defaultBaseUrl);
     setNotificationUrl(newProfile.defaultNotificationUrl);
-    if (newProfile.name === "Epic") {
+    if (newProfile.name === "Logica") {
+      setAccessToken(newProfile.accessToken);
+    } else {
       let token = await getAccessToken();
       setAccessToken(token);
-    } else setAccessToken(newProfile.accessToken);
+    }
 
     setShowMessageToast(false);
     setProgress("0%");
@@ -435,7 +451,7 @@ function App() {
         "Content-type": "application/json",
         Accept: "application/json",
         Authorization:
-          accessToken?.length > 0 && currentProfileName === "Epic"
+          accessToken?.length > 0 && currentProfileName !== "Logica"
             ? "bearer " + accessToken
             : "",
       },
@@ -523,9 +539,9 @@ function App() {
   // Fetch Consent for a Patient
   const fetchConsents = async (
     patientFhirId = patient.fhirId,
-    category = currentProfileName === "Epic"
-      ? "http://loinc.org|64292-6"
-      : "64292-6",
+    category = currentProfileName === "Logica"
+      ? "64292-6"
+      : "http://loinc.org|64292-6",
     status = "active"
   ) => {
     const url = `${baseUrl}/Consent?patient=${patientFhirId}&category=${category}&status=${status}`;
@@ -609,7 +625,6 @@ function App() {
         "Content-type": "application/json",
         Accept: "application/json",
         "x-api-key": "sfsdfddfdsfsdfs32342343", //"wOvYlZbrIW6THlB68QcJk6UlCwNPKYHfibNCMj03",
-        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify({
         privateKey: null,
@@ -619,6 +634,116 @@ function App() {
     const token = data.body.access_token;
     console.log("access token ", token);
     return token;
+  };
+
+  const updateReferralStatus = async (taskFhirId, newStatus) => {
+    console.log("new status: ", newStatus);
+    setProgress("0%");
+    setToastMessage("Updating Task Status ...");
+    setShowMessageToast(true);
+
+    // fetch the Task first
+    let url =
+      "https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/request/read";
+    let res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        Accept: "application/json",
+        "x-api-key": "sfsdfddfdsfsdfs32342343",
+      },
+      body: JSON.stringify({
+        baseUrl: baseUrl,
+        resourceType: "Task",
+        resourceId: taskFhirId,
+      }),
+    });
+    let data = await res.json();
+    let task = data.response.body;
+    let headers = data.response.headers;
+    let eTag = headers["e-tag"];
+    console.log("task: ", task);
+    console.log("headers", headers);
+
+    setProgress("5%");
+    // update status and match header
+    task.status = newStatus.value;
+    let epicCode = mapToEpicCode(newStatus.rejectReason.reason.text)
+    if (newStatus.value === "rejected") {
+      task.statusReason = {
+        coding: [
+          {
+            system:
+              currentProfileName === "Logica"
+                ? "HTTPS://UNITEUS.COM/IO/STRUCTUREDEFINITION/STATUS-REASON"
+                : "urn:oid:1.2.840.114350.1.13.0.1.7.4.698084.34025",
+            code: epicCode.code,
+            display: epicCode.display,
+          },
+        ],
+        text: `${newStatus.rejectReason.reason.value}. ${newStatus.rejectReason.note}`,
+      };
+    }
+    console.log("new task: ", task);
+
+    // send Task update requester
+    url =
+      "https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/request/update";
+    res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        Accept: "application/json",
+        "x-api-key": "sfsdfddfdsfsdfs32342343",
+      },
+      body: JSON.stringify({
+        baseUrl: baseUrl,
+        resourceType: "Task",
+        resourceId: taskFhirId,
+        etag: eTag,
+        resource: task,
+      }),
+    });
+
+    setProgress("10%");
+    setToastMessage("Retrieving FHIR Resources ...");
+    await getReferrals(currentEncounter, baseUrl);
+    setShowMessageToast(false);
+    setProgress("0%");
+    return;
+  };
+
+  const mapToEpicCode = (uuCode) => {
+    switch (uuCode) {
+      case "Not Eligible":
+        return {
+          system: "urn:oid:1.2.840.114350.1.13.0.1.7.4.698084.34025",
+          code: "104",
+          display:
+            "Patient does not meet the level of care required for admission",
+        };
+      case "No Capacity":
+        return {
+          system: "urn:oid:1.2.840.114350.1.13.0.1.7.4.698084.34025",
+          code: "101",
+          display: "Facility Full",
+        };
+      case "Do Not Provide Service":
+        return {
+          system: "urn:oid:1.2.840.114350.1.13.0.1.7.4.698084.34025",
+          code: "103",
+          display: "Facility cannot provide for patient's needs",
+        };
+      case "Duplicate":
+      case "Unable to Contact Client":
+      case "Other":
+      default:
+        return {
+          system: "urn:oid:1.2.840.114350.1.13.0.1.7.4.698084.34025",
+          code: "99",
+          display: "Other (Comment)",
+        };
+    }
   };
 
   useEffect(() => {
@@ -667,7 +792,7 @@ function App() {
             <div
               className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
               role="progressbar"
-              style={{width: progress}}
+              style={{ width: progress }}
               aria-valuenow="0"
               aria-valuemin="0"
               aria-valuemax="100"
@@ -690,6 +815,7 @@ function App() {
             currentEncounter={currentEncounter}
             sendNotificationUU={sendNotificationUU}
             profileName={currentProfileName}
+            updateReferralStatus={updateReferralStatus}
           />
         </div>
       </div>
