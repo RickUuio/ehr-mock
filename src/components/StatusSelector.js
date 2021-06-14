@@ -117,9 +117,8 @@ const StatusSelector = ({
   };
 
   const stageColor = (stage) => {
-    const colorDone = "table-success";
+    const colorDone = rowColor(newReferralStatus || currentReferralStatus)
     const colorNotDone = "table-secondary";
-    const colorFail = "table-danger";
     let newStage = 1;
 
     switch (newReferralStatus || currentReferralStatus) {
@@ -140,7 +139,7 @@ const StatusSelector = ({
     }
     return newStage < stage
       ? colorNotDone
-      : "table-" + rowColor(newReferralStatus);
+      : "table-" + colorDone;
   };
 
   return (
@@ -169,7 +168,7 @@ const StatusSelector = ({
             {"New Status    : "}
             <div
               className={
-                "btn active btn-outline-" + rowColor(newReferralStatus)
+                "btn active btn-outline-" + rowColor(newReferralStatus || currentReferralStatus)
               }
             >
               {newReferralStatus || currentReferralStatus}
