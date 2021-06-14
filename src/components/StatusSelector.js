@@ -12,9 +12,7 @@ const StatusSelector = ({
   closeReferralStatusEdit,
   profileName,
 }) => {
-  const [newReferralStatus, setNewReferralStatus] = useState(
-    currentReferralStatus
-  );
+  const [newReferralStatus, setNewReferralStatus] = useState("");
   const [rejectReason, setRejectReason] = useState({
     value: "Please select a reason ...",
   });
@@ -22,7 +20,7 @@ const StatusSelector = ({
   const [enforceBusinessRule, setEnforceBusinessRule] = useState(false);
 
   const closeStatusEdit = () => {
-    setNewReferralStatus(currentReferralStatus);
+    setNewReferralStatus("");
     setRejectReason({ value: "Please select a reason ..." });
     setRejectReasonNote("");
     closeReferralStatusEdit(null);
@@ -94,7 +92,6 @@ const StatusSelector = ({
       { display_name: "Other", value: "Other" },
     ];
 
-    //return uuRejectReasons;
     return uuRejectReasons.map((option) => {
       return <option value={option.value}>{option.display_name}</option>;
     });
@@ -120,20 +117,31 @@ const StatusSelector = ({
   };
 
   const stageColor = (stage) => {
-    const colorDone = 'table-success';
-    const colorNotDone = 'table-secondary';
-    const colorFail = 'table-danger';
+    const colorDone = "table-success";
+    const colorNotDone = "table-secondary";
+    const colorFail = "table-danger";
     let newStage = 1;
 
-    switch (newReferralStatus) {
-      case "requested": newStage = 1; break;
-      case "accepted": newStage = 2; break;
-      case "in-progress": newStage = 3; break;
-      case "completed" : newStage = 4; break;
-      default: newStage = 5;
+    switch (newReferralStatus || currentReferralStatus) {
+      case "requested":
+        newStage = 1;
+        break;
+      case "accepted":
+        newStage = 2;
+        break;
+      case "in-progress":
+        newStage = 3;
+        break;
+      case "completed":
+        newStage = 4;
+        break;
+      default:
+        newStage = 5;
     }
-    return newStage < stage ? colorNotDone : newStage > 4 ? colorFail : colorDone;
-  }
+    return newStage < stage
+      ? colorNotDone
+      : "table-" + rowColor(newReferralStatus);
+  };
 
   return (
     <Modal
@@ -164,7 +172,7 @@ const StatusSelector = ({
                 "btn active btn-outline-" + rowColor(newReferralStatus)
               }
             >
-              {newReferralStatus}
+              {newReferralStatus || currentReferralStatus}
             </div>
           </div>
         </div>

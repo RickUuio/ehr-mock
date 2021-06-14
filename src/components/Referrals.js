@@ -11,16 +11,16 @@ function Referrals({
   currentEncounter,
   sendNotificationUU,
   profileName,
-  updateReferralStatus
+  updateReferralStatus,
 }) {
   const [showNewReferral, setShowNewReferral] = useState(false);
   const [showSource, setShowSource] = useState(false);
   const [showReferralStatus, setShowReferralStatus] = useState(false);
   const [fullJson, setFullJson] = useState();
   const [currentReferralStatus, setCurrentReferralStatus] = useState("");
-  const [newReferralStatus, setNewReferralStatus] = useState(
-    currentReferralStatus
-  );
+  //const [newReferralStatus, setNewReferralStatus] = useState(
+  //  currentReferralStatus
+  //);
   const [editReferralId, setEditReferralId] = useState();
 
   const toggleShowNewReferral = () => {
@@ -43,18 +43,17 @@ function Referrals({
     setShowReferralStatus(true);
     setEditReferralId(referralId);
     setCurrentReferralStatus(currentStatus);
-    setNewReferralStatus(currentStatus);
+    //setNewReferralStatus("");
   };
 
-  const closeReferralStatusEdit = (newReferralStatus) => {
+  const closeReferralStatusEdit = (newStatus) => {
     setShowReferralStatus(false);
-    if (newReferralStatus != null)
-   {
+    if (newStatus !== null) {
       //setNewReferralStatus(newReferralStatus.value);
-      console.log('new status: ', newReferralStatus.value, newReferralStatus.rejectReason);
-      updateReferralStatus(editReferralId, newReferralStatus)
-    }
-  }
+      console.log("new status: ", newStatus.value, newStatus.rejectReason);
+      updateReferralStatus(editReferralId, newStatus);
+    } //else setNewReferralStatus("");
+  };
 
   return (
     <div className="col-md-9 col-lg-10 px-0">
