@@ -34,9 +34,11 @@ const StatusSelector = ({
   };
 
   const statusEnabled = (status) => {
+    return true;
     if (profileName === "Logica") return true;
 
     switch (status) {
+      case "requested":
       case "accepted":
       case "rejected":
         if (
@@ -123,7 +125,7 @@ const StatusSelector = ({
       </Modal.Header>
       <Modal.Body>
         <div className="row my-3 text-center">
-        <div className="col-6">{"Current Stauts: "}<div className={"btn btn-outline-" + rowColor(currentReferralStatus)}>{currentReferralStatus}</div></div>
+        <div className="col-6">{"Current Stauts: "}<div className={"btn disabled btn-outline-" + rowColor(currentReferralStatus)}>{currentReferralStatus}</div></div>
         <div className="col-6">{"New Status    : "}<div className={"btn active btn-outline-" + rowColor(newReferralStatus)}>{newReferralStatus}</div></div>
         </div>
         <div

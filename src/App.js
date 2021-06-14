@@ -661,14 +661,17 @@ function App() {
     let data = await res.json();
     let task = data.response.body;
     let headers = data.response.headers;
-    let eTag = headers["e-tag"][0];
+    let eTag =
+      currentProfileName === "Logica"
+        ? headers["etag"][0]
+        : headers["e-tag"][0];
     console.log("task: ", task);
     console.log("headers", headers);
 
     setProgress("5%");
     // update status and match header
     task.status = newStatus.value;
-    let epicCode = mapToEpicCode(newStatus.rejectReason.reason.text)
+    let epicCode = mapToEpicCode(newStatus.rejectReason.reason.text);
     if (newStatus.value === "rejected") {
       task.statusReason = {
         coding: [

@@ -125,7 +125,7 @@ function Referrals({
         showReferralStatus={showReferralStatus}
         currentReferralStatus={currentReferralStatus}
         closeReferralStatusEdit={closeReferralStatusEdit}
-        profileName={"Logica"}
+        profileName={profileName}
       ></StatusSelector>
     </div>
   );
