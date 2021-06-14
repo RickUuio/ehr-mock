@@ -91,6 +91,26 @@ const StatusSelector = ({
     )
   };
 
+
+  const rowColor = (status) => {
+    switch (status) {
+      case "accepted":
+        return "primary";
+      case "in-progress":
+        return "info";
+      case "rejected":
+        return "danger";
+      case "failed":
+        return "danger";
+      case "completed":
+        return "success";
+      case "cancelled":
+        return "danger";
+      default:
+        return "dark";
+    }
+  };
+
   return (
     <Modal
       id="referralStatus"
@@ -102,8 +122,10 @@ const StatusSelector = ({
         <Modal.Title>Update Referral Status</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <pre id="json">Current {currentReferralStatus}</pre>
-        <pre id="json">New {newReferralStatus}</pre>
+        <div className="row my-3 text-center">
+        <div className="col-6">{"Current Stauts: "}<div className={"btn btn-outline-" + rowColor(currentReferralStatus)}>{currentReferralStatus}</div></div>
+        <div className="col-6">{"New Status    : "}<div className={"btn active btn-outline-" + rowColor(newReferralStatus)}>{newReferralStatus}</div></div>
+        </div>
         <div
           className="btn-group mb-2 text-center container-fluid"
           role="group"
