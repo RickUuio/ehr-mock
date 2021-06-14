@@ -5,6 +5,7 @@ import {
   FaAngleDoubleLeft,
   FaFlagCheckered,
 } from "react-icons/fa";
+import { AiOutlineStop } from "react-icons/ai";
 
 const StatusSelector = ({
   showReferralStatus,
@@ -117,7 +118,7 @@ const StatusSelector = ({
   };
 
   const stageColor = (stage) => {
-    const colorDone = rowColor(newReferralStatus || currentReferralStatus)
+    const colorDone = rowColor(newReferralStatus || currentReferralStatus);
     const colorNotDone = "table-secondary";
     let newStage = 1;
 
@@ -137,9 +138,7 @@ const StatusSelector = ({
       default:
         newStage = 5;
     }
-    return newStage < stage
-      ? colorNotDone
-      : "table-" + colorDone;
+    return newStage < stage ? colorNotDone : "table-" + colorDone;
   };
 
   return (
@@ -168,7 +167,8 @@ const StatusSelector = ({
             {"New Status    : "}
             <div
               className={
-                "btn active btn-outline-" + rowColor(newReferralStatus || currentReferralStatus)
+                "btn active btn-outline-" +
+                rowColor(newReferralStatus || currentReferralStatus)
               }
             >
               {newReferralStatus || currentReferralStatus}
@@ -231,6 +231,7 @@ const StatusSelector = ({
                       class="btn btn-outline-dark"
                       htmlFor="statusRequested"
                     >
+                      {!statusEnabled("requested") ? <AiOutlineStop /> : null}{" "}
                       requested{" "}
                       <span className="float-end">
                         <FaAngleDoubleRight />
@@ -258,6 +259,7 @@ const StatusSelector = ({
                       class="btn btn-outline-danger"
                       htmlFor="statusCancelled"
                     >
+                      {!statusEnabled("cancelled") ? <AiOutlineStop /> : null}{" "}
                       cancelled{" "}
                       <span className="float-end">
                         <FaFlagCheckered />
@@ -290,6 +292,7 @@ const StatusSelector = ({
                       <span className="float-start">
                         <FaAngleDoubleLeft />
                       </span>{" "}
+                      {!statusEnabled("accepted") ? <AiOutlineStop /> : null}{" "}
                       accepted{" "}
                       <span className="float-end">
                         <FaAngleDoubleRight />
@@ -319,6 +322,7 @@ const StatusSelector = ({
                       <span className="float-start">
                         <FaAngleDoubleLeft />
                       </span>{" "}
+                      {!statusEnabled("in-progress") ? <AiOutlineStop /> : null}{" "}
                       in-progress{" "}
                       <span className="float-end">
                         <FaAngleDoubleRight />
@@ -345,6 +349,7 @@ const StatusSelector = ({
                       class="btn btn-outline-success"
                       htmlFor="statusCompleted"
                     >
+                      {!statusEnabled("completed") ? <AiOutlineStop /> : null}{" "}
                       completed{" "}
                       <span className="float-end">
                         <FaFlagCheckered />
@@ -367,6 +372,7 @@ const StatusSelector = ({
                       class="btn btn-outline-danger"
                       htmlFor="statusFailed"
                     >
+                      {!statusEnabled("failed") ? <AiOutlineStop /> : null}{" "}
                       failed{" "}
                       <span className="float-end">
                         <FaFlagCheckered />
@@ -396,6 +402,7 @@ const StatusSelector = ({
                       class="btn btn-outline-danger"
                       htmlFor="statusRejected"
                     >
+                      {!statusEnabled("rejected") ? <AiOutlineStop /> : null}{" "}
                       rejected{" "}
                       <span className="float-end">
                         <FaFlagCheckered />
