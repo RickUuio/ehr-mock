@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
-import { FaAngleDoubleRight, FaFlagCheckered} from "react-icons/fa"
+import {
+  FaAngleDoubleRight,
+  FaAngleDoubleLeft,
+  FaFlagCheckered,
+} from "react-icons/fa";
 
 const StatusSelector = ({
   showReferralStatus,
@@ -12,29 +16,33 @@ const StatusSelector = ({
     currentReferralStatus
   );
   const [rejectReason, setRejectReason] = useState({
-    value: "Please select a reason ..."
-});
+    value: "Please select a reason ...",
+  });
   const [rejectReasonNote, setRejectReasonNote] = useState("");
+  const [enforceBusinessRule, setEnforceBusinessRule] = useState(false);
 
   const closeStatusEdit = () => {
     setNewReferralStatus(currentReferralStatus);
-    setRejectReason({value: "Please select a reason ..."});
+    setRejectReason({ value: "Please select a reason ..." });
     setRejectReasonNote("");
     closeReferralStatusEdit(null);
-  }
+  };
 
   const submitStatusChange = () => {
     setNewReferralStatus(newReferralStatus);
-    closeReferralStatusEdit({value: newReferralStatus, rejectReason: { reason: rejectReason, note: rejectReasonNote}});
-  }
+    closeReferralStatusEdit({
+      value: newReferralStatus,
+      rejectReason: { reason: rejectReason, note: rejectReasonNote },
+    });
+  };
 
   const changeStatus = (newStatus) => {
-      console.log('new status is: ', newStatus);
+    console.log("new status is: ", newStatus);
     setNewReferralStatus(newStatus);
   };
 
   const statusEnabled = (status) => {
-    return true;
+    if (!enforceBusinessRule) return true;
     if (profileName === "Logica") return true;
 
     switch (status) {
@@ -45,6 +53,7 @@ const StatusSelector = ({
           currentReferralStatus === "requested" ||
           currentReferralStatus === "in-progress" ||
           currentReferralStatus === "accepted" ||
+          currentReferralStatus === "rejected" ||
           currentReferralStatus === ""
         )
           return true;
@@ -82,17 +91,14 @@ const StatusSelector = ({
         display_name: "Unable to Contact Client",
         value: "We were unable to contact the client",
       },
-      { display_name: "Other", value: "Other" }
+      { display_name: "Other", value: "Other" },
     ];
 
     //return uuRejectReasons;
-    return (
-        uuRejectReasons.map(option => {
-            return <option value={option.value}>{option.display_name}</option>
-        })
-    )
+    return uuRejectReasons.map((option) => {
+      return <option value={option.value}>{option.display_name}</option>;
+    });
   };
-
 
   const rowColor = (status) => {
     switch (status) {
@@ -113,6 +119,22 @@ const StatusSelector = ({
     }
   };
 
+  const stageColor = (stage) => {
+    const colorDone = 'table-success';
+    const colorNotDone = 'table-secondary';
+    const colorFail = 'table-danger';
+    let newStage = 1;
+
+    switch (newReferralStatus) {
+      case "requested": newStage = 1; break;
+      case "accepted": newStage = 2; break;
+      case "in-progress": newStage = 3; break;
+      case "completed" : newStage = 4; break;
+      default: newStage = 5;
+    }
+    return newStage < stage ? colorNotDone : newStage > 4 ? colorFail : colorDone;
+  }
+
   return (
     <Modal
       id="referralStatus"
@@ -125,8 +147,26 @@ const StatusSelector = ({
       </Modal.Header>
       <Modal.Body>
         <div className="row my-3 text-center">
-        <div className="col-6">{"Current Stauts: "}<div className={"btn disabled btn-outline-" + rowColor(currentReferralStatus)}>{currentReferralStatus}</div></div>
-        <div className="col-6">{"New Status    : "}<div className={"btn active btn-outline-" + rowColor(newReferralStatus)}>{newReferralStatus}</div></div>
+          <div className="col-6">
+            {"Current Stauts: "}
+            <div
+              className={
+                "btn disabled btn-outline-" + rowColor(currentReferralStatus)
+              }
+            >
+              {currentReferralStatus}
+            </div>
+          </div>
+          <div className="col-6">
+            {"New Status    : "}
+            <div
+              className={
+                "btn active btn-outline-" + rowColor(newReferralStatus)
+              }
+            >
+              {newReferralStatus}
+            </div>
+          </div>
         </div>
         <div
           className="btn-group mb-2 text-center container-fluid"
@@ -137,10 +177,30 @@ const StatusSelector = ({
           <table className="table table-bordered table-sm">
             <thead>
               <tr>
-                <th class="table-light">INITIATE <FaAngleDoubleRight /></th>
-                <th>RESPONSE <FaAngleDoubleRight /></th>
-                <th class="table-light">CONFIRM <FaAngleDoubleRight /></th>
-                <th>RESOLVE <FaFlagCheckered /></th>
+                <th className={stageColor(1)}>
+                  INITIATE{" "}
+                  <span className="float-end">
+                    <FaAngleDoubleRight />
+                  </span>
+                </th>
+                <th className={stageColor(2)}>
+                  RESPONSE{" "}
+                  <span className="float-end">
+                    <FaAngleDoubleRight />
+                  </span>
+                </th>
+                <th className={stageColor(3)}>
+                  CONFIRM{" "}
+                  <span className="float-end">
+                    <FaAngleDoubleRight />
+                  </span>
+                </th>
+                <th className={stageColor(4)}>
+                  RESOLVE{" "}
+                  <span className="float-end">
+                    <FaFlagCheckered />
+                  </span>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -164,7 +224,10 @@ const StatusSelector = ({
                       class="btn btn-outline-dark"
                       htmlFor="statusRequested"
                     >
-                      requested
+                      requested{" "}
+                      <span className="float-end">
+                        <FaAngleDoubleRight />
+                      </span>
                     </label>
                   </div>
                 </td>
@@ -188,7 +251,10 @@ const StatusSelector = ({
                       class="btn btn-outline-danger"
                       htmlFor="statusCancelled"
                     >
-                      cancelled
+                      cancelled{" "}
+                      <span className="float-end">
+                        <FaFlagCheckered />
+                      </span>
                     </label>
                   </div>
                 </td>
@@ -214,7 +280,13 @@ const StatusSelector = ({
                       class="btn btn-outline-primary"
                       htmlFor="statusAccepted"
                     >
-                      accepted
+                      <span className="float-start">
+                        <FaAngleDoubleLeft />
+                      </span>{" "}
+                      accepted{" "}
+                      <span className="float-end">
+                        <FaAngleDoubleRight />
+                      </span>
                     </label>
                   </div>
                 </td>
@@ -237,7 +309,13 @@ const StatusSelector = ({
                       class="btn btn-outline-info"
                       htmlFor="statusInProgress"
                     >
-                      in-progress
+                      <span className="float-start">
+                        <FaAngleDoubleLeft />
+                      </span>{" "}
+                      in-progress{" "}
+                      <span className="float-end">
+                        <FaAngleDoubleRight />
+                      </span>
                     </label>
                   </div>
                 </td>
@@ -260,7 +338,10 @@ const StatusSelector = ({
                       class="btn btn-outline-success"
                       htmlFor="statusCompleted"
                     >
-                      completed
+                      completed{" "}
+                      <span className="float-end">
+                        <FaFlagCheckered />
+                      </span>
                     </label>
                     <input
                       type="radio"
@@ -279,7 +360,10 @@ const StatusSelector = ({
                       class="btn btn-outline-danger"
                       htmlFor="statusFailed"
                     >
-                      failed
+                      failed{" "}
+                      <span className="float-end">
+                        <FaFlagCheckered />
+                      </span>
                     </label>
                   </div>
                 </td>
@@ -305,7 +389,10 @@ const StatusSelector = ({
                       class="btn btn-outline-danger"
                       htmlFor="statusRejected"
                     >
-                      rejected
+                      rejected{" "}
+                      <span className="float-end">
+                        <FaFlagCheckered />
+                      </span>
                     </label>
                     <div
                       className={
@@ -329,7 +416,6 @@ const StatusSelector = ({
                             <option>Select a reason ...</option>
                             {rejectReasonOptions()}
                           </select>
-
                         </div>
                       </div>
 
@@ -357,10 +443,29 @@ const StatusSelector = ({
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="warning" onClick={closeStatusEdit}>
+        {profileName === "Logica" ? null : (
+          <div className="col form-check form-switch mx-2 float-start text-start">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              role="button"
+              id="flexSwitchBusinessRule"
+              checked={enforceBusinessRule}
+              onChange={() => setEnforceBusinessRule(!enforceBusinessRule)}
+            />
+            <label
+              className="form-check-label"
+              role="button"
+              for="flexSwitchBusinessRule"
+            >
+              Enforce Epic Business Rules
+            </label>
+          </div>
+        )}
+        <Button className="col" variant="warning" onClick={closeStatusEdit}>
           Cancel
         </Button>
-        <Button variant="primary" onClick={submitStatusChange}>
+        <Button className="col" variant="primary" onClick={submitStatusChange}>
           Submit
         </Button>
       </Modal.Footer>
