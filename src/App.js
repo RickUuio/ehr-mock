@@ -661,7 +661,7 @@ function App() {
     let data = await res.json();
     let task = data.response.body;
     let headers = data.response.headers;
-    let eTag = headers["e-tag"];
+    let eTag = headers["e-tag"][0];
     console.log("task: ", task);
     console.log("headers", headers);
 
