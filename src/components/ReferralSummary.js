@@ -63,7 +63,7 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus }) {
         <td>{referral.ServiceRequest.resource.authoredOn}</td>
         <td>
           <div
-            className="btn btn-outline-primary my-0"
+            className="btn btn-outline-primary my-0" data-bs-toggle="tooltip" title="Click to edit referral status" data-bs-placement="top"
             onClick={() => editStatus(referral.Task?.resource?.id, referral.Task?.resource?.status)}
           >
             {referral.Task?.resource?.status}  <FaEdit></FaEdit>
