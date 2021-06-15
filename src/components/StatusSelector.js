@@ -42,17 +42,25 @@ const StatusSelector = ({
 
   const statusEnabled = (status) => {
     if (!enforceBusinessRule) return true;
-    if (profileName === "Logica") return true;
+    // if (profileName === "Logica") return true;
 
     switch (status) {
       case "requested":
+        if (
+          currentReferralStatus === "requested" ||
+          currentReferralStatus === "accepted" ||
+          //currentReferralStatus === "rejected" ||
+          currentReferralStatus === ""
+        )
+          return true;
+        else return false;
       case "accepted":
       case "rejected":
         if (
           currentReferralStatus === "requested" ||
           currentReferralStatus === "in-progress" ||
           currentReferralStatus === "accepted" ||
-          currentReferralStatus === "rejected" ||
+          //currentReferralStatus === "rejected" ||
           currentReferralStatus === ""
         )
           return true;
@@ -457,7 +465,7 @@ const StatusSelector = ({
         </div>
       </Modal.Body>
       <Modal.Footer>
-        {profileName === "Logica" ? null : (
+        
           <div className="col form-check form-switch mx-2 float-start text-start">
             <input
               className="form-check-input"
@@ -475,7 +483,7 @@ const StatusSelector = ({
               Enforce Epic Business Rules
             </label>
           </div>
-        )}
+  
         <Button className="col" variant="warning" onClick={closeStatusEdit}>
           Cancel
         </Button>
