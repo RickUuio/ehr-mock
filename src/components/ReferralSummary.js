@@ -1,7 +1,7 @@
 import { IoOpenOutline, IoCloudDownloadSharp } from "react-icons/io5";
 import { useState } from "react";
-import { MdExpandLess, MdExpandMore } from "react-icons/md";
-import {FaEdit} from "react-icons/fa";
+// import { MdExpandLess, MdExpandMore } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
 
 function ReferralSummary({ referral, showFhirSource, editReferralStatus }) {
   const [expandReferralId, setExpandReferralId] = useState("");
@@ -12,7 +12,7 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus }) {
 
   const editStatus = (referralId, currentStatus) => {
     editReferralStatus(referralId, currentStatus);
-  }
+  };
 
   let findUUID = (resource) => {
     const cboUUID = resource.identifier.find(
@@ -54,19 +54,31 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus }) {
   return (
     <>
       <tr
-        className={"align-middle table-" + rowColor(referral.Task?.resource?.status)}
+        className={
+          "align-middle table-" + rowColor(referral.Task?.resource?.status)
+        }
         data-bs-toggle="collapse"
         data-bs-target={"#referral" + referral.ServiceRequest.resource.id}
         aria-expanded="false"
         aria-controls={"referral" + referral.ServiceRequest.resource.id}
+        onClick={() => toggleExpand(referral.ServiceRequest.resource.id)}
+        role="button"
       >
         <td>{referral.ServiceRequest.resource.authoredOn}</td>
         <td>
           <div
-            className="btn btn-outline-primary my-0" data-bs-toggle="tooltip" title="Click to edit referral status" data-bs-placement="top"
-            onClick={() => editStatus(referral.Task?.resource?.id, referral.Task?.resource?.status)}
+            className="btn btn-outline-primary my-0"
+            data-bs-toggle="tooltip"
+            title="Click to edit referral status"
+            data-bs-placement="top"
+            onClick={() =>
+              editStatus(
+                referral.Task?.resource?.id,
+                referral.Task?.resource?.status
+              )
+            }
           >
-            {referral.Task?.resource?.status}  <FaEdit></FaEdit>
+            {referral.Task?.resource?.status} <FaEdit></FaEdit>
           </div>
         </td>
         <td>
@@ -75,7 +87,7 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus }) {
             : "Not Confirmed"}
         </td>
         <td>{referral.Task?.resource?.owner?.display}</td>
-        <td>
+        {/* <td>
           <div className="form-check form-switch mx-2 text-start">
             <input
               className="form-check-input"
@@ -98,7 +110,22 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus }) {
               )}
             </label>
           </div>
+        </td> */}
+        <td>
+          {referral.trackingItem ? (
+            <a
+              href={`https://app.uniteustraining.com/dashboard/referrals/sent/all/${referral.trackingItem.core_referral_id}`}
+              data-bs-toggle="tooltip"
+              title={referral.trackingItem.core_referral_id}
+              data-bs-placement="top"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              {"..." + referral.trackingItem.core_referral_id.split("-").pop()}
+            </a>
+          ) : null}
         </td>
+        <td>{expandStatus(referral.ServiceRequest.resource.id) ? "-" : "+"}</td>
       </tr>
       <tr
         className={
@@ -108,10 +135,36 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus }) {
         }
         id={"referral" + referral.ServiceRequest.resource.id}
       >
-        <td colspan="5">
+        <td colspan="6">
           <div className="row px-3">
             <table className="table table-sm align-middle text-start">
               <tbody>
+                {referral.trackingItem ? (
+                  <tr>
+                    <th scoope="row">
+                      <button
+                        type="button"
+                        className="btn btn-link"
+                        onClick={() => showSource(referral.trackingItem)}
+                      >
+                        Task Tracking <IoOpenOutline />
+                      </button>
+                    </th>
+                    <td>
+                      Referral created in Unite Us{" "}
+                      <a
+                        href={`https://app.uniteustraining.com/dashboard/referrals/sent/all/${referral.trackingItem.core_referral_id}`}
+                        data-bs-toggle="tooltip"
+                        title={referral.trackingItem.core_referral_id}
+                        data-bs-placement="top"
+                        target="_blank"
+                        rel="noreferrer noopener"
+                      >
+                        {referral.trackingItem.core_referral_id}
+                      </a>
+                    </td>
+                  </tr>
+                ) : null}
                 <tr>
                   <th scoope="row">
                     <button

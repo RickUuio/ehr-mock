@@ -404,13 +404,24 @@ function App() {
 
     // Fetch Binaries for all DocumentReferences
     //setToastMessage((a) => { return a + "\nBinaries ... "});
-    setProgress("95%");
+    setProgress("85%");
     for (let referral of referralList) {
       if (referral.DocumentReference?.length > 0) {
         const binaryList = await fetchBinaries(referral.DocumentReference);
         if (binaryList?.length > 0) {
           referral.Binary = binaryList;
         }
+      }
+    }
+
+    setProgress("95%");
+    // look up referral UUID in AWS DDB
+    for (let referral of referralList) {
+      if (referral.Task?.resource?.id) {
+        const trackingItem = await lookupUUReferralId(
+          `${baseUrl}/Task/${referral.Task?.resource?.id}`
+        );
+        if (trackingItem) referral.trackingItem = trackingItem;
       }
     }
 
@@ -556,6 +567,26 @@ function App() {
     const data = await res.json();
     console.log("consent: ", data);
     return data.entry;
+  };
+
+  const lookupUUReferralId = async (fhirUrl) => {
+    const url =
+      "https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/resource_tracking/read";
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        Accept: "application/json",
+        "x-api-key": "sfsdfddfdsfsdfs32342343",
+      },
+      body: JSON.stringify({
+        full_url: fhirUrl,
+      }),
+    });
+    const data = await res.json();
+    const item = data.response?.item;
+    console.log("Found item: ", item);
+    return item;
   };
 
   const changeCurrentEncounter = async (encounterSelected, currentBaseUrl) => {

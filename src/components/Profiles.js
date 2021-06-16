@@ -83,7 +83,7 @@ export const Profile_Logica = {
     networkId: "145ca925-ba86-490d-b404-35f4fe5ada66",
   },
 
-  defaultEncounter: "14732",
+  defaultEncounter: "14801",
   defaultDocumentReference: "14740",
 
   defaultBaseUrl: "https://api.logicahealth.org/uufhircrn/open",

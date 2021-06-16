@@ -88,7 +88,8 @@ function Referrals({
                   <th>STATUS</th>
                   <th>SERVICE TYPE</th>
                   <th>RECEIPIENT</th>
-                  <th>EXPAND</th>
+                  <th>UU REFERRAL</th>
+                  <th>+/-</th>
                 </tr>
               </thead>
               <tbody>
