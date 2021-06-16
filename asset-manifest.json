@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/ehr-mock/static/css/main.1b0bd38c.chunk.css",
-    "main.js": "/ehr-mock/static/js/main.6bb4235a.chunk.js",
-    "main.js.map": "/ehr-mock/static/js/main.6bb4235a.chunk.js.map",
+    "main.js": "/ehr-mock/static/js/main.b8a96bd2.chunk.js",
+    "main.js.map": "/ehr-mock/static/js/main.b8a96bd2.chunk.js.map",
     "runtime-main.js": "/ehr-mock/static/js/runtime-main.6a7ea37a.js",
     "runtime-main.js.map": "/ehr-mock/static/js/runtime-main.6a7ea37a.js.map",
     "static/css/2.800be05e.chunk.css": "/ehr-mock/static/css/2.800be05e.chunk.css",
@@ -20,6 +20,6 @@
     "static/css/2.800be05e.chunk.css",
     "static/js/2.e1fae15d.chunk.js",
     "static/css/main.1b0bd38c.chunk.css",
-    "static/js/main.6bb4235a.chunk.js"
+    "static/js/main.b8a96bd2.chunk.js"
   ]
 }
