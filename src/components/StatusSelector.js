@@ -49,7 +49,7 @@ const StatusSelector = ({
         if (
           currentReferralStatus === "requested" ||
           currentReferralStatus === "accepted" ||
-          //currentReferralStatus === "rejected" ||
+          currentReferralStatus === "rejected" ||
           currentReferralStatus === ""
         )
           return true;
@@ -60,7 +60,7 @@ const StatusSelector = ({
           currentReferralStatus === "requested" ||
           currentReferralStatus === "in-progress" ||
           currentReferralStatus === "accepted" ||
-          //currentReferralStatus === "rejected" ||
+          currentReferralStatus === "rejected" ||
           currentReferralStatus === ""
         )
           return true;
