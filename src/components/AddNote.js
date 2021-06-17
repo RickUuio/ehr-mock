@@ -133,7 +133,7 @@ const AddNote = ({ showAddNote, referral, closeAddNote }) => {
         <div className="form-group">
           <div className="d-flex">
             <label className="col-form-label col-6 vertical-bottom">NEW NOTE</label>
-            <div className="btn btn-block btn-primary col-6" onClick={sendNote}>
+            <div className="btn btn-primary col-6" onClick={sendNote}>
               Send
             </div>
           </div>
