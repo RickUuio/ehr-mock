@@ -23,8 +23,8 @@ const AddNote = ({ showAddNote, referral, closeAddNote }) => {
       },
       body: JSON.stringify({
         note : noteText,
-        referral_id: referral.trackingItem?.core_referral_id,
-        sent_at: Date.now(),
+        referralId: referral.trackingItem?.core_referral_id,
+        sentAt: Date.now(),
       }),
     });
     const data = await res.json();
