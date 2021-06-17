@@ -238,11 +238,12 @@ const StatusSelector = ({
                       class="btn btn-outline-dark"
                       htmlFor="statusRequested"
                     >
-                      {!statusEnabled("requested") ? <AiOutlineStop /> : null}{" "}
-                      requested{" "}
-                      <span className="float-end">
-                        <FaAngleDoubleRight />
-                      </span>
+                      <AiOutlineStop
+                        className={
+                          statusEnabled("requested") ? "invisible" : "visible"
+                        }
+                      />{" "}
+                      requested <AiOutlineStop className="invisible" />
                     </label>
                   </div>
                 </td>
@@ -266,7 +267,11 @@ const StatusSelector = ({
                       class="btn btn-outline-danger"
                       htmlFor="statusCancelled"
                     >
-                      {!statusEnabled("cancelled") ? <AiOutlineStop /> : null}{" "}
+                      <AiOutlineStop
+                        className={
+                          statusEnabled("cancelled") ? "invisible" : "visible"
+                        }
+                      />{" "}
                       cancelled{" "}
                       <span className="float-end">
                         <FaFlagCheckered />
@@ -296,14 +301,12 @@ const StatusSelector = ({
                       class="btn btn-outline-primary"
                       htmlFor="statusAccepted"
                     >
-                      <span className="float-start">
-                        <FaAngleDoubleLeft />
-                      </span>{" "}
-                      {!statusEnabled("accepted") ? <AiOutlineStop /> : null}{" "}
-                      accepted{" "}
-                      <span className="float-end">
-                        <FaAngleDoubleRight />
-                      </span>
+                      <AiOutlineStop
+                        className={
+                          statusEnabled("accepted") ? "invisible" : "visible"
+                        }
+                      />{" "}
+                      accepted <AiOutlineStop className="invisible" />
                     </label>
                   </div>
                 </td>
@@ -326,14 +329,12 @@ const StatusSelector = ({
                       class="btn btn-outline-info"
                       htmlFor="statusInProgress"
                     >
-                      <span className="float-start">
-                        <FaAngleDoubleLeft />
-                      </span>{" "}
-                      {!statusEnabled("in-progress") ? <AiOutlineStop /> : null}{" "}
-                      in-progress{" "}
-                      <span className="float-end">
-                        <FaAngleDoubleRight />
-                      </span>
+                      <AiOutlineStop
+                        className={
+                          statusEnabled("in-progress") ? "invisible" : "visible"
+                        }
+                      />{" "}
+                      in-progress <AiOutlineStop className="invisible" />
                     </label>
                   </div>
                 </td>
@@ -356,7 +357,11 @@ const StatusSelector = ({
                       class="btn btn-outline-success"
                       htmlFor="statusCompleted"
                     >
-                      {!statusEnabled("completed") ? <AiOutlineStop /> : null}{" "}
+                      <AiOutlineStop
+                        className={
+                          statusEnabled("completed") ? "invisible" : "visible"
+                        }
+                      />{" "}
                       completed{" "}
                       <span className="float-end">
                         <FaFlagCheckered />
@@ -379,7 +384,11 @@ const StatusSelector = ({
                       class="btn btn-outline-danger"
                       htmlFor="statusFailed"
                     >
-                      {!statusEnabled("failed") ? <AiOutlineStop /> : null}{" "}
+                      <AiOutlineStop
+                        className={
+                          statusEnabled("failed") ? "invisible" : "visible"
+                        }
+                      />{" "}
                       failed{" "}
                       <span className="float-end">
                         <FaFlagCheckered />
@@ -409,7 +418,11 @@ const StatusSelector = ({
                       class="btn btn-outline-danger"
                       htmlFor="statusRejected"
                     >
-                      {!statusEnabled("rejected") ? <AiOutlineStop /> : null}{" "}
+                      <AiOutlineStop
+                        className={
+                          statusEnabled("rejected") ? "invisible" : "visible"
+                        }
+                      />{" "}
                       rejected{" "}
                       <span className="float-end">
                         <FaFlagCheckered />
@@ -464,25 +477,24 @@ const StatusSelector = ({
         </div>
       </Modal.Body>
       <Modal.Footer>
-        
-          <div className="col form-check form-switch mx-2 float-start text-start">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              role="button"
-              id="flexSwitchBusinessRule"
-              checked={enforceBusinessRule}
-              onChange={() => setEnforceBusinessRule(!enforceBusinessRule)}
-            />
-            <label
-              className="form-check-label"
-              role="button"
-              for="flexSwitchBusinessRule"
-            >
-              Enforce Epic Business Rules
-            </label>
-          </div>
-  
+        <div className="col form-check form-switch mx-2 float-start text-start">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            role="button"
+            id="flexSwitchBusinessRule"
+            checked={enforceBusinessRule}
+            onChange={() => setEnforceBusinessRule(!enforceBusinessRule)}
+          />
+          <label
+            className="form-check-label"
+            role="button"
+            for="flexSwitchBusinessRule"
+          >
+            Enforce Epic Business Rules
+          </label>
+        </div>
+
         <Button className="col" variant="warning" onClick={closeStatusEdit}>
           Cancel
         </Button>

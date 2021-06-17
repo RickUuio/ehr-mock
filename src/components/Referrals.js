@@ -2,6 +2,7 @@ import EncounterSummary from "./EncounterSummary";
 import CreateReferral from "./CreateReferral";
 import ReferralSummary from "./ReferralSummary";
 import StatusSelector from "./StatusSelector";
+import AddNote from "./AddNote";
 import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 
@@ -22,6 +23,8 @@ function Referrals({
   //  currentReferralStatus
   //);
   const [editReferralId, setEditReferralId] = useState();
+  const [showAddNote, setShowAddNote] = useState(false);
+  const [currentReferral, setCurrentReferral] = useState();
 
   const toggleShowNewReferral = () => {
     setShowNewReferral((showNewReferral) => !showNewReferral);
@@ -53,6 +56,14 @@ function Referrals({
       console.log("new status: ", newStatus.value, newStatus.rejectReason);
       updateReferralStatus(editReferralId, newStatus);
     } //else setNewReferralStatus("");
+  };
+
+  const showAddNoteWindow = (referral) => {
+    setCurrentReferral(referral)
+    setShowAddNote(true);
+  };
+  const closeAddNote = () => {
+    setShowAddNote(false);
   };
 
   return (
@@ -88,6 +99,7 @@ function Referrals({
                   <th>STATUS</th>
                   <th>SERVICE TYPE</th>
                   <th>RECEIPIENT</th>
+                  <th>NOTES</th>
                   <th>UU REFERRAL</th>
                   <th>+/-</th>
                 </tr>
@@ -99,6 +111,7 @@ function Referrals({
                     referral={referral}
                     showFhirSource={showFhirSource}
                     editReferralStatus={editReferralStatus}
+                    showAddNoteWindow={showAddNoteWindow}
                   />
                 ))}
               </tbody>
@@ -127,6 +140,11 @@ function Referrals({
         closeReferralStatusEdit={closeReferralStatusEdit}
         profileName={profileName}
       ></StatusSelector>
+      <AddNote
+        showAddNote={showAddNote}
+        referral={currentReferral}
+        closeAddNote={closeAddNote}
+      ></AddNote>
     </div>
   );
 }

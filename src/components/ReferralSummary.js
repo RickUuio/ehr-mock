@@ -3,7 +3,7 @@ import { useState } from "react";
 // import { MdExpandLess, MdExpandMore } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 
-function ReferralSummary({ referral, showFhirSource, editReferralStatus }) {
+function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAddNoteWindow }) {
   const [expandReferralId, setExpandReferralId] = useState("");
 
   const showSource = (fullJson) => {
@@ -78,7 +78,7 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus }) {
               )
             }
           >
-            {referral.Task?.resource?.status} <FaEdit></FaEdit>
+            {referral.Task?.resource?.status}{" "}<FaEdit></FaEdit>
           </div>
         </td>
         <td>
@@ -87,6 +87,16 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus }) {
             : "Not Confirmed"}
         </td>
         <td>{referral.Task?.resource?.owner?.display}</td>
+        <td>
+          <div role="button" onClick={() =>
+              showAddNoteWindow(referral)
+            }>
+            <div className="badge bg-primary">
+              {referral.Communication?.length || "0"}
+            </div>{" "}
+            <FaEdit className="text-primary"></FaEdit>
+          </div>
+        </td>
         {/* <td>
           <div className="form-check form-switch mx-2 text-start">
             <input
@@ -135,7 +145,7 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus }) {
         }
         id={"referral" + referral.ServiceRequest.resource.id}
       >
-        <td colspan="6">
+        <td colspan="7">
           <div className="row px-3">
             <table className="table table-sm align-middle text-start">
               <tbody>
