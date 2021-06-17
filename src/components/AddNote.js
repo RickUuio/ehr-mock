@@ -24,7 +24,7 @@ const AddNote = ({ showAddNote, referral, closeAddNote }) => {
       body: JSON.stringify({
         note : noteText,
         referralId: referral.trackingItem?.core_referral_id,
-        sentAt: Date.now(),
+        sentAt: Math.floor(Date.now() / 1000),
       }),
     });
     const data = await res.json();
