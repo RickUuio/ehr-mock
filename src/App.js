@@ -850,6 +850,7 @@ function App() {
             sendNotificationUU={sendNotificationUU}
             profileName={currentProfileName}
             updateReferralStatus={updateReferralStatus}
+            baseUrl={baseUrl}
           />
         </div>
       </div>

@@ -13,6 +13,7 @@ function Referrals({
   sendNotificationUU,
   profileName,
   updateReferralStatus,
+  baseUrl,
 }) {
   const [showNewReferral, setShowNewReferral] = useState(false);
   const [showSource, setShowSource] = useState(false);
@@ -144,6 +145,7 @@ function Referrals({
         showAddNote={showAddNote}
         referral={currentReferral}
         closeAddNote={closeAddNote}
+        baseUrl={baseUrl}
       ></AddNote>
     </div>
   );

@@ -145,7 +145,7 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
         }
         id={"referral" + referral.ServiceRequest.resource.id}
       >
-        <td colspan="7">
+        <td colSpan="7">
           <div className="row px-3">
             <table className="table table-sm align-middle text-start">
               <tbody>
@@ -468,19 +468,19 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
                           .
                         </span>
                         {communication.resource.payload ? (
-                          <p>
+                          <div>
                             {" "}
                             Note message:{" "}
                             <div className="btn btn-outline-primary disabled">
                               {communication.resource.payload[0].contentString}
                             </div>
-                          </p>
+                          </div>
                         ) : (
                           <span> Note message is empty.</span>
                         )}
                         {communication.resource.payload &&
                         communication.resource.payload[1]?.contentReference ? (
-                          <p>
+                          <div>
                             {" "}
                             A{" "}
                             <div
@@ -492,7 +492,7 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
                               document <IoOpenOutline />
                             </div>{" "}
                             was attached to the communication.
-                          </p>
+                          </div>
                         ) : null}
                       </td>
                     </tr>

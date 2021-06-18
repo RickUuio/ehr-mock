@@ -155,7 +155,7 @@ footer {
   color: #fff;
   box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.16),
     1px 1px 5px 1px rgba(0, 0, 0, 0.26);
-  background-color: rgb(0, 80, 120);
+  background-color: rgba(0, 123, 167, 1);
   /*   background-image: linear-gradient(
     to right,
     rgb(0, 120, 160) 10%,

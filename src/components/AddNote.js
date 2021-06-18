@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
 import {
   FaAngleDoubleRight,
@@ -8,12 +8,78 @@ import {
 import { IoOpenOutline, IoCloudDownloadSharp } from "react-icons/io5";
 import { CgAttachment } from "react-icons/cg";
 
-const AddNote = ({ showAddNote, referral, closeAddNote }) => {
+const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
   const [noteText, setNoteText] = useState("");
+  const [callResponse, setCallResponse] = useState();
+  const [refreshCount, setRefreshCount] = useState(0);
+  const [communicationList, setCommunicationList] = useState([]);
+
+  useEffect(() => {
+    if (communicationList?.length===0) setCommunicationList(referral?.Communication);
+  });
+
+  useEffect(() => {
+    const updateList = async () => {
+      /*  setCommunicationList(() => {
+        communicationList?.push({
+          resource: {
+            resourceType: "Communication",
+            sent: "2021-06-16T22:44:04.929Z",
+            recipient: [
+              {
+                reference: "Practitioner/SMART-1234",
+                display: "John Smith",
+              },
+            ],
+            sender: {
+              reference: "Organization/14733",
+              display: "River City Food Bank",
+            },
+            payload: [
+              {
+                contentString: noteText,
+              },
+            ],
+          },
+        });
+      }); */
+
+      // Fetch Communications for a Task
+
+      const url =
+        "https://fhir-crn.uniteustraining.com/rick/mockapi/request/search";
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          "Accept": "application/json",
+          "x-api-key": "sfsdfddfdsfsdfs32342343",
+        },
+        body: JSON.stringify({
+            "baseUrl": baseUrl,
+            "resourceType": "Communication",
+            "queryParams": {
+                "part-of": referral.Task.resource.id,
+            }
+        }),
+      });
+      const data = await res.json();
+      console.log("communications: ", data.response?.body?.entry);
+      //setCommunicationList(data.response?.body?.entry);
+      setCommunicationList(data.response?.body?.entry);
+      console.log("communications2: ", communicationList);
+    };
+
+    if (referral?.Task) updateList();
+    setNoteText("");
+    setCallResponse("");
+  }, [refreshCount]);
 
   const sendNote = async () => {
-    console.log('sending note ...', noteText);
-    const url = "https://fhir-crn.uniteustraining.com/rick/mockapi/communication_out/process"
+    console.log("sending note ...", noteText);
+    const url =
+      "https://fhir-crn.uniteustraining.com/rick/mockapi/communication_out/process";
     const res = await fetch(url, {
       method: "POST",
       headers: {
@@ -22,16 +88,17 @@ const AddNote = ({ showAddNote, referral, closeAddNote }) => {
         "x-api-key": "sfsdfddfdsfsdfs32342343",
       },
       body: JSON.stringify({
-        note : noteText,
+        note: noteText,
         referralId: referral.trackingItem?.core_referral_id,
         sentAt: Math.floor(Date.now() / 1000),
       }),
     });
     const data = await res.json();
     console.log("Sent note: ", data);
+    setCallResponse(JSON.stringify(data));
+    setRefreshCount(refreshCount + 1);
     return;
-
-  }
+  };
 
   const sender = (communication) => {
     if (communication) {
@@ -45,7 +112,6 @@ const AddNote = ({ showAddNote, referral, closeAddNote }) => {
         senderType = "cbo";
       else senderType = "ehr";
       const senderInfo = { name: senderName, type: senderType };
-      console.log(senderInfo);
       return senderInfo;
     }
 
@@ -79,14 +145,14 @@ const AddNote = ({ showAddNote, referral, closeAddNote }) => {
       <Modal.Body>
         <table className="table table-responsive table-hover">
           <tbody>
-            {referral?.Communication.map((entry, index) => (
+            {communicationList?.map((entry, index) => (
               <tr>
                 <td className="p-0">
                   <table className="table table-borderless m-0 p-0">
                     <tbody>
                       <tr>
                         <td className="text-center text-secondary">
-                          {entry.resource.sent}
+                          {entry.resource?.sent}
                         </td>
                       </tr>
 
@@ -110,12 +176,12 @@ const AddNote = ({ showAddNote, referral, closeAddNote }) => {
                               entry
                             )} disabled mt-0 mx-0 text-start`}
                           >
-                            {entry.resource.payload
-                              ? entry.resource.payload[0].contentString
+                            {entry.resource?.payload
+                              ? entry.resource?.payload[0]?.contentString
                               : "[empty]"}
                           </div>
-                          {entry.resource.payload &&
-                          entry.resource.payload[1]?.contentReference ? (
+                          {entry.resource?.payload &&
+                          entry.resource?.payload[1]?.contentReference ? (
                             <p>
                               <CgAttachment />
                               Document attachment
@@ -132,7 +198,9 @@ const AddNote = ({ showAddNote, referral, closeAddNote }) => {
         </table>
         <div className="form-group">
           <div className="d-flex">
-            <label className="col-form-label col-6 vertical-bottom">NEW NOTE</label>
+            <label className="col-form-label col-6 vertical-bottom">
+              NEW NOTE
+            </label>
             <div className="btn btn-primary col-6" onClick={sendNote}>
               Send
             </div>
@@ -143,10 +211,14 @@ const AddNote = ({ showAddNote, referral, closeAddNote }) => {
               rows="3"
               cols="50"
               placeholder="Enter a new note"
-              onChange ={(e) => setNoteText(e.target.value)}
-            />
+              value={noteText}
+              onChange={(e) => setNoteText(e.target.value)} />
+            
           </div>
         </div>
+        <pre>
+          {callResponse}
+        </pre>
       </Modal.Body>
       <Modal.Footer>
         <Button className="col" variant="warning" onClick={closeAddNote}>

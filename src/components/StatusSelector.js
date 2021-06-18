@@ -399,7 +399,7 @@ const StatusSelector = ({
               </tr>
 
               <tr>
-                <td colspan="3">
+                <td colSpan="3">
                   <div className="d-grid gap-2">
                     <input
                       type="radio"
