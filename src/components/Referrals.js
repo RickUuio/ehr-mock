@@ -144,6 +144,7 @@ function Referrals({
       <AddNote
         showAddNote={showAddNote}
         referral={currentReferral}
+        communicationList={currentReferral?.Communication}
         closeAddNote={closeAddNote}
         baseUrl={baseUrl}
       ></AddNote>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Modal, Button } from "react-bootstrap";
 import {
   FaAngleDoubleRight,
@@ -12,40 +12,16 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
   const [noteText, setNoteText] = useState("");
   const [callResponse, setCallResponse] = useState();
   const [refreshCount, setRefreshCount] = useState(0);
+  const [showMessageToast, setShowMessageToast] = useState(false);
   const [communicationList, setCommunicationList] = useState([]);
 
   useEffect(() => {
-    if (communicationList?.length===0) setCommunicationList(referral?.Communication);
-  });
+    setCommunicationList(referral?.Communication);
+    console.log("useEffect cl:", communicationList);
+  }, [referral]);
 
   useEffect(() => {
     const updateList = async () => {
-      /*  setCommunicationList(() => {
-        communicationList?.push({
-          resource: {
-            resourceType: "Communication",
-            sent: "2021-06-16T22:44:04.929Z",
-            recipient: [
-              {
-                reference: "Practitioner/SMART-1234",
-                display: "John Smith",
-              },
-            ],
-            sender: {
-              reference: "Organization/14733",
-              display: "River City Food Bank",
-            },
-            payload: [
-              {
-                contentString: noteText,
-              },
-            ],
-          },
-        });
-      }); */
-
-      // Fetch Communications for a Task
-
       const url =
         "https://fhir-crn.uniteustraining.com/rick/mockapi/request/search";
 
@@ -53,21 +29,24 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
         method: "POST",
         headers: {
           "Content-type": "application/json",
-          "Accept": "application/json",
+          Accept: "application/json",
           "x-api-key": "sfsdfddfdsfsdfs32342343",
         },
         body: JSON.stringify({
-            "baseUrl": baseUrl,
-            "resourceType": "Communication",
-            "queryParams": {
-                "part-of": referral.Task.resource.id,
-            }
+          baseUrl: baseUrl,
+          resourceType: "Communication",
+          queryParams: {
+            "part-of": referral?.Task.resource.id,
+          },
         }),
       });
       const data = await res.json();
       console.log("communications: ", data.response?.body?.entry);
+
+      if (data.response?.body?.total > 0)
+        //communicationList = data.response.body.entry;
+        setCommunicationList(data.response?.body?.entry);
       //setCommunicationList(data.response?.body?.entry);
-      setCommunicationList(data.response?.body?.entry);
       console.log("communications2: ", communicationList);
     };
 
@@ -78,6 +57,7 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
 
   const sendNote = async () => {
     console.log("sending note ...", noteText);
+    setShowMessageToast(true);
     const url =
       "https://fhir-crn.uniteustraining.com/rick/mockapi/communication_out/process";
     const res = await fetch(url, {
@@ -89,7 +69,7 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
       },
       body: JSON.stringify({
         note: noteText,
-        referralId: referral.trackingItem?.core_referral_id,
+        referralId: referral?.trackingItem?.core_referral_id,
         sentAt: Math.floor(Date.now() / 1000),
       }),
     });
@@ -97,6 +77,7 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
     console.log("Sent note: ", data);
     setCallResponse(JSON.stringify(data));
     setRefreshCount(refreshCount + 1);
+    setShowMessageToast(false);
     return;
   };
 
@@ -137,95 +118,144 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
     return responseToStr;
   };
 
-  return (
-    <Modal id="addNote" size="lg" show={showAddNote} onHide={closeAddNote}>
-      <Modal.Header className="bg-light">
-        <Modal.Title>Referral Communications</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <table className="table table-responsive table-hover">
-          <tbody>
-            {communicationList?.map((entry, index) => (
-              <tr>
-                <td className="p-0">
-                  <table className="table table-borderless m-0 p-0">
-                    <tbody>
-                      <tr>
-                        <td className="text-center text-secondary">
-                          {entry.resource?.sent}
-                        </td>
-                      </tr>
+  const closeAddNoteWindow = () => {
+    setCommunicationList([]);
+    closeAddNote();
+  };
 
-                      {sender(entry).type === "cbo" ? (
-                        <tr
-                          className={`text-${noteAlign(entry)} text-secondary`}
-                        >
-                          <td className="py-0">{responseTo(entry)}</td>{" "}
+  return (
+    <>
+      <Modal
+        id="addNote"
+        size="lg"
+        show={showAddNote}
+        onHide={closeAddNoteWindow}
+      >
+        <Modal.Header className="bg-light">
+          <Modal.Title>Referral Communications</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <table className="table table-responsive table-hover">
+            <tbody>
+              {communicationList?.map((entry, index) => (
+                <tr>
+                  <td className="p-0">
+                    <table className="table table-borderless m-0 p-0">
+                      <tbody>
+                        <tr>
+                          <td className="text-center text-secondary">
+                            {entry.resource?.sent}
+                          </td>
                         </tr>
-                      ) : (
-                        <tr
-                          className={`text-${noteAlign(entry)} text-secondary`}
-                        >
-                          <td className="py-0">{sender(entry).name}</td>
-                        </tr>
-                      )}
-                      <tr className={`text-${noteAlign(entry)}`}>
-                        <td>
-                          <div
-                            className={`btn btn-${noteColor(
+
+                        {sender(entry).type === "cbo" ? (
+                          <tr
+                            className={`text-${noteAlign(
                               entry
-                            )} disabled mt-0 mx-0 text-start`}
+                            )} text-secondary`}
                           >
-                            {entry.resource?.payload
-                              ? entry.resource?.payload[0]?.contentString
-                              : "[empty]"}
-                          </div>
-                          {entry.resource?.payload &&
-                          entry.resource?.payload[1]?.contentReference ? (
-                            <p>
-                              <CgAttachment />
-                              Document attachment
-                            </p>
-                          ) : null}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="form-group">
-          <div className="d-flex">
-            <label className="col-form-label col-6 vertical-bottom">
-              NEW NOTE
-            </label>
-            <div className="btn btn-primary col-6" onClick={sendNote}>
-              Send
+                            <td className="py-0">{responseTo(entry)}</td>{" "}
+                          </tr>
+                        ) : (
+                          <tr
+                            className={`text-${noteAlign(
+                              entry
+                            )} text-secondary`}
+                          >
+                            <td className="py-0">{sender(entry).name}</td>
+                          </tr>
+                        )}
+                        <tr className={`text-${noteAlign(entry)}`}>
+                          <td>
+                            <div
+                              className={`btn btn-${noteColor(
+                                entry
+                              )} disabled mt-0 mx-0 text-start`}
+                            >
+                              {entry.resource?.payload
+                                ? entry.resource?.payload[0]?.contentString
+                                : "[empty]"}
+                            </div>
+                            {entry.resource?.payload &&
+                            entry.resource?.payload[1]?.contentReference ? (
+                              <p>
+                                <CgAttachment />
+                                Document attachment
+                              </p>
+                            ) : null}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="form-group">
+            <div className="d-flex">
+              <label className="col-form-label col-6 vertical-bottom">
+                NEW NOTE
+              </label>
+              <div className="btn btn-primary col-6" onClick={sendNote}>
+                Send
+              </div>
+            </div>
+            <div
+              className={
+                showMessageToast
+                  ? "toast bg-warning text-secondary show"
+                  : "toast"
+              }
+              role="alert"
+              aria-live="assertive"
+              aria-atomic="true"
+              id="messageToastModal"
+            >
+              <div className="toast-header">
+                <strong className="me-auto">Please Wait ...</strong>
+              </div>
+              <div className="toast-body">
+                {callResponse}
+                <div className="spinner-border text-warning" role="status">
+                  <span className="visually-hidden">...</span>
+                </div>
+                <div className="progress my-2">
+                  <div
+                    className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
+                    role="progressbar"
+                    style={{ width: "50%" }}
+                    aria-valuenow="0"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <textarea
+                className="form-control"
+                rows="3"
+                cols="50"
+                placeholder="Enter a new note"
+                value={noteText}
+                onChange={(e) => setNoteText(e.target.value)}
+              />
             </div>
           </div>
-          <div>
-            <textarea
-              className="form-control"
-              rows="3"
-              cols="50"
-              placeholder="Enter a new note"
-              value={noteText}
-              onChange={(e) => setNoteText(e.target.value)} />
-            
-          </div>
-        </div>
-        <pre>
-          {callResponse}
-        </pre>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button className="col" variant="warning" onClick={closeAddNote}>
-          Close
-        </Button>
-      </Modal.Footer>
-    </Modal>
+          <pre>{callResponse}</pre>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            className="col"
+            variant="warning"
+            onClick={closeAddNoteWindow}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 };
 
