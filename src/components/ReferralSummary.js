@@ -2,6 +2,7 @@ import { IoOpenOutline, IoCloudDownloadSharp } from "react-icons/io5";
 import { useState } from "react";
 // import { MdExpandLess, MdExpandMore } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
+import { BiMessageEdit } from "react-icons/bi";
 
 function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAddNoteWindow }) {
   const [expandReferralId, setExpandReferralId] = useState("");
@@ -94,7 +95,7 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
             <div className="badge bg-primary">
               {referral.Communication?.length || "0"}
             </div>{" "}
-            <FaEdit className="text-primary"></FaEdit>
+            <BiMessageEdit className="text-primary " />
           </div>
         </td>
         {/* <td>

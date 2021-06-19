@@ -155,7 +155,7 @@ const StatusSelector = ({
       show={showReferralStatus}
       onHide={closeStatusEdit}
     >
-      <Modal.Header className="bg-light">
+      <Modal.Header className="bg-light" closeButton>
         <Modal.Title>Update Referral Status</Modal.Title>
       </Modal.Header>
       <Modal.Body>

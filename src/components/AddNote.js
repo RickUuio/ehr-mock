@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Modal, Button } from "react-bootstrap";
+import { BiMessage } from "react-icons/bi"
+
 import {
   FaAngleDoubleRight,
   FaAngleDoubleLeft,
@@ -14,6 +16,9 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
   const [refreshCount, setRefreshCount] = useState(0);
   const [showMessageToast, setShowMessageToast] = useState(false);
   const [communicationList, setCommunicationList] = useState([]);
+  const [waitMessage, setWaitMessage] = useState(
+    "Sending communication note ..."
+  );
 
   useEffect(() => {
     setCommunicationList(referral?.Communication);
@@ -22,6 +27,9 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
 
   useEffect(() => {
     const updateList = async () => {
+      setWaitMessage("Retriving communcation notes ...");
+      setShowMessageToast(true);
+
       const url =
         "https://fhir-crn.uniteustraining.com/rick/mockapi/request/search";
 
@@ -41,22 +49,22 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
         }),
       });
       const data = await res.json();
-      console.log("communications: ", data.response?.body?.entry);
 
-      if (data.response?.body?.total > 0)
-        //communicationList = data.response.body.entry;
+      if (data.response?.body?.total > 0) {
         setCommunicationList(data.response?.body?.entry);
-      //setCommunicationList(data.response?.body?.entry);
-      console.log("communications2: ", communicationList);
+        referral.Communication = data.response?.body?.entry;
+      }
+
+      setShowMessageToast(false);
     };
 
     if (referral?.Task) updateList();
     setNoteText("");
-    setCallResponse("");
+    //setCallResponse("");
   }, [refreshCount]);
 
   const sendNote = async () => {
-    console.log("sending note ...", noteText);
+    setWaitMessage("Sending communication note ...");
     setShowMessageToast(true);
     const url =
       "https://fhir-crn.uniteustraining.com/rick/mockapi/communication_out/process";
@@ -74,7 +82,6 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
       }),
     });
     const data = await res.json();
-    console.log("Sent note: ", data);
     setCallResponse(JSON.stringify(data));
     setRefreshCount(refreshCount + 1);
     setShowMessageToast(false);
@@ -100,8 +107,8 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
   };
 
   const noteColor = (communication) => {
-    if (sender(communication)?.type === "ehr") return "success";
-    else return "primary";
+    if (sender(communication)?.type === "ehr") return "seashell";
+    else return "aliceblue";
   };
 
   const noteAlign = (communication) => {
@@ -111,7 +118,7 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
 
   const responseTo = (communication) => {
     const recipients = communication.resource?.recipient;
-    let responseToStr = "Sent to: ";
+    let responseToStr = "Replied to: ";
     recipients.forEach((entry) => {
       responseToStr += entry.display + ", ";
     });
@@ -119,7 +126,8 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
   };
 
   const closeAddNoteWindow = () => {
-    setCommunicationList([]);
+    //setCommunicationList([]);
+    setCallResponse("");
     closeAddNote();
   };
 
@@ -131,7 +139,7 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
         show={showAddNote}
         onHide={closeAddNoteWindow}
       >
-        <Modal.Header className="bg-light">
+        <Modal.Header className="bg-light" closeButton>
           <Modal.Title>Referral Communications</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -162,15 +170,14 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
                               entry
                             )} text-secondary`}
                           >
-                            <td className="py-0">{sender(entry).name}</td>
+                            <td className="py-0">From: {sender(entry).name}</td>
                           </tr>
                         )}
                         <tr className={`text-${noteAlign(entry)}`}>
-                          <td>
+                          <td style={{backgroundColor: noteColor(entry)}}>
                             <div
-                              className={`btn btn-${noteColor(
-                                entry
-                              )} disabled mt-0 mx-0 text-start`}
+                              className={`btn mt-0 mx-0 text-start disabled text-body`}
+                              style={{opacity: 1}}
                             >
                               {entry.resource?.payload
                                 ? entry.resource?.payload[0]?.contentString
@@ -192,6 +199,7 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
               ))}
             </tbody>
           </table>
+          { referral?.trackingItem ? 
           <div className="form-group">
             <div className="d-flex">
               <label className="col-form-label col-6 vertical-bottom">
@@ -216,19 +224,9 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
                 <strong className="me-auto">Please Wait ...</strong>
               </div>
               <div className="toast-body">
-                {callResponse}
+                {waitMessage}{' '}
                 <div className="spinner-border text-warning" role="status">
                   <span className="visually-hidden">...</span>
-                </div>
-                <div className="progress my-2">
-                  <div
-                    className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
-                    role="progressbar"
-                    style={{ width: "50%" }}
-                    aria-valuenow="0"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
                 </div>
               </div>
             </div>
@@ -242,8 +240,9 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
                 onChange={(e) => setNoteText(e.target.value)}
               />
             </div>
+            <pre>{callResponse}</pre>
           </div>
-          <pre>{callResponse}</pre>
+            : null }
         </Modal.Body>
         <Modal.Footer>
           <Button
