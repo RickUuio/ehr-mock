@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Modal, Button } from "react-bootstrap";
-import { BiMessage } from "react-icons/bi"
+import { BiMessage } from "react-icons/bi";
+import { TiDeleteOutline } from "react-icons/ti";
 
 import {
   FaAngleDoubleRight,
@@ -12,7 +13,7 @@ import { CgAttachment } from "react-icons/cg";
 
 const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
   const [noteText, setNoteText] = useState("");
-  const [callResponse, setCallResponse] = useState();
+  const [callResponse, setCallResponse] = useState("");
   const [refreshCount, setRefreshCount] = useState(0);
   const [showMessageToast, setShowMessageToast] = useState(false);
   const [communicationList, setCommunicationList] = useState([]);
@@ -174,10 +175,10 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
                           </tr>
                         )}
                         <tr className={`text-${noteAlign(entry)}`}>
-                          <td style={{backgroundColor: noteColor(entry)}}>
+                          <td style={{ backgroundColor: noteColor(entry) }}>
                             <div
                               className={`btn mt-0 mx-0 text-start disabled text-body`}
-                              style={{opacity: 1}}
+                              style={{ opacity: 1 }}
                             >
                               {entry.resource?.payload
                                 ? entry.resource?.payload[0]?.contentString
@@ -199,50 +200,64 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
               ))}
             </tbody>
           </table>
-          { referral?.trackingItem ? 
-          <div className="form-group">
-            <div className="d-flex">
-              <label className="col-form-label col-6 vertical-bottom">
-                NEW NOTE
-              </label>
-              <div className="btn btn-primary col-6" onClick={sendNote}>
-                Send
-              </div>
-            </div>
-            <div
-              className={
-                showMessageToast
-                  ? "toast bg-warning text-secondary show"
-                  : "toast"
-              }
-              role="alert"
-              aria-live="assertive"
-              aria-atomic="true"
-              id="messageToastModal"
-            >
-              <div className="toast-header">
-                <strong className="me-auto">Please Wait ...</strong>
-              </div>
-              <div className="toast-body">
-                {waitMessage}{' '}
-                <div className="spinner-border text-warning" role="status">
-                  <span className="visually-hidden">...</span>
+          {referral?.trackingItem ? (
+            <div className="form-group">
+              <div className="d-flex">
+                <label className="col-form-label col-6 vertical-bottom">
+                  NEW NOTE
+                </label>
+                <div className="btn btn-primary col-6" onClick={sendNote}>
+                  Send
                 </div>
               </div>
+              <div
+                className={
+                  showMessageToast
+                    ? "toast bg-warning text-secondary show"
+                    : "toast"
+                }
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+                id="messageToastModal"
+              >
+                <div className="toast-header">
+                  <strong className="me-auto">Please Wait ...</strong>
+                </div>
+                <div className="toast-body">
+                  {waitMessage}{" "}
+                  <div className="spinner-border text-warning" role="status">
+                    <span className="visually-hidden">...</span>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <textarea
+                  className="form-control"
+                  rows="3"
+                  cols="50"
+                  placeholder="Enter a new note"
+                  value={noteText}
+                  onChange={(e) => setNoteText(e.target.value)}
+                />
+              </div>
+              {callResponse === "" ? null : (
+                <div className="row">
+                  <div className="col-10">
+                    <pre>{callResponse}</pre>{" "}
+                  </div>
+                  <div className="col-2">
+                    <TiDeleteOutline
+                      calssName="col-2"
+                      onClick={() => {
+                        setCallResponse("");
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
-            <div>
-              <textarea
-                className="form-control"
-                rows="3"
-                cols="50"
-                placeholder="Enter a new note"
-                value={noteText}
-                onChange={(e) => setNoteText(e.target.value)}
-              />
-            </div>
-            <pre>{callResponse}</pre>
-          </div>
-            : null }
+          ) : null}
         </Modal.Body>
         <Modal.Footer>
           <Button

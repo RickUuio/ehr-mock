@@ -13,7 +13,7 @@ const ProfileSelector = ({ profileName, switchProfile }) => {
           switchProfile("Epic");
         }}
       />
-      <label class="btn btn-outline-danger" htmlFor="profileEpic">
+      <label className="btn btn-outline-danger" htmlFor="profileEpic">
         Calvin @Epic
       </label>
       <input
@@ -28,7 +28,7 @@ const ProfileSelector = ({ profileName, switchProfile }) => {
           switchProfile("Epic2");
         }}
       />
-      <label class="btn btn-outline-danger" htmlFor="profileEpic2">
+      <label className="btn btn-outline-danger" htmlFor="profileEpic2">
         Beverly @Epic
       </label>
       <input

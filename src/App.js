@@ -30,8 +30,9 @@ function App() {
 
   const [sampleDocumentReference, setSampleDocumentReference] = useState("");
 
+  const defaultToastMessage = "Retrieving FHIR resources ... ";
   const [toastMessage, setToastMessage] = useState(
-    "Retrieving FHIR resources ... "
+    defaultToastMessage
   );
   const [showMessageToast, setShowMessageToast] = useState(true);
   const toggleShowMessageToast = () => setShowMessageToast(!showMessageToast);
@@ -41,6 +42,7 @@ function App() {
   const switchProfile = async (profileName) => {
     //if (profileName === currentProfileName) return
     setProgress("0%");
+    setToastMessage(defaultToastMessage);
     setShowMessageToast(true);
 
     console.log("Switch to profile: ", profileName);
@@ -82,6 +84,7 @@ function App() {
   // Create a referral
   const createReferral = async (referral) => {
     setProgress("0%");
+    setToastMessage("Sending create requests ... ");
     setShowMessageToast(true);
 
     console.log("create referral: ", referral);
@@ -284,6 +287,7 @@ function App() {
   ) => {
     // fetching Task + ServiceRequest
     //setToastMessage("Fetching FHIR resources: \n Tasks ... \n ServiceRequests ... ");
+    setToastMessage(defaultToastMessage);
     setProgress("10%");
 
     const url =
@@ -472,8 +476,8 @@ function App() {
     const encounterList = data.total > 0 ? data.entry : [];
 
     encounterList.sort((a, b) => {
-      const timeA = new Date(a.resource.period.start).getTime();
-      const timeB = new Date(b.resource.period.start).getTime();
+      const timeA = new Date(a.resource?.period?.start).getTime();
+      const timeB = new Date(b.resource?.period?.start).getTime();
       return timeB - timeA;
     });
     console.log("encounter", encounterList);
@@ -592,6 +596,7 @@ function App() {
   const changeCurrentEncounter = async (encounterSelected, currentBaseUrl) => {
     //if (encounterSelected === currentEncounter) return;
     setProgress("0%");
+    setToastMessage(defaultToastMessage);
     setShowMessageToast(true);
 
     setCurrentEncounter(encounterSelected);
@@ -624,6 +629,10 @@ function App() {
   };
 
   const sendNotificationUU = async () => {
+    setToastMessage('Sending encounter notification to Unite Us ... ');
+    setProgress("25%");
+    setShowMessageToast(true);
+    
     const url = notificationUrl;
     const notification = {
       resourceType: "Bundle",
@@ -642,8 +651,12 @@ function App() {
       },
       body: JSON.stringify(notification),
     });
+    setProgress("80%");
     const data = await res.json();
     console.log("notification response: ", data);
+    setProgress("100%");
+    setToastMessage(data.statusCode + ": " + data.message);
+    setProgress("hide");
     return data;
   };
 
@@ -816,9 +829,12 @@ function App() {
       >
         <div className="toast-header">
           <strong className="me-auto">Please Wait ...</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="messageToast" aria-label="Close" onClick={() => {setShowMessageToast(false)}}></button>
         </div>
         <div className="toast-body">
           {toastMessage}
+          { progress === "hide" ? null :
+          <>
           <div className="spinner-border text-warning" role="status">
             <span className="visually-hidden">...</span>
           </div>
@@ -832,6 +848,8 @@ function App() {
               aria-valuemax="100"
             ></div>
           </div>
+          </>
+          }
         </div>
       </div>
 

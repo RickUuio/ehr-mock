@@ -489,7 +489,7 @@ const StatusSelector = ({
           <label
             className="form-check-label"
             role="button"
-            for="flexSwitchBusinessRule"
+            htmlFor="flexSwitchBusinessRule"
           >
             Enforce Epic Business Rules
           </label>
