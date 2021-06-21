@@ -119,6 +119,8 @@ const StatusSelector = ({
         return "success";
       case "cancelled":
         return "danger";
+      case "requested":
+        return "secondary";
       default:
         return "dark";
     }
@@ -164,7 +166,7 @@ const StatusSelector = ({
             {"Current Stauts: "}
             <div
               className={
-                "btn disabled btn-outline-" + rowColor(currentReferralStatus)
+                "btn btn-outline-" + rowColor(currentReferralStatus)
               }
             >
               {currentReferralStatus}
@@ -235,7 +237,7 @@ const StatusSelector = ({
                       disabled={!statusEnabled("requested")}
                     />
                     <label
-                      class="btn btn-outline-dark"
+                      class="btn btn-outline-secondary"
                       htmlFor="statusRequested"
                     >
                       <AiOutlineStop
