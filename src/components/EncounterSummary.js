@@ -26,7 +26,7 @@ const EncounterSummary = ({
           <button
             className="btn btn-primary btn-block mx-1"
             onClick={toggle}
-            disabled={profileName === "Epic"}
+            disabled={profileName !== "Logica"}
           >
             Create New Referral
           </button>
