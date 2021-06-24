@@ -52,6 +52,28 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
     }
   };
 
+  const removeReferral = async () => {
+    const fullUrl = referral.trackingItem.full_url;
+    console.log('remove referral: ', fullUrl);
+    const url =
+      "https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/resource_tracking/delete";
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        Accept: "application/json",
+        "x-api-key": "sfsdfddfdsfsdfs32342343",
+      },
+      body: JSON.stringify({
+        full_url: fullUrl,
+      }),
+    });
+    const data = await res.json();
+    const item = data.response;
+    console.log("remove item: ", item);
+    return item;
+  }
+
   return (
     <>
       <tr
@@ -173,6 +195,7 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
                       >
                         {referral.trackingItem.core_referral_id}
                       </a>
+                      <div className="btn btn-sm btn-danger" onClick={removeReferral}>Remove Referral</div>
                     </td>
                   </tr>
                 ) : null}
