@@ -223,10 +223,10 @@ footer {
     */
   border: 1px, solid, lightgray;
   border-color: lightgray;
-  border-style: solid;
+  border-style: none;
   border-width: thin;
   border-radius: 5px;
-  padding: 30px;
+  padding: 20px;
   margin: 20px;
   background-color: ghostwhite;
 }
@@ -236,8 +236,8 @@ footer {
     1px 1px 5px 1px rgba(0, 0, 0, 0.26);
     */
   border-color: lightgray;
-  border-style: solid;
-  border-width: 2px;
+  border-bottom-style: solid;
+  border-width: thin;
   border-left-style: none;
   border-right-style: none;
   padding: 10px;
@@ -253,7 +253,7 @@ footer {
     */
   border-color: lightgray;
   border-style: solid;
-  border-width: thin;
+  border-width: 2px;
   border-radius: 5px;
   padding: 0px;
   padding-top: 0;
@@ -361,7 +361,7 @@ footer {
   .encounterSummary {
     margin-left: 0px;
     margin-right: 0px;
-    margin-top: 20px;
+    margin-top: 0px;
   }
 
   .referralList {
