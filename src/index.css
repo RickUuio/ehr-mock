@@ -226,7 +226,7 @@ footer {
   border-radius: 5px;
   padding: 30px;
   margin: 20px;
-  background-color: white;
+  background-color: ghostwhite;
 }
 
 .encounterSummary {
@@ -239,6 +239,7 @@ footer {
   border-left-style: none;
   border-right-style: none;
   padding: 10px;
+  padding-right: 30px;
   margin: 0px;
   margin-top: 0px;
   background-color: white;
