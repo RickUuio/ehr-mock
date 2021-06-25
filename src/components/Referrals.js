@@ -70,28 +70,42 @@ function Referrals({
   return (
     <div className="col-md-9 col-lg-10 px-0">
       <div className="referrals">
-        <EncounterSummary
+        {/*         <EncounterSummary
           toggleShowNewReferral={toggleShowNewReferral}
           showNewReferral={showNewReferral}
           currentEncounter={currentEncounter}
           sendNotificationUU={sendNotificationUU}
           profileName={profileName}
-        />
+        /> 
         {showNewReferral ? (
           <CreateReferral
             onCreate={onCreateReferral}
             toggleShowNewReferral={toggleShowNewReferral}
           />
-        ) : null}
-        <div className="referralList" style={{backgroundColor: 'white'}}>
-          <div className="h5 py-3">
+        ) : null} */}
+        <div className="referralList">
+          {/* <div className="h5 py-3">
             This encounter has{" "}
             {referralList.length > 1
               ? referralList.length + " referrals."
               : referralList.length === 1
               ? " 1 referral."
               : " no referrals."}
-          </div>
+          </div> */}
+
+          <EncounterSummary
+            toggleShowNewReferral={toggleShowNewReferral}
+            showNewReferral={showNewReferral}
+            currentEncounter={currentEncounter}
+            sendNotificationUU={sendNotificationUU}
+            profileName={profileName}
+          />
+          {showNewReferral ? (
+            <CreateReferral
+              onCreate={onCreateReferral}
+              toggleShowNewReferral={toggleShowNewReferral}
+            />
+          ) : null}
           {referralList.length > 0 ? (
             <div className="table-responsive">
               <table className="table table-hover">
@@ -122,6 +136,7 @@ function Referrals({
           ) : null}
         </div>
       </div>
+
       <Modal id="fhirSource" size="lg" show={showSource} onHide={closeWindow}>
         <Modal.Header className="bg-light" closeButton>
           <Modal.Title>
@@ -137,12 +152,14 @@ function Referrals({
           </Button>
         </Modal.Footer>
       </Modal>
+
       <StatusSelector
         showReferralStatus={showReferralStatus}
         currentReferralStatus={currentReferralStatus}
         closeReferralStatusEdit={closeReferralStatusEdit}
         profileName={profileName}
       ></StatusSelector>
+
       <AddNote
         showAddNote={showAddNote}
         referral={currentReferral}
