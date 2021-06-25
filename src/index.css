@@ -156,8 +156,10 @@ footer {
   /* box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.16),
     1px 1px 5px 1px rgba(0, 0, 0, 0.26);
     */
+  background-color: rgba(0, 70, 110, 1); 
+  /*   
   background-color: rgba(0, 123, 167, 1);
-  /*   background-image: linear-gradient(
+  background-image: linear-gradient(
     to right,
     rgb(0, 120, 160) 10%,
     rgb(0, 80, 120) 30%,
@@ -265,9 +267,9 @@ footer {
   margin-bottom: 0px;
   margin-top: 0px;
   border-top-color: lightgray;
-  border-top-style: solid;
+  border-top-style: dashed;
   border-bottom-color: lightgray;
-  border-bottom-style: solid;
+  border-bottom-style: dashed;
   border-width: thin;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -276,6 +278,11 @@ footer {
 
 .list-hover.selected {
   background-color: white;
+  border-top-color: lightgray;
+  border-top-style: solid;
+  border-bottom-color: lightgray;
+  border-bottom-style: solid;
+  border-width: thin;
 }
 
 .table-hover {
