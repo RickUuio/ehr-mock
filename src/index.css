@@ -267,9 +267,9 @@ footer {
   margin-bottom: 0px;
   margin-top: 0px;
   border-top-color: lightgray;
-  border-top-style: dashed;
+  border-top-style: none;
   border-bottom-color: lightgray;
-  border-bottom-style: none;
+  border-bottom-style: dashed;
   border-width: thin;
   padding-top: 10px;
   padding-bottom: 10px;
