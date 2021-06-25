@@ -60,7 +60,7 @@ function Referrals({
   };
 
   const showAddNoteWindow = (referral) => {
-    setCurrentReferral(referral)
+    setCurrentReferral(referral);
     setShowAddNote(true);
   };
   const closeAddNote = () => {
@@ -83,7 +83,7 @@ function Referrals({
             toggleShowNewReferral={toggleShowNewReferral}
           />
         ) : null}
-        <div className="referralList">
+        <div className="referralList" style={{backgroundColor: 'white'}}>
           <div className="h5 py-3">
             This encounter has{" "}
             {referralList.length > 1
@@ -93,30 +93,32 @@ function Referrals({
               : " no referrals."}
           </div>
           {referralList.length > 0 ? (
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  <th>DATE SENT</th>
-                  <th>STATUS</th>
-                  <th>SERVICE TYPE</th>
-                  <th>RECEIPIENT</th>
-                  <th>NOTES</th>
-                  <th>UU REFERRAL</th>
-                  <th>+/-</th>
-                </tr>
-              </thead>
-              <tbody>
-                {referralList.map((referral, index) => (
-                  <ReferralSummary
-                    key={index}
-                    referral={referral}
-                    showFhirSource={showFhirSource}
-                    editReferralStatus={editReferralStatus}
-                    showAddNoteWindow={showAddNoteWindow}
-                  />
-                ))}
-              </tbody>
-            </table>
+            <div className="table-responsive">
+              <table className="table table-hover">
+                <thead>
+                  <tr>
+                    <th>DATE SENT</th>
+                    <th>STATUS</th>
+                    <th>SERVICE TYPE</th>
+                    <th>RECEIPIENT</th>
+                    <th>NOTES</th>
+                    <th>UU REFERRAL</th>
+                    <th>+/-</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {referralList.map((referral, index) => (
+                    <ReferralSummary
+                      key={index}
+                      referral={referral}
+                      showFhirSource={showFhirSource}
+                      editReferralStatus={editReferralStatus}
+                      showAddNoteWindow={showAddNoteWindow}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
           ) : null}
         </div>
       </div>

@@ -123,16 +123,16 @@ function App() {
           display: provider.firstName + " " + provider.lastName,
         },
       ],
-      // orderDetail: {
-      //   text: referral.serviceType.text,
-      //   coding: [
-      //     {
-      //       system: "Unite Us",
-      //       code: referral.serviceType.value,
-      //       display: referral.serviceType.text,
-      //     },
-      //   ],
-      // },
+      orderDetail: {
+        text: referral.serviceType.text,
+        coding: [
+          {
+            system: "Unite Us",
+            code: referral.serviceType.value,
+            display: referral.serviceType.text,
+          },
+        ],
+      },
     };
 
     if (referral.attachDocument && sampleDocumentReference.length > 0) {
@@ -853,8 +853,8 @@ function App() {
         </div>
       </div>
 
-      <div className="container-fluid">
-        <div className="row mt-1 mx-0">
+      <div className="container-fluid px-0">
+        <div className="row mt-0 mx-0">
           <Encounters
             encounterList={encounters}
             currentEncounter={currentEncounter}
