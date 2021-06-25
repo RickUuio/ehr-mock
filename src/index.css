@@ -269,19 +269,19 @@ footer {
   border-top-color: lightgray;
   border-top-style: dashed;
   border-bottom-color: lightgray;
-  border-bottom-style: dashed;
+  border-bottom-style: none;
   border-width: thin;
   padding-top: 10px;
   padding-bottom: 10px;
   text-align: center;
 }
 
+.list-hover:hover {
+  background-color: white;
+}
+
 .list-hover.selected {
   background-color: white;
-  border-top-color: lightgray;
-  border-top-style: solid;
-  border-bottom-color: lightgray;
-  border-bottom-style: solid;
   border-width: thin;
 }
 
