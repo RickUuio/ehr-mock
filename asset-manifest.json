@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/ehr-mock/static/css/main.76511791.chunk.css",
-    "main.js": "/ehr-mock/static/js/main.733d74c3.chunk.js",
-    "main.js.map": "/ehr-mock/static/js/main.733d74c3.chunk.js.map",
+    "main.css": "/ehr-mock/static/css/main.9c2232ac.chunk.css",
+    "main.js": "/ehr-mock/static/js/main.4b05d877.chunk.js",
+    "main.js.map": "/ehr-mock/static/js/main.4b05d877.chunk.js.map",
     "runtime-main.js": "/ehr-mock/static/js/runtime-main.5e06d120.js",
     "runtime-main.js.map": "/ehr-mock/static/js/runtime-main.5e06d120.js.map",
     "static/css/2.800be05e.chunk.css": "/ehr-mock/static/css/2.800be05e.chunk.css",
@@ -12,14 +12,14 @@
     "static/js/3.fbef91b4.chunk.js.map": "/ehr-mock/static/js/3.fbef91b4.chunk.js.map",
     "index.html": "/ehr-mock/index.html",
     "static/css/2.800be05e.chunk.css.map": "/ehr-mock/static/css/2.800be05e.chunk.css.map",
-    "static/css/main.76511791.chunk.css.map": "/ehr-mock/static/css/main.76511791.chunk.css.map",
+    "static/css/main.9c2232ac.chunk.css.map": "/ehr-mock/static/css/main.9c2232ac.chunk.css.map",
     "static/js/2.6aa99c32.chunk.js.LICENSE.txt": "/ehr-mock/static/js/2.6aa99c32.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.5e06d120.js",
     "static/css/2.800be05e.chunk.css",
     "static/js/2.6aa99c32.chunk.js",
-    "static/css/main.76511791.chunk.css",
-    "static/js/main.733d74c3.chunk.js"
+    "static/css/main.9c2232ac.chunk.css",
+    "static/js/main.4b05d877.chunk.js"
   ]
 }
