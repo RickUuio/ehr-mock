@@ -70,6 +70,8 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
     });
     const data = await res.json();
     const item = data.response;
+    referral.trackingItem = null;
+    setExpandReferralId("");
     console.log("remove item: ", item);
     return item;
   }
