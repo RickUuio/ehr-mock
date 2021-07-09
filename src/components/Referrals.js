@@ -1,10 +1,10 @@
-import EncounterSummary from "./EncounterSummary";
-import CreateReferral from "./CreateReferral";
-import ReferralSummary from "./ReferralSummary";
-import StatusSelector from "./StatusSelector";
-import AddNote from "./AddNote";
-import { useState } from "react";
-import { Modal, Button } from "react-bootstrap";
+import EncounterSummary from './EncounterSummary';
+import CreateReferral from './CreateReferral';
+import ReferralSummary from './ReferralSummary';
+import StatusSelector from './StatusSelector';
+import AddNote from './AddNote';
+import { useState } from 'react';
+import { Modal, Button } from 'react-bootstrap';
 
 function Referrals({
   onCreate,
@@ -19,7 +19,7 @@ function Referrals({
   const [showSource, setShowSource] = useState(false);
   const [showReferralStatus, setShowReferralStatus] = useState(false);
   const [fullJson, setFullJson] = useState();
-  const [currentReferralStatus, setCurrentReferralStatus] = useState("");
+  const [currentReferralStatus, setCurrentReferralStatus] = useState('');
   //const [newReferralStatus, setNewReferralStatus] = useState(
   //  currentReferralStatus
   //);
@@ -54,7 +54,7 @@ function Referrals({
     setShowReferralStatus(false);
     if (newStatus !== null) {
       //setNewReferralStatus(newReferralStatus.value);
-      console.log("new status: ", newStatus.value, newStatus.rejectReason);
+      console.log('new status: ', newStatus.value, newStatus.rejectReason);
       updateReferralStatus(editReferralId, newStatus);
     } //else setNewReferralStatus("");
   };

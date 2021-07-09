@@ -1,19 +1,19 @@
-import { useState } from "react";
-import { GrAttachment } from "react-icons/gr";
+import { useState } from 'react';
+import { GrAttachment } from 'react-icons/gr';
 
 export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
-  const [referredToGroupIds, setReferredToGroupIds] = useState("");
-  const [referredFromGroupId, setReferredFromGroupId] = useState("");
-  const [networkId, setNetworkId] = useState("");
-  const [serviceType, setServiceType] = useState("");
-  const [description, setDescription] = useState("");
+  const [referredToGroupIds, setReferredToGroupIds] = useState('');
+  const [referredFromGroupId, setReferredFromGroupId] = useState('');
+  const [networkId, setNetworkId] = useState('');
+  const [serviceType, setServiceType] = useState('');
+  const [description, setDescription] = useState('');
   const [attachDocument, setAttachDocument] = useState(false);
 
   const onSubmit = (e) => {
     e.preventDefault();
 
     if (!serviceType) {
-      alert("Please select a service for the referral!");
+      alert('Please select a service for the referral!');
       return;
     }
 
@@ -26,11 +26,11 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
       attachDocument,
     });
 
-    setReferredToGroupIds("");
-    setReferredFromGroupId("demo-hospital");
-    setNetworkId("demo-network");
-    setServiceType("");
-    setDescription("");
+    setReferredToGroupIds('');
+    setReferredFromGroupId('demo-hospital');
+    setNetworkId('demo-network');
+    setServiceType('');
+    setDescription('');
     setAttachDocument(false);
   };
 
@@ -56,7 +56,7 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
                 />
               </div>
             </div>
-            
+
             <div className="form-group">
               <label className="col-form-label">RECEIVING NETWORK</label>
               <div>
@@ -71,7 +71,7 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
                 />
               </div>
             </div>
-            
+
             <div className="form-group">
               <label className="col-form-label">SENDER</label>
               <div>
@@ -87,7 +87,7 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
               </div>
             </div>
           </div>
-          
+
           <div className="col-lg-6">
             <div className="form-group">
               <label className="col-form-label">SERVICE TYPE</label>
@@ -160,7 +160,7 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
                   className="form-check-label"
                   for="flexSwitchCheckDefault"
                 >
-                  Attach document to the communication{" "}
+                  Attach document to the communication{' '}
                   <GrAttachment></GrAttachment>
                 </label>
               </div>

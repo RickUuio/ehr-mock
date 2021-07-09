@@ -10,7 +10,7 @@ const EncounterSummary = ({
   };
 
   const sendNotification = () => {
-    console.log("sending an encounter notification to Unite Us...");
+    console.log('sending an encounter notification to Unite Us...');
     sendNotificationUU();
   };
 
@@ -21,33 +21,31 @@ const EncounterSummary = ({
           <h4>Current Encounter: {currentEncounter}</h4>
         </div>
         <div className="col">
-        {!showNewReferral ? (
-          
+          {!showNewReferral ? (
+            <button
+              className="btn btn-primary btn-block mx-1"
+              onClick={toggle}
+              disabled={profileName !== 'Logica'}
+            >
+              Create New Referral
+            </button>
+          ) : (
+            <button
+              className="btn btn-warning btn-block col mx-1"
+              onClick={toggle}
+            >
+              Cancel New Referral
+            </button>
+          )}
+        </div>
+        <div className="col">
           <button
-            className="btn btn-primary btn-block mx-1"
-            onClick={toggle}
-            disabled={profileName !== "Logica"}
+            className="btn btn-primary btn-block col mx-1"
+            onClick={sendNotification}
           >
-            Create New Referral
+            Send Notification to Unite Us
           </button>
-     
-        ) : (
-          <button
-            className="btn btn-warning btn-block col mx-1"
-            onClick={toggle}
-          >
-            Cancel New Referral
-          </button>
-        )}
-     </div>
-     <div className="col">
-        <button
-          className="btn btn-primary btn-block col mx-1"
-          onClick={sendNotification}
-        >
-          Send Notification to Unite Us
-        </button>
-      </div>
+        </div>
       </div>
     </div>
   );

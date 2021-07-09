@@ -12,10 +12,10 @@ const ProfileSelector = ({ profileName, switchProfile }) => {
         name="btnProfile"
         id="profileEpic"
         autoComplete="off"
-        defaultChecked={profileName === "Epic"}
+        defaultChecked={profileName === 'Epic'}
         onClick={() => {
-          profileName = "Epic";
-          switchProfile("Epic");
+          profileName = 'Epic';
+          switchProfile('Epic');
         }}
       />
       <label className="btn btn-outline-danger" htmlFor="profileEpic">
@@ -27,10 +27,10 @@ const ProfileSelector = ({ profileName, switchProfile }) => {
         name="btnProfile"
         id="profileEpic2"
         autoComplete="off"
-        defaultChecked={profileName === "Epic2"}
+        defaultChecked={profileName === 'Epic2'}
         onClick={() => {
-          profileName = "Epic2";
-          switchProfile("Epic2");
+          profileName = 'Epic2';
+          switchProfile('Epic2');
         }}
       />
       <label className="btn btn-outline-danger" htmlFor="profileEpic2">
@@ -42,10 +42,10 @@ const ProfileSelector = ({ profileName, switchProfile }) => {
         name="btnProfile"
         id="profileLogica"
         autoComplete="off"
-        defaultChecked={profileName === "Logica"}
+        defaultChecked={profileName === 'Logica'}
         onClick={() => {
-          profileName = "Logica";
-          switchProfile("Logica");
+          profileName = 'Logica';
+          switchProfile('Logica');
         }}
       />
       <label className="btn btn-outline-info" htmlFor="profileLogica">

@@ -1,11 +1,7 @@
-import { useState } from "react";
-import { Modal, Button } from "react-bootstrap";
-import {
-  FaAngleDoubleRight,
-  FaAngleDoubleLeft,
-  FaFlagCheckered,
-} from "react-icons/fa";
-import { AiOutlineStop } from "react-icons/ai";
+import { useState } from 'react';
+import { Modal, Button } from 'react-bootstrap';
+import { FaAngleDoubleRight, FaFlagCheckered } from 'react-icons/fa';
+import { AiOutlineStop } from 'react-icons/ai';
 
 const StatusSelector = ({
   showReferralStatus,
@@ -13,17 +9,17 @@ const StatusSelector = ({
   closeReferralStatusEdit,
   profileName,
 }) => {
-  const [newReferralStatus, setNewReferralStatus] = useState("");
+  const [newReferralStatus, setNewReferralStatus] = useState('');
   const [rejectReason, setRejectReason] = useState({
-    value: "Please select a reason ...",
+    value: 'Please select a reason ...',
   });
-  const [rejectReasonNote, setRejectReasonNote] = useState("");
+  const [rejectReasonNote, setRejectReasonNote] = useState('');
   const [enforceBusinessRule, setEnforceBusinessRule] = useState(false);
 
   const closeStatusEdit = () => {
-    setNewReferralStatus("");
-    setRejectReason({ value: "Please select a reason ..." });
-    setRejectReasonNote("");
+    setNewReferralStatus('');
+    setRejectReason({ value: 'Please select a reason ...' });
+    setRejectReasonNote('');
     closeReferralStatusEdit(null);
   };
 
@@ -36,7 +32,7 @@ const StatusSelector = ({
   };
 
   const changeStatus = (newStatus) => {
-    console.log("new status is: ", newStatus);
+    console.log('new status is: ', newStatus);
     setNewReferralStatus(newStatus);
   };
 
@@ -45,29 +41,29 @@ const StatusSelector = ({
     // if (profileName === "Logica") return true;
 
     switch (status) {
-      case "requested":
+      case 'requested':
         if (
-          currentReferralStatus === "requested" ||
-          currentReferralStatus === "accepted" ||
-          currentReferralStatus === "rejected" ||
-          currentReferralStatus === ""
+          currentReferralStatus === 'requested' ||
+          currentReferralStatus === 'accepted' ||
+          currentReferralStatus === 'rejected' ||
+          currentReferralStatus === ''
         )
           return true;
         else return false;
-      case "accepted":
-      case "rejected":
+      case 'accepted':
+      case 'rejected':
         if (
-          currentReferralStatus === "requested" ||
-          currentReferralStatus === "accepted" ||
-          currentReferralStatus === "rejected" ||
-          currentReferralStatus === ""
+          currentReferralStatus === 'requested' ||
+          currentReferralStatus === 'accepted' ||
+          currentReferralStatus === 'rejected' ||
+          currentReferralStatus === ''
         )
           return true;
         else return false;
 
-      case "completed":
-      case "failed":
-        if (currentReferralStatus === "in-progress") return true;
+      case 'completed':
+      case 'failed':
+        if (currentReferralStatus === 'in-progress') return true;
         else return false;
 
       default:
@@ -78,26 +74,26 @@ const StatusSelector = ({
   const rejectReasonOptions = () => {
     const uuRejectReasons = [
       {
-        display_name: "Not Eligible",
-        value: "Client is not eligible for our services",
+        display_name: 'Not Eligible',
+        value: 'Client is not eligible for our services',
       },
       {
-        display_name: "Duplicate",
-        value: "Duplicate, case already exists in the system",
+        display_name: 'Duplicate',
+        value: 'Duplicate, case already exists in the system',
       },
       {
-        display_name: "No Capacity",
-        value: "We do not have capacity to serve client",
+        display_name: 'No Capacity',
+        value: 'We do not have capacity to serve client',
       },
       {
-        display_name: "Do Not Provide Service",
-        value: "We do not provide the services requested/needed",
+        display_name: 'Do Not Provide Service',
+        value: 'We do not provide the services requested/needed',
       },
       {
-        display_name: "Unable to Contact Client",
-        value: "We were unable to contact the client",
+        display_name: 'Unable to Contact Client',
+        value: 'We were unable to contact the client',
       },
-      { display_name: "Other", value: "Other" },
+      { display_name: 'Other', value: 'Other' },
     ];
 
     return uuRejectReasons.map((option) => {
@@ -107,47 +103,47 @@ const StatusSelector = ({
 
   const rowColor = (status) => {
     switch (status) {
-      case "accepted":
-        return "primary";
-      case "in-progress":
-        return "info";
-      case "rejected":
-        return "danger";
-      case "failed":
-        return "danger";
-      case "completed":
-        return "success";
-      case "cancelled":
-        return "danger";
-      case "requested":
-        return "secondary";
+      case 'accepted':
+        return 'primary';
+      case 'in-progress':
+        return 'info';
+      case 'rejected':
+        return 'danger';
+      case 'failed':
+        return 'danger';
+      case 'completed':
+        return 'success';
+      case 'cancelled':
+        return 'danger';
+      case 'requested':
+        return 'secondary';
       default:
-        return "dark";
+        return 'dark';
     }
   };
 
   const stageColor = (stage) => {
     const colorDone = rowColor(newReferralStatus || currentReferralStatus);
-    const colorNotDone = "table-secondary";
+    const colorNotDone = 'table-secondary';
     let newStage = 1;
 
     switch (newReferralStatus || currentReferralStatus) {
-      case "requested":
+      case 'requested':
         newStage = 1;
         break;
-      case "accepted":
+      case 'accepted':
         newStage = 2;
         break;
-      case "in-progress":
+      case 'in-progress':
         newStage = 3;
         break;
-      case "completed":
+      case 'completed':
         newStage = 4;
         break;
       default:
         newStage = 5;
     }
-    return newStage < stage ? colorNotDone : "table-" + colorDone;
+    return newStage < stage ? colorNotDone : 'table-' + colorDone;
   };
 
   return (
@@ -163,20 +159,18 @@ const StatusSelector = ({
       <Modal.Body>
         <div className="row my-3 text-center">
           <div className="col-6">
-            {"Current Stauts: "}
+            {'Current Stauts: '}
             <div
-              className={
-                "btn btn-outline-" + rowColor(currentReferralStatus)
-              }
+              className={'btn btn-outline-' + rowColor(currentReferralStatus)}
             >
               {currentReferralStatus}
             </div>
           </div>
           <div className="col-6">
-            {"New Status    : "}
+            {'New Status    : '}
             <div
               className={
-                "btn active btn-outline-" +
+                'btn active btn-outline-' +
                 rowColor(newReferralStatus || currentReferralStatus)
               }
             >
@@ -194,25 +188,25 @@ const StatusSelector = ({
             <thead>
               <tr>
                 <th className={stageColor(1)}>
-                  INITIATE{" "}
+                  INITIATE{' '}
                   <span className="float-end">
                     <FaAngleDoubleRight />
                   </span>
                 </th>
                 <th className={stageColor(2)}>
-                  RESPONSE{" "}
+                  RESPONSE{' '}
                   <span className="float-end">
                     <FaAngleDoubleRight />
                   </span>
                 </th>
                 <th className={stageColor(3)}>
-                  CONFIRM{" "}
+                  CONFIRM{' '}
                   <span className="float-end">
                     <FaAngleDoubleRight />
                   </span>
                 </th>
                 <th className={stageColor(4)}>
-                  RESOLVE{" "}
+                  RESOLVE{' '}
                   <span className="float-end">
                     <FaFlagCheckered />
                   </span>
@@ -230,11 +224,11 @@ const StatusSelector = ({
                       id="statusRequested"
                       autoComplete="off"
                       value="requested"
-                      defaultChecked={currentReferralStatus === "requested"}
+                      defaultChecked={currentReferralStatus === 'requested'}
                       onClick={(e) => {
                         changeStatus(e.target.value);
                       }}
-                      disabled={!statusEnabled("requested")}
+                      disabled={!statusEnabled('requested')}
                     />
                     <label
                       class="btn btn-outline-secondary"
@@ -242,9 +236,9 @@ const StatusSelector = ({
                     >
                       <AiOutlineStop
                         className={
-                          statusEnabled("requested") ? "invisible" : "visible"
+                          statusEnabled('requested') ? 'invisible' : 'visible'
                         }
-                      />{" "}
+                      />{' '}
                       requested <AiOutlineStop className="invisible" />
                     </label>
                   </div>
@@ -259,11 +253,11 @@ const StatusSelector = ({
                       id="statusCancelled"
                       autoComplete="off"
                       value="cancelled"
-                      defaultChecked={currentReferralStatus === "cancelled"}
+                      defaultChecked={currentReferralStatus === 'cancelled'}
                       onClick={(e) => {
                         changeStatus(e.target.value);
                       }}
-                      disabled={!statusEnabled("cancelled")}
+                      disabled={!statusEnabled('cancelled')}
                     />
                     <label
                       class="btn btn-outline-danger"
@@ -271,10 +265,10 @@ const StatusSelector = ({
                     >
                       <AiOutlineStop
                         className={
-                          statusEnabled("cancelled") ? "invisible" : "visible"
+                          statusEnabled('cancelled') ? 'invisible' : 'visible'
                         }
-                      />{" "}
-                      cancelled{" "}
+                      />{' '}
+                      cancelled{' '}
                       <span className="float-end">
                         <FaFlagCheckered />
                       </span>
@@ -293,11 +287,11 @@ const StatusSelector = ({
                       id="statusAccepted"
                       autoComplete="off"
                       value="accepted"
-                      defaultChecked={currentReferralStatus === "accepted"}
+                      defaultChecked={currentReferralStatus === 'accepted'}
                       onClick={(e) => {
                         changeStatus(e.target.value);
                       }}
-                      disabled={!statusEnabled("accepted")}
+                      disabled={!statusEnabled('accepted')}
                     />
                     <label
                       class="btn btn-outline-primary"
@@ -305,9 +299,9 @@ const StatusSelector = ({
                     >
                       <AiOutlineStop
                         className={
-                          statusEnabled("accepted") ? "invisible" : "visible"
+                          statusEnabled('accepted') ? 'invisible' : 'visible'
                         }
-                      />{" "}
+                      />{' '}
                       accepted <AiOutlineStop className="invisible" />
                     </label>
                   </div>
@@ -321,11 +315,11 @@ const StatusSelector = ({
                       id="statusInProgress"
                       autoComplete="off"
                       value="in-progress"
-                      defaultChecked={currentReferralStatus === "in-progress"}
+                      defaultChecked={currentReferralStatus === 'in-progress'}
                       onClick={(e) => {
                         changeStatus(e.target.value);
                       }}
-                      disabled={!statusEnabled("in-progress")}
+                      disabled={!statusEnabled('in-progress')}
                     />
                     <label
                       class="btn btn-outline-info"
@@ -333,9 +327,9 @@ const StatusSelector = ({
                     >
                       <AiOutlineStop
                         className={
-                          statusEnabled("in-progress") ? "invisible" : "visible"
+                          statusEnabled('in-progress') ? 'invisible' : 'visible'
                         }
-                      />{" "}
+                      />{' '}
                       in-progress <AiOutlineStop className="invisible" />
                     </label>
                   </div>
@@ -349,11 +343,11 @@ const StatusSelector = ({
                       id="statusCompleted"
                       autoComplete="off"
                       value="completed"
-                      defaultChecked={currentReferralStatus === "completed"}
+                      defaultChecked={currentReferralStatus === 'completed'}
                       onClick={(e) => {
                         changeStatus(e.target.value);
                       }}
-                      disabled={!statusEnabled("completed")}
+                      disabled={!statusEnabled('completed')}
                     />
                     <label
                       class="btn btn-outline-success"
@@ -361,10 +355,10 @@ const StatusSelector = ({
                     >
                       <AiOutlineStop
                         className={
-                          statusEnabled("completed") ? "invisible" : "visible"
+                          statusEnabled('completed') ? 'invisible' : 'visible'
                         }
-                      />{" "}
-                      completed{" "}
+                      />{' '}
+                      completed{' '}
                       <span className="float-end">
                         <FaFlagCheckered />
                       </span>
@@ -376,11 +370,11 @@ const StatusSelector = ({
                       id="statusFailed"
                       autoComplete="off"
                       value="failed"
-                      defaultChecked={currentReferralStatus === "failed"}
+                      defaultChecked={currentReferralStatus === 'failed'}
                       onClick={(e) => {
                         changeStatus(e.target.value);
                       }}
-                      disabled={!statusEnabled("failed")}
+                      disabled={!statusEnabled('failed')}
                     />
                     <label
                       class="btn btn-outline-danger"
@@ -388,10 +382,10 @@ const StatusSelector = ({
                     >
                       <AiOutlineStop
                         className={
-                          statusEnabled("failed") ? "invisible" : "visible"
+                          statusEnabled('failed') ? 'invisible' : 'visible'
                         }
-                      />{" "}
-                      failed{" "}
+                      />{' '}
+                      failed{' '}
                       <span className="float-end">
                         <FaFlagCheckered />
                       </span>
@@ -413,8 +407,8 @@ const StatusSelector = ({
                       onClick={(e) => {
                         changeStatus(e.target.value);
                       }}
-                      defaultChecked={currentReferralStatus === "rejected"}
-                      disabled={!statusEnabled("rejected")}
+                      defaultChecked={currentReferralStatus === 'rejected'}
+                      disabled={!statusEnabled('rejected')}
                     />
                     <label
                       class="btn btn-outline-danger"
@@ -422,17 +416,17 @@ const StatusSelector = ({
                     >
                       <AiOutlineStop
                         className={
-                          statusEnabled("rejected") ? "invisible" : "visible"
+                          statusEnabled('rejected') ? 'invisible' : 'visible'
                         }
-                      />{" "}
-                      rejected{" "}
+                      />{' '}
+                      rejected{' '}
                       <span className="float-end">
                         <FaFlagCheckered />
                       </span>
                     </label>
                     <div
                       className={
-                        newReferralStatus === "rejected" ? "" : "d-none"
+                        newReferralStatus === 'rejected' ? '' : 'd-none'
                       }
                     >
                       <div className="form-group">

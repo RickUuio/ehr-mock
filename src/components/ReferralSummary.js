@@ -1,11 +1,16 @@
-import { IoOpenOutline, IoCloudDownloadSharp } from "react-icons/io5";
-import { useState } from "react";
+import { IoOpenOutline, IoCloudDownloadSharp } from 'react-icons/io5';
+import { useState } from 'react';
 // import { MdExpandLess, MdExpandMore } from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
-import { BiMessageEdit } from "react-icons/bi";
+import { FaEdit } from 'react-icons/fa';
+import { BiMessageEdit } from 'react-icons/bi';
 
-function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAddNoteWindow }) {
-  const [expandReferralId, setExpandReferralId] = useState("");
+function ReferralSummary({
+  referral,
+  showFhirSource,
+  editReferralStatus,
+  showAddNoteWindow,
+}) {
+  const [expandReferralId, setExpandReferralId] = useState('');
 
   const showSource = (fullJson) => {
     showFhirSource(fullJson, true);
@@ -19,13 +24,13 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
     const cboUUID = resource.identifier.find(
       (entry) =>
         entry.system.toUpperCase() ===
-        "HTTPS://UNITEUS.COM/IO/STRUCTUREDEFINITION/CBO-UUID"
+        'HTTPS://UNITEUS.COM/IO/STRUCTUREDEFINITION/CBO-UUID'
     );
     return cboUUID;
   };
 
   const toggleExpand = (referralId) => {
-    if (expandReferralId === referralId) setExpandReferralId("");
+    if (expandReferralId === referralId) setExpandReferralId('');
     else setExpandReferralId(referralId);
   };
 
@@ -35,20 +40,20 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
 
   const rowColor = (status) => {
     switch (status) {
-      case "accepted":
-        return "primary";
-      case "in-progress":
-        return "info";
-      case "rejected":
-        return "danger";
-      case "failed":
-        return "danger";
-      case "completed":
-        return "success";
-      case "cancelled":
-        return "danger";
+      case 'accepted':
+        return 'primary';
+      case 'in-progress':
+        return 'info';
+      case 'rejected':
+        return 'danger';
+      case 'failed':
+        return 'danger';
+      case 'completed':
+        return 'success';
+      case 'cancelled':
+        return 'danger';
       default:
-        return "light";
+        return 'light';
     }
   };
 
@@ -56,13 +61,13 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
     const fullUrl = referral.trackingItem.full_url;
     console.log('remove referral: ', fullUrl);
     const url =
-      "https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/resource_tracking/delete";
+      'https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/resource_tracking/delete';
     const res = await fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-type": "application/json",
-        Accept: "application/json",
-        "x-api-key": "sfsdfddfdsfsdfs32342343",
+        'Content-type': 'application/json',
+        Accept: 'application/json',
+        'x-api-key': 'sfsdfddfdsfsdfs32342343',
       },
       body: JSON.stringify({
         full_url: fullUrl,
@@ -71,21 +76,21 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
     const data = await res.json();
     const item = data.response;
     referral.trackingItem = null;
-    setExpandReferralId("");
-    console.log("remove item: ", item);
+    setExpandReferralId('');
+    console.log('remove item: ', item);
     return item;
-  }
+  };
 
   return (
     <>
       <tr
         className={
-          "align-middle table-" + rowColor(referral.Task?.resource?.status)
+          'align-middle table-' + rowColor(referral.Task?.resource?.status)
         }
         data-bs-toggle="collapse"
-        data-bs-target={"#referral" + referral.ServiceRequest.resource.id}
+        data-bs-target={'#referral' + referral.ServiceRequest.resource.id}
         aria-expanded="false"
-        aria-controls={"referral" + referral.ServiceRequest.resource.id}
+        aria-controls={'referral' + referral.ServiceRequest.resource.id}
         onClick={() => toggleExpand(referral.ServiceRequest.resource.id)}
         role="button"
       >
@@ -103,22 +108,20 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
               )
             }
           >
-            {referral.Task?.resource?.status}{" "}<FaEdit></FaEdit>
+            {referral.Task?.resource?.status} <FaEdit></FaEdit>
           </div>
         </td>
         <td>
           {referral.ServiceRequest.resource.orderDetail
             ? referral.ServiceRequest.resource.orderDetail[0].text
-            : "Not Confirmed"}
+            : 'Not Confirmed'}
         </td>
         <td>{referral.Task?.resource?.owner?.display}</td>
         <td>
-          <div role="button" onClick={() =>
-              showAddNoteWindow(referral)
-            }>
+          <div role="button" onClick={() => showAddNoteWindow(referral)}>
             <div className="badge bg-primary">
-              {referral.Communication?.length || "0"}
-            </div>{" "}
+              {referral.Communication?.length || '0'}
+            </div>{' '}
             <BiMessageEdit className="text-primary " />
           </div>
         </td>
@@ -156,19 +159,19 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
               target="_blank"
               rel="noreferrer noopener"
             >
-              {"..." + referral.trackingItem.core_referral_id.split("-").pop()}
+              {'...' + referral.trackingItem.core_referral_id.split('-').pop()}
             </a>
           ) : null}
         </td>
-        <td>{expandStatus(referral.ServiceRequest.resource.id) ? "-" : "+"}</td>
+        <td>{expandStatus(referral.ServiceRequest.resource.id) ? '-' : '+'}</td>
       </tr>
       <tr
         className={
           expandStatus(referral.ServiceRequest.resource.id)
-            ? "table-light"
-            : "collapse"
+            ? 'table-light'
+            : 'collapse'
         }
-        id={"referral" + referral.ServiceRequest.resource.id}
+        id={'referral' + referral.ServiceRequest.resource.id}
       >
         <td colSpan="7">
           <div className="row px-3">
@@ -186,7 +189,7 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
                       </button>
                     </th>
                     <td>
-                      Referral created in Unite Us{" "}
+                      Referral created in Unite Us{' '}
                       <a
                         href={`https://app.uniteustraining.com/dashboard/referrals/sent/all/${referral.trackingItem.core_referral_id}`}
                         data-bs-toggle="tooltip"
@@ -197,7 +200,12 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
                       >
                         {referral.trackingItem.core_referral_id}
                       </a>
-                      <div className="btn btn-sm btn-danger" onClick={removeReferral}>Remove Referral</div>
+                      <div
+                        className="btn btn-sm btn-danger"
+                        onClick={removeReferral}
+                      >
+                        Remove Referral
+                      </div>
                     </td>
                   </tr>
                 ) : null}
@@ -210,38 +218,38 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
                         showSource(referral.ServiceRequest.resource)
                       }
                     >
-                      {referral.ServiceRequest.resource.resourceType}{" "}
+                      {referral.ServiceRequest.resource.resourceType}{' '}
                       <IoOpenOutline />
                     </button>
                   </th>
                   <td>
-                    Referral was authored on{" "}
+                    Referral was authored on{' '}
                     <div className="btn btn-outline-primary disabled">
                       {referral.ServiceRequest.resource.authoredOn}
-                    </div>{" "}
-                    by{" "}
+                    </div>{' '}
+                    by{' '}
                     <div
                       className="btn btn-outline-primary"
                       onClick={() => showSource(referral.Practitioner.resource)}
                     >
-                      {referral.ServiceRequest.resource.requester.display}{" "}
+                      {referral.ServiceRequest.resource.requester.display}{' '}
                       <IoOpenOutline />
                     </div>
-                    .{" "}
+                    .{' '}
                     {referral.ServiceRequest.resource.orderDetail ? (
                       <span>
-                        {"Service type is "}
+                        {'Service type is '}
                         <div className="btn btn-outline-primary disabled">
                           {referral.ServiceRequest.resource.orderDetail[0].text}
                         </div>
                         .
                       </span>
                     ) : (
-                      "Service type has not been confirmed yet."
+                      'Service type has not been confirmed yet.'
                     )}
                     {referral.ServiceRequest.resource.supportingInfo ? (
                       <span>
-                        {" "}
+                        {' '}
                         Attached is a supporting document of
                         <div
                           className="btn btn-outline-primary"
@@ -249,7 +257,7 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
                             showSource(referral.DocumentReference[0])
                           }
                         >
-                          {referral.DocumentReference[0].type.text}{" "}
+                          {referral.DocumentReference[0].type.text}{' '}
                           <IoOpenOutline />
                         </div>
                       </span>
@@ -268,24 +276,24 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
                   </th>
                   <td>
                     <span>
-                      Referral status is{" "}
+                      Referral status is{' '}
                       <div className="btn btn-outline-primary disabled">
                         {referral.Task?.resource?.status}
                       </div>
-                      , last modified on{" "}
+                      , last modified on{' '}
                       <div className="btn btn-outline-primary disabled">
                         {referral.Task?.resource?.lastModified}
                       </div>
-                    </span>{" "}
+                    </span>{' '}
                     <span>
-                      Recipient is{" "}
+                      Recipient is{' '}
                       <div
                         className="btn btn-outline-primary"
                         onClick={() =>
                           showSource(referral.Organization?.resource)
                         }
                       >
-                        {referral.Task?.resource?.owner?.display}{" "}
+                        {referral.Task?.resource?.owner?.display}{' '}
                         <IoOpenOutline />
                       </div>
                     </span>
@@ -301,20 +309,20 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
                           showSource(referral.Organization.resource)
                         }
                       >
-                        {referral.Organization.resource.resourceType}{" "}
+                        {referral.Organization.resource.resourceType}{' '}
                         <IoOpenOutline />
                       </button>
                     </th>
                     <td>
                       <span>
-                        Recipient is{" "}
+                        Recipient is{' '}
                         <div className="btn btn-outline-primary disabled">
                           {referral.Organization.resource.name}
                         </div>
                       </span>
                       {findUUID(referral.Organization.resource) ? (
                         <span>
-                          Their Unite Us UUID is{" "}
+                          Their Unite Us UUID is{' '}
                           <div className="btn btn-outline-primary disabled">
                             {findUUID(referral.Organization.resource).value}
                           </div>
@@ -331,13 +339,13 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
                         className="btn btn-link"
                         onClick={() => showSource(referral.Patient.resource)}
                       >
-                        {referral.Patient.resource.resourceType}{" "}
+                        {referral.Patient.resource.resourceType}{' '}
                         <IoOpenOutline />
                       </button>
                     </th>
                     <td>
                       <div className="btn btn-outline-primary disabled">
-                        {referral.Patient.resource.name[0].family},{" "}
+                        {referral.Patient.resource.name[0].family},{' '}
                         {referral.Patient.resource.name[0].given[0]}
                       </div>
                     </td>
@@ -353,13 +361,13 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
                           showSource(referral.Practitioner.resource)
                         }
                       >
-                        {referral.Practitioner.resource.resourceType}{" "}
+                        {referral.Practitioner.resource.resourceType}{' '}
                         <IoOpenOutline />
                       </button>
                     </th>
                     <td>
                       <div className="btn btn-outline-primary disabled">
-                        {referral.Practitioner.resource.name[0].family},{" "}
+                        {referral.Practitioner.resource.name[0].family},{' '}
                         {referral.Practitioner.resource.name[0].given[0]}
                       </div>
                     </td>
@@ -380,11 +388,11 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
                       </th>
                       <td>
                         <span>
-                          Consent status is{" "}
+                          Consent status is{' '}
                           <div className="btn btn-outline-primary disabled">
                             {consent.resource.status}
                           </div>
-                          . Scope is{" "}
+                          . Scope is{' '}
                           <div className="btn btn-outline-primary disabled">
                             {consent.resource.scope?.text}
                           </div>
@@ -416,11 +424,11 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
                       </th>
                       <td>
                         <span>
-                          Document type is{" "}
+                          Document type is{' '}
                           <div className="btn btn-outline-primary disabled">
                             {documentReference.type.text}
                           </div>
-                          . Document description is{" "}
+                          . Document description is{' '}
                           <div className="btn btn-outline-primary disabled">
                             {documentReference.description}
                           </div>
@@ -444,12 +452,12 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
                       </th>
                       <td>
                         <span>
-                          Content type is{" "}
+                          Content type is{' '}
                           <div className="btn btn-outline-primary disabled">
                             {binary.contentType}
                           </div>
                           .
-                        </span>{" "}
+                        </span>{' '}
                         <div className="btn btn-link">
                           <a
                             download="Epic_CRN.pdf"
@@ -473,21 +481,21 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
                           className="btn btn-link"
                           onClick={() => showSource(communication.resource)}
                         >
-                          {communication.resource.resourceType}{" "}
+                          {communication.resource.resourceType}{' '}
                           <IoOpenOutline />
                         </button>
                       </th>
                       <td>
                         <span>
-                          On{" "}
+                          On{' '}
                           <div className="btn btn-outline-primary disabled">
                             {communication.resource?.sent}
                           </div>
-                          , sent from{" "}
+                          , sent from{' '}
                           <div className="btn btn-outline-primary disabled">
                             {communication.resource?.sender.display}
                           </div>
-                          to{" "}
+                          to{' '}
                           <div className="btn btn-outline-primary disabled">
                             {communication.resource?.recipient[0].display}
                           </div>
@@ -495,8 +503,8 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
                         </span>
                         {communication.resource.payload ? (
                           <div>
-                            {" "}
-                            Note message:{" "}
+                            {' '}
+                            Note message:{' '}
                             <div className="btn btn-outline-primary disabled">
                               {communication.resource.payload[0].contentString}
                             </div>
@@ -507,8 +515,8 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
                         {communication.resource.payload &&
                         communication.resource.payload[1]?.contentReference ? (
                           <div>
-                            {" "}
-                            A{" "}
+                            {' '}
+                            A{' '}
                             <div
                               className="btn btn-outline-primary"
                               onClick={() =>
@@ -516,7 +524,7 @@ function ReferralSummary({ referral, showFhirSource, editReferralStatus, showAdd
                               }
                             >
                               document <IoOpenOutline />
-                            </div>{" "}
+                            </div>{' '}
                             was attached to the communication.
                           </div>
                         ) : null}

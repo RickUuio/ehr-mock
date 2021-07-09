@@ -1,13 +1,13 @@
-import "./App.css";
-import Header from "./components/Header";
-import Encounters from "./components/Encounters";
-import Referrals from "./components/Referrals";
-import { useState, useEffect } from "react";
+import './App.css';
+import Header from './components/Header';
+import Encounters from './components/Encounters';
+import Referrals from './components/Referrals';
+import { useState, useEffect } from 'react';
 import {
   Profile_Epic,
   Profile_Epic_2,
   Profile_Logica,
-} from "./components/Profiles";
+} from './components/Profiles';
 
 function App() {
   const defaultProfile = Profile_Epic;
@@ -28,29 +28,29 @@ function App() {
   const [referrals, setReferrals] = useState([]);
   const [encounters, setEncounters] = useState([]);
 
-  const [sampleDocumentReference, setSampleDocumentReference] = useState("");
+  const [sampleDocumentReference, setSampleDocumentReference] = useState('');
 
-  const defaultToastMessage = "Retrieving FHIR resources ... ";
+  const defaultToastMessage = 'Retrieving FHIR resources ... ';
   const [toastMessage, setToastMessage] = useState(defaultToastMessage);
   const [showMessageToast, setShowMessageToast] = useState(true);
   const toggleShowMessageToast = () => setShowMessageToast(!showMessageToast);
 
-  const [progress, setProgress] = useState("0%");
+  const [progress, setProgress] = useState('0%');
 
   const switchProfile = async (profileName) => {
     //if (profileName === currentProfileName) return
-    setProgress("0%");
+    setProgress('0%');
     setToastMessage(defaultToastMessage);
     setShowMessageToast(true);
 
-    console.log("Switch to profile: ", profileName);
+    console.log('Switch to profile: ', profileName);
     setCurrentProfileName(profileName);
     let newProfile; //'= profileName === "Logica" ? Profile_Logica : Profile_Epic;
     switch (profileName) {
-      case "Logica":
+      case 'Logica':
         newProfile = Profile_Logica;
         break;
-      case "Epic2":
+      case 'Epic2':
         newProfile = Profile_Epic_2;
         break;
       default:
@@ -60,7 +60,7 @@ function App() {
     setProvider(newProfile.defaultProvider);
     setBaseUrl(newProfile.defaultBaseUrl);
     setNotificationUrl(newProfile.defaultNotificationUrl);
-    if (newProfile.name === "Logica") {
+    if (newProfile.name === 'Logica') {
       setAccessToken(newProfile.accessToken);
     } else {
       let token = await getAccessToken();
@@ -68,7 +68,7 @@ function App() {
     }
 
     setShowMessageToast(false);
-    setProgress("0%");
+    setProgress('0%');
     //setToastMessage("");
   };
 
@@ -81,35 +81,35 @@ function App() {
 
   // Create a referral
   const createReferral = async (referral) => {
-    setProgress("0%");
-    setToastMessage("Sending create requests ... ");
+    setProgress('0%');
+    setToastMessage('Sending create requests ... ');
     setShowMessageToast(true);
 
-    console.log("create referral: ", referral);
+    console.log('create referral: ', referral);
     const nowISO = new Date().toISOString();
 
     // Create ServiceRequest
-    let url = baseUrl + "/ServiceRequest";
+    let url = baseUrl + '/ServiceRequest';
     let resource = {
-      resourceType: "ServiceRequest",
-      status: "active",
-      intent: "plan",
+      resourceType: 'ServiceRequest',
+      status: 'active',
+      intent: 'plan',
       category: [
         {
           coding: [
             {
-              system: "http://snomed.info/sct",
-              code: "307835004",
-              display: "Referral by service",
+              system: 'http://snomed.info/sct',
+              code: '307835004',
+              display: 'Referral by service',
             },
           ],
-          text: "Referral by service",
+          text: 'Referral by service',
         },
       ],
-      priority: "routine",
+      priority: 'routine',
       subject: {
         reference: `Patient/${patient.fhirId}`,
-        display: patient.lastName + ", " + patient.firstName,
+        display: patient.lastName + ', ' + patient.firstName,
       },
       encounter: {
         reference: `Encounter/${currentEncounter}`,
@@ -118,14 +118,14 @@ function App() {
       requester: [
         {
           reference: `Practitioner/${provider.fhirId}`,
-          display: provider.firstName + " " + provider.lastName,
+          display: provider.firstName + ' ' + provider.lastName,
         },
       ],
       orderDetail: {
         text: referral.serviceType.text,
         coding: [
           {
-            system: "Unite Us",
+            system: 'Unite Us',
             code: referral.serviceType.value,
             display: referral.serviceType.text,
           },
@@ -142,32 +142,32 @@ function App() {
     }
 
     let res = await fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-type": "application/json",
+        'Content-type': 'application/json',
       },
       body: JSON.stringify(resource),
     });
 
     let data = await res.json();
     let newServiceRequestId = data.id;
-    console.log("server request id: ", newServiceRequestId);
+    console.log('server request id: ', newServiceRequestId);
 
     // Create Task
-    url = baseUrl + "/Task";
+    url = baseUrl + '/Task';
     resource = {
-      resourceType: "Task",
+      resourceType: 'Task',
       basedOn: [
         {
           reference: `ServiceRequest/${newServiceRequestId}`,
         },
       ],
-      status: "requested",
-      intent: "plan",
-      priority: "routine",
+      status: 'requested',
+      intent: 'plan',
+      priority: 'routine',
       for: {
         reference: `Patient/${patient.fhirId}`,
-        display: patient.lastName + ", " + patient.firstName,
+        display: patient.lastName + ', ' + patient.firstName,
       },
       encounter: {
         reference: `Encounter/${currentEncounter}`,
@@ -177,7 +177,7 @@ function App() {
       requester: [
         {
           reference: `Practitioner/${provider.fhirId}`,
-          display: provider.firstName + " " + provider.lastName,
+          display: provider.firstName + ' ' + provider.lastName,
         },
       ],
       // description:
@@ -193,24 +193,24 @@ function App() {
       },
     };
 
-    setProgress("5%");
+    setProgress('5%');
 
     res = await fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-type": "application/json",
+        'Content-type': 'application/json',
       },
       body: JSON.stringify(resource),
     });
 
     data = await res.json();
     let newTaskId = data.id;
-    console.log("Task id: ", newTaskId);
+    console.log('Task id: ', newTaskId);
 
     // Create initial Communication
-    url = baseUrl + "/Communication";
+    url = baseUrl + '/Communication';
     resource = {
-      resourceType: "Communication",
+      resourceType: 'Communication',
       basedOn: [
         {
           reference: `ServiceRequest/${newServiceRequestId}`,
@@ -221,10 +221,10 @@ function App() {
           reference: `Task/${newTaskId}`,
         },
       ],
-      status: "in-progress",
+      status: 'in-progress',
       subject: {
         reference: `Patient/${patient.fhirId}`,
-        display: patient.lastName + ", " + patient.firstName,
+        display: patient.lastName + ', ' + patient.firstName,
       },
       encounter: {
         reference: `Encounter/${currentEncounter}`,
@@ -238,7 +238,7 @@ function App() {
       ],
       sender: {
         reference: `Practitioner/${provider.fhirId}`,
-        display: provider.firstName + " " + provider.lastName,
+        display: provider.firstName + ' ' + provider.lastName,
       },
     };
 
@@ -262,20 +262,20 @@ function App() {
     }
 
     res = await fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-type": "application/json",
+        'Content-type': 'application/json',
       },
       body: JSON.stringify(resource),
     });
 
     data = await res.json();
     let newCommunicationId = data.id;
-    console.log("Communication id: ", newCommunicationId);
+    console.log('Communication id: ', newCommunicationId);
 
     await getReferrals();
 
-    setProgress("100%");
+    setProgress('100%');
     setShowMessageToast(false);
   };
 
@@ -286,28 +286,28 @@ function App() {
     // fetching Task + ServiceRequest
     //setToastMessage("Fetching FHIR resources: \n Tasks ... \n ServiceRequests ... ");
     setToastMessage(defaultToastMessage);
-    setProgress("10%");
+    setProgress('10%');
 
     const url =
       referralBaseUrl +
-      "/Task?encounter=" +
+      '/Task?encounter=' +
       encounterId +
-      "&_include=Task%3Apatient&_include=Task%3Aencounter&_include=Task%3Arequester&_include=Task%3A" +
-      "based-on" + //(currentProfileName === "Epic" ? "basedon" : "based-on") + "%3AServiceRequest" +
-      "&_include=Task%3Aowner%3AOrganization";
+      '&_include=Task%3Apatient&_include=Task%3Aencounter&_include=Task%3Arequester&_include=Task%3A' +
+      'based-on' + //(currentProfileName === "Epic" ? "basedon" : "based-on") + "%3AServiceRequest" +
+      '&_include=Task%3Aowner%3AOrganization';
 
     const res = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-type": "application/json",
-        Accept: "application/json",
-        Authorization: accessToken?.length > 0 ? "bearer " + accessToken : "",
+        'Content-type': 'application/json',
+        Accept: 'application/json',
+        Authorization: accessToken?.length > 0 ? 'bearer ' + accessToken : '',
       },
     });
     const data = await res.json();
     let entryList = data.total === 0 ? [] : data.entry;
     if (!entryList) return [];
-    console.log("Task bundle received: ", entryList);
+    console.log('Task bundle received: ', entryList);
 
     // //_include works at Epic, no need to fetch ServiceRequest seperatedly
     // const url2 = baseUrl + "/ServiceRequest?encounter=" + encounterId;
@@ -336,9 +336,9 @@ function App() {
     // Take all the Task
     let referralList = [];
     entryList.forEach((entry, index) => {
-      if (entry.resource.resourceType === "Task") {
+      if (entry.resource.resourceType === 'Task') {
         let referral = {
-          id: "Task/" + entry.resource.id,
+          id: 'Task/' + entry.resource.id,
           Task: entry,
         };
         referralList.push(referral);
@@ -358,21 +358,21 @@ function App() {
       entryList.forEach((entry, index) => {
         let entryId = entry.resource.id;
         switch (entry.resource.resourceType) {
-          case "ServiceRequest": {
+          case 'ServiceRequest': {
             if (serviceRequestId === `ServiceRequest/${entryId}`)
               referral.ServiceRequest = entry;
             break;
           }
-          case "Patient": {
+          case 'Patient': {
             if (patientId === `Patient/${entryId}`) referral.Patient = entry;
             break;
           }
-          case "Organization": {
+          case 'Organization': {
             if (organizationId === `Organization/${entryId}`)
               referral.Organization = entry;
             break;
           }
-          case "Practitioner": {
+          case 'Practitioner': {
             if (practitionerId === `Practitioner/${entryId}`)
               referral.Practitioner = entry;
             break;
@@ -384,7 +384,7 @@ function App() {
 
     // Fetch Communications for each Task
     //setToastMessage((a) => { return a + "\n Communications ... "});
-    setProgress("40%");
+    setProgress('40%');
     for (let referral of referralList) {
       const referralId = referral?.Task?.resource?.id;
       const communications = await fetchCommunications(referralId);
@@ -393,20 +393,20 @@ function App() {
 
     // Fetch DocumentReferences for each ServiceRequest
     //setToastMessage((a) => { return a + "\n DocumentReferences ... "});
-    setProgress("70%");
+    setProgress('70%');
     for (let referral of referralList) {
       const documentReferences = await fetchDocumentReferences(referral);
       if (documentReferences?.length > 0) {
         referral.DocumentReference = documentReferences;
         setSampleDocumentReference(referral.DocumentReference[0].id);
-        console.log("documentReference", referral.DocumentReference);
-        console.log("sampleDocumentReference", sampleDocumentReference);
+        console.log('documentReference', referral.DocumentReference);
+        console.log('sampleDocumentReference', sampleDocumentReference);
       }
     }
 
     // Fetch Binaries for all DocumentReferences
     //setToastMessage((a) => { return a + "\nBinaries ... "});
-    setProgress("85%");
+    setProgress('85%');
     for (let referral of referralList) {
       if (referral.DocumentReference?.length > 0) {
         const binaryList = await fetchBinaries(referral.DocumentReference);
@@ -416,7 +416,7 @@ function App() {
       }
     }
 
-    setProgress("95%");
+    setProgress('95%');
     // look up referral UUID in AWS DDB
     for (let referral of referralList) {
       if (referral.Task?.resource?.id) {
@@ -442,14 +442,14 @@ function App() {
     }
     //}
 
-    console.log("referral list", referralList);
+    console.log('referral list', referralList);
     referralList.sort((a, b) => {
       const timeA = new Date(a.ServiceRequest.resource.authoredOn).getTime();
       const timeB = new Date(b.ServiceRequest.resource.authoredOn).getTime();
       return timeB - timeA;
     });
 
-    setProgress("100%");
+    setProgress('100%');
     return referralList;
   };
 
@@ -457,16 +457,16 @@ function App() {
     patientId = patient.fhirId,
     encounterBaseUrl = baseUrl
   ) => {
-    const url = encounterBaseUrl + "/Encounter?patient=" + patientId;
+    const url = encounterBaseUrl + '/Encounter?patient=' + patientId;
     const res = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-type": "application/json",
-        Accept: "application/json",
+        'Content-type': 'application/json',
+        Accept: 'application/json',
         Authorization:
-          accessToken?.length > 0 && currentProfileName !== "Logica"
-            ? "bearer " + accessToken
-            : "",
+          accessToken?.length > 0 && currentProfileName !== 'Logica'
+            ? 'bearer ' + accessToken
+            : '',
       },
     });
     const data = await res.json();
@@ -478,24 +478,24 @@ function App() {
       const timeB = new Date(b.resource?.period?.start).getTime();
       return timeB - timeA;
     });
-    console.log("encounter", encounterList);
+    console.log('encounter', encounterList);
     return encounterList;
   };
 
   // Fetch Communications for a Task
   const fetchCommunications = async (taskId) => {
-    const url = baseUrl + "/Communication?part-of=" + taskId;
+    const url = baseUrl + '/Communication?part-of=' + taskId;
 
     const res = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-type": "application/json",
-        Accept: "application/json",
-        Authorization: accessToken?.length > 0 ? "bearer " + accessToken : "",
+        'Content-type': 'application/json',
+        Accept: 'application/json',
+        Authorization: accessToken?.length > 0 ? 'bearer ' + accessToken : '',
       },
     });
     const data = await res.json();
-    console.log("communications: ", data);
+    console.log('communications: ', data);
     return data;
   };
 
@@ -507,18 +507,18 @@ function App() {
     if (!supportingInfo) return documentList;
 
     for (let entry of supportingInfo) {
-      const url = baseUrl + "/" + entry.reference;
+      const url = baseUrl + '/' + entry.reference;
       const res = await fetch(url, {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-type": "application/json",
-          Accept: "application/json",
-          Authorization: accessToken?.length > 0 ? "bearer " + accessToken : "",
+          'Content-type': 'application/json',
+          Accept: 'application/json',
+          Authorization: accessToken?.length > 0 ? 'bearer ' + accessToken : '',
         },
       });
       const data = await res.json();
-      console.log("documentReference: ", data);
-      if (data?.resourceType === "DocumentReference") documentList.push(data);
+      console.log('documentReference: ', data);
+      if (data?.resourceType === 'DocumentReference') documentList.push(data);
     }
 
     return documentList;
@@ -531,17 +531,17 @@ function App() {
     if (!documentReferenceList) return binaryList;
 
     for (let entry of documentReferenceList) {
-      const url = baseUrl + "/" + entry.content[0]?.attachment?.url;
+      const url = baseUrl + '/' + entry.content[0]?.attachment?.url;
       const res = await fetch(url, {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-type": "application/json",
-          Accept: "application/fhir+json",
-          Authorization: accessToken?.length > 0 ? "bearer " + accessToken : "",
+          'Content-type': 'application/json',
+          Accept: 'application/fhir+json',
+          Authorization: accessToken?.length > 0 ? 'bearer ' + accessToken : '',
         },
       });
       const data = await res.json();
-      if (data?.resourceType === "Binary") {
+      if (data?.resourceType === 'Binary') {
         binaryList.push(data);
       }
     }
@@ -552,34 +552,34 @@ function App() {
   // Fetch Consent for a Patient
   const fetchConsents = async (
     patientFhirId = patient.fhirId,
-    category = currentProfileName === "Logica"
-      ? "64292-6"
-      : "http://loinc.org|64292-6",
-    status = "active"
+    category = currentProfileName === 'Logica'
+      ? '64292-6'
+      : 'http://loinc.org|64292-6',
+    status = 'active'
   ) => {
     const url = `${baseUrl}/Consent?patient=${patientFhirId}&category=${category}&status=${status}`;
     const res = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-type": "application/json",
-        Accept: "application/json",
-        Authorization: accessToken?.length > 0 ? "bearer " + accessToken : "",
+        'Content-type': 'application/json',
+        Accept: 'application/json',
+        Authorization: accessToken?.length > 0 ? 'bearer ' + accessToken : '',
       },
     });
     const data = await res.json();
-    console.log("consent: ", data);
+    console.log('consent: ', data);
     return data.entry;
   };
 
   const lookupUUReferralId = async (fhirUrl) => {
     const url =
-      "https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/resource_tracking/read";
+      'https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/resource_tracking/read';
     const res = await fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-type": "application/json",
-        Accept: "application/json",
-        "x-api-key": "sfsdfddfdsfsdfs32342343",
+        'Content-type': 'application/json',
+        Accept: 'application/json',
+        'x-api-key': 'sfsdfddfdsfsdfs32342343',
       },
       body: JSON.stringify({
         full_url: fhirUrl,
@@ -587,13 +587,13 @@ function App() {
     });
     const data = await res.json();
     const item = data.response?.item;
-    console.log("Found item: ", item);
+    console.log('Found item: ', item);
     return item;
   };
 
   const changeCurrentEncounter = async (encounterSelected, currentBaseUrl) => {
     //if (encounterSelected === currentEncounter) return;
-    setProgress("0%");
+    setProgress('0%');
     setToastMessage(defaultToastMessage);
     setShowMessageToast(true);
 
@@ -601,7 +601,7 @@ function App() {
     await getReferrals(encounterSelected, currentBaseUrl);
 
     setShowMessageToast(false);
-    setProgress("0%");
+    setProgress('0%');
     //setToastMessage("");
 
     return;
@@ -613,60 +613,60 @@ function App() {
   };
 
   const getEncounters = async (patientId, encounterBaseUrl) => {
-    setProgress("0%");
+    setProgress('0%');
     setShowMessageToast(true);
 
     const data = await fetchEncounters(patientId, encounterBaseUrl);
     setEncounters(data);
 
     setShowMessageToast(false);
-    setProgress("0%");
+    setProgress('0%');
     //setToastMessage("");
 
     return data;
   };
 
   const sendNotificationUU = async () => {
-    setToastMessage("Sending encounter notification to Unite Us ... ");
-    setProgress("25%");
+    setToastMessage('Sending encounter notification to Unite Us ... ');
+    setProgress('25%');
     setShowMessageToast(true);
 
     const url = notificationUrl;
     const notification = {
-      resourceType: "Bundle",
-      type: "Event",
+      resourceType: 'Bundle',
+      type: 'Event',
       entry: [
         {
-          fullUrl: baseUrl + "/Encounter/" + currentEncounter,
+          fullUrl: baseUrl + '/Encounter/' + currentEncounter,
         },
       ],
     };
     const res = await fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-type": "application/json",
-        "x-api-key": "sfsdfddfdsfsdfs32342343", //"wOvYlZbrIW6THlB68QcJk6UlCwNPKYHfibNCMj03",
+        'Content-type': 'application/json',
+        'x-api-key': 'sfsdfddfdsfsdfs32342343', //"wOvYlZbrIW6THlB68QcJk6UlCwNPKYHfibNCMj03",
       },
       body: JSON.stringify(notification),
     });
-    setProgress("80%");
+    setProgress('80%');
     const data = await res.json();
-    console.log("notification response: ", data);
-    setProgress("100%");
-    setToastMessage(data.statusCode + ": " + data.message);
-    setProgress("hide");
+    console.log('notification response: ', data);
+    setProgress('100%');
+    setToastMessage(data.statusCode + ': ' + data.message);
+    setProgress('hide');
     return data;
   };
 
   const getAccessToken = async () => {
     const url =
-      "https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/authentication/token";
+      'https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/authentication/token';
     const res = await fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-type": "application/json",
-        Accept: "application/json",
-        "x-api-key": "sfsdfddfdsfsdfs32342343", //"wOvYlZbrIW6THlB68QcJk6UlCwNPKYHfibNCMj03",
+        'Content-type': 'application/json',
+        Accept: 'application/json',
+        'x-api-key': 'sfsdfddfdsfsdfs32342343', //"wOvYlZbrIW6THlB68QcJk6UlCwNPKYHfibNCMj03",
       },
       body: JSON.stringify({
         privateKey: null,
@@ -674,29 +674,29 @@ function App() {
     });
     const data = await res.json();
     const token = data.body.access_token;
-    console.log("access token ", token);
+    console.log('access token ', token);
     return token;
   };
 
   const updateReferralStatus = async (taskFhirId, newStatus) => {
-    console.log("new status: ", newStatus);
-    setProgress("0%");
-    setToastMessage("Updating Task Status ...");
+    console.log('new status: ', newStatus);
+    setProgress('0%');
+    setToastMessage('Updating Task Status ...');
     setShowMessageToast(true);
 
     // fetch the Task first
     let url =
-      "https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/request/read";
+      'https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/request/read';
     let res = await fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-type": "application/json",
-        Accept: "application/json",
-        "x-api-key": "sfsdfddfdsfsdfs32342343",
+        'Content-type': 'application/json',
+        Accept: 'application/json',
+        'x-api-key': 'sfsdfddfdsfsdfs32342343',
       },
       body: JSON.stringify({
         baseUrl: baseUrl,
-        resourceType: "Task",
+        resourceType: 'Task',
         resourceId: taskFhirId,
       }),
     });
@@ -704,24 +704,24 @@ function App() {
     let task = data.response.body;
     let headers = data.response.headers;
     let eTag =
-      currentProfileName === "Logica"
-        ? headers["etag"][0]
-        : headers["e-tag"][0];
-    console.log("task: ", task);
-    console.log("headers", headers);
+      currentProfileName === 'Logica'
+        ? headers['etag'][0]
+        : headers['e-tag'][0];
+    console.log('task: ', task);
+    console.log('headers', headers);
 
-    setProgress("5%");
+    setProgress('5%');
     // update status and match header
     task.status = newStatus.value;
     let epicCode = mapToEpicCode(newStatus.rejectReason.reason.text);
-    if (newStatus.value === "rejected") {
+    if (newStatus.value === 'rejected') {
       task.statusReason = {
         coding: [
           {
             system:
-              currentProfileName === "Logica"
-                ? "HTTPS://UNITEUS.COM/IO/STRUCTUREDEFINITION/STATUS-REASON"
-                : "urn:oid:1.2.840.114350.1.13.0.1.7.4.698084.34025",
+              currentProfileName === 'Logica'
+                ? 'HTTPS://UNITEUS.COM/IO/STRUCTUREDEFINITION/STATUS-REASON'
+                : 'urn:oid:1.2.840.114350.1.13.0.1.7.4.698084.34025',
             code: epicCode.code,
             display: epicCode.display,
           },
@@ -729,64 +729,64 @@ function App() {
         text: `${newStatus.rejectReason.reason.value}. ${newStatus.rejectReason.note}`,
       };
     }
-    console.log("new task: ", task);
+    console.log('new task: ', task);
 
     // send Task update requester
     url =
-      "https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/request/update";
+      'https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/request/update';
     res = await fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-type": "application/json",
-        Accept: "application/json",
-        "x-api-key": "sfsdfddfdsfsdfs32342343",
+        'Content-type': 'application/json',
+        Accept: 'application/json',
+        'x-api-key': 'sfsdfddfdsfsdfs32342343',
       },
       body: JSON.stringify({
         baseUrl: baseUrl,
-        resourceType: "Task",
+        resourceType: 'Task',
         resourceId: taskFhirId,
         etag: eTag,
         resource: task,
       }),
     });
 
-    setProgress("10%");
-    setToastMessage("Retrieving FHIR Resources ...");
+    setProgress('10%');
+    setToastMessage('Retrieving FHIR Resources ...');
     await getReferrals(currentEncounter, baseUrl);
     setShowMessageToast(false);
-    setProgress("0%");
+    setProgress('0%');
     return;
   };
 
   const mapToEpicCode = (uuCode) => {
     switch (uuCode) {
-      case "Not Eligible":
+      case 'Not Eligible':
         return {
-          system: "urn:oid:1.2.840.114350.1.13.0.1.7.4.698084.34025",
-          code: "104",
+          system: 'urn:oid:1.2.840.114350.1.13.0.1.7.4.698084.34025',
+          code: '104',
           display:
-            "Patient does not meet the level of care required for admission",
+            'Patient does not meet the level of care required for admission',
         };
-      case "No Capacity":
+      case 'No Capacity':
         return {
-          system: "urn:oid:1.2.840.114350.1.13.0.1.7.4.698084.34025",
-          code: "101",
-          display: "Facility Full",
+          system: 'urn:oid:1.2.840.114350.1.13.0.1.7.4.698084.34025',
+          code: '101',
+          display: 'Facility Full',
         };
-      case "Do Not Provide Service":
+      case 'Do Not Provide Service':
         return {
-          system: "urn:oid:1.2.840.114350.1.13.0.1.7.4.698084.34025",
-          code: "103",
+          system: 'urn:oid:1.2.840.114350.1.13.0.1.7.4.698084.34025',
+          code: '103',
           display: "Facility cannot provide for patient's needs",
         };
-      case "Duplicate":
-      case "Unable to Contact Client":
-      case "Other":
+      case 'Duplicate':
+      case 'Unable to Contact Client':
+      case 'Other':
       default:
         return {
-          system: "urn:oid:1.2.840.114350.1.13.0.1.7.4.698084.34025",
-          code: "99",
-          display: "Other (Comment)",
+          system: 'urn:oid:1.2.840.114350.1.13.0.1.7.4.698084.34025',
+          code: '99',
+          display: 'Other (Comment)',
         };
     }
   };
@@ -818,7 +818,7 @@ function App() {
 
       <div
         className={
-          showMessageToast ? "toast bg-warning text-secondary show" : "toast"
+          showMessageToast ? 'toast bg-warning text-secondary show' : 'toast'
         }
         role="alert"
         aria-live="assertive"
@@ -839,7 +839,7 @@ function App() {
         </div>
         <div className="toast-body">
           {toastMessage}
-          {progress === "hide" ? null : (
+          {progress === 'hide' ? null : (
             <>
               <div className="spinner-border text-warning" role="status">
                 <span className="visually-hidden">...</span>
