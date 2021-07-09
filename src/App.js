@@ -673,7 +673,7 @@ function App() {
       }),
     });
     const data = await res.json();
-    const token = data.body.access_token;
+    const token = data.body['access_token'];
     console.log('access token ', token);
     return token;
   };
