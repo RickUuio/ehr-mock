@@ -31,9 +31,7 @@ function App() {
   const [sampleDocumentReference, setSampleDocumentReference] = useState("");
 
   const defaultToastMessage = "Retrieving FHIR resources ... ";
-  const [toastMessage, setToastMessage] = useState(
-    defaultToastMessage
-  );
+  const [toastMessage, setToastMessage] = useState(defaultToastMessage);
   const [showMessageToast, setShowMessageToast] = useState(true);
   const toggleShowMessageToast = () => setShowMessageToast(!showMessageToast);
 
@@ -629,10 +627,10 @@ function App() {
   };
 
   const sendNotificationUU = async () => {
-    setToastMessage('Sending encounter notification to Unite Us ... ');
+    setToastMessage("Sending encounter notification to Unite Us ... ");
     setProgress("25%");
     setShowMessageToast(true);
-    
+
     const url = notificationUrl;
     const notification = {
       resourceType: "Bundle",
@@ -829,27 +827,35 @@ function App() {
       >
         <div className="toast-header">
           <strong className="me-auto">Please Wait ...</strong>
-          <button type="button" class="btn-close" data-bs-dismiss="messageToast" aria-label="Close" onClick={() => {setShowMessageToast(false)}}></button>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="messageToast"
+            aria-label="Close"
+            onClick={() => {
+              setShowMessageToast(false);
+            }}
+          ></button>
         </div>
         <div className="toast-body">
           {toastMessage}
-          { progress === "hide" ? null :
-          <>
-          <div className="spinner-border text-warning" role="status">
-            <span className="visually-hidden">...</span>
-          </div>
-          <div className="progress my-2">
-            <div
-              className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
-              role="progressbar"
-              style={{ width: progress }}
-              aria-valuenow="0"
-              aria-valuemin="0"
-              aria-valuemax="100"
-            ></div>
-          </div>
-          </>
-          }
+          {progress === "hide" ? null : (
+            <>
+              <div className="spinner-border text-warning" role="status">
+                <span className="visually-hidden">...</span>
+              </div>
+              <div className="progress my-2">
+                <div
+                  className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
+                  role="progressbar"
+                  style={{ width: progress }}
+                  aria-valuenow="0"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </>
+          )}
         </div>
       </div>
 

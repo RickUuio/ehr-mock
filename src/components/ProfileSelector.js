@@ -1,6 +1,11 @@
 const ProfileSelector = ({ profileName, switchProfile }) => {
   return (
-    <div className="btn-group mb-2" role="group" aria-label="Profile selector" id="profileGroup">
+    <div
+      className="btn-group mb-2"
+      role="group"
+      aria-label="Profile selector"
+      id="profileGroup"
+    >
       <input
         type="radio"
         className="btn-check"
