@@ -9,6 +9,8 @@ function ReferralSummary({
   showFhirSource,
   editReferralStatus,
   showAddNoteWindow,
+  baseUrl,
+  sendCommunicationNotificationUU,
 }) {
   const [expandReferralId, setExpandReferralId] = useState('');
 
@@ -79,6 +81,11 @@ function ReferralSummary({
     setExpandReferralId('');
     console.log('remove item: ', item);
     return item;
+  };
+
+  const sendCommunicationNotification = (fhirId) => {
+    console.log('sending a communication notification to Unite Us...');
+    sendCommunicationNotificationUU(fhirId);
   };
 
   return (
@@ -200,12 +207,14 @@ function ReferralSummary({
                       >
                         {referral.trackingItem.core_referral_id}
                       </a>
-                      <div
+                    </td>
+                    <td>
+                      <button
                         className="btn btn-sm btn-danger"
                         onClick={removeReferral}
                       >
                         Remove Referral
-                      </div>
+                      </button>
                     </td>
                   </tr>
                 ) : null}
@@ -263,6 +272,11 @@ function ReferralSummary({
                       </span>
                     ) : null}
                   </td>
+                  <td>
+                    <button className="btn btn-sm btn-primary disabled">
+                      Send Task Notification
+                    </button>
+                  </td>
                 </tr>
                 <tr>
                   <th scoope="row">
@@ -274,7 +288,7 @@ function ReferralSummary({
                       {referral.Task.resource.resourceType} <IoOpenOutline />
                     </button>
                   </th>
-                  <td>
+                  <td colSpan="2">
                     <span>
                       Referral status is{' '}
                       <div className="btn btn-outline-primary disabled">
@@ -329,6 +343,11 @@ function ReferralSummary({
                         </span>
                       ) : null}
                     </td>
+                    <td>
+                      <button className="btn btn-sm btn-primary disabled">
+                        Look up UU Provider
+                      </button>
+                    </td>
                   </tr>
                 ) : null}
                 {referral.Patient ? (
@@ -348,6 +367,11 @@ function ReferralSummary({
                         {referral.Patient.resource.name[0].family},{' '}
                         {referral.Patient.resource.name[0].given[0]}
                       </div>
+                    </td>
+                    <td>
+                      <button className="btn btn-sm btn-primary disabled">
+                        Look up UU Client
+                      </button>
                     </td>
                   </tr>
                 ) : null}
@@ -370,6 +394,11 @@ function ReferralSummary({
                         {referral.Practitioner.resource.name[0].family},{' '}
                         {referral.Practitioner.resource.name[0].given[0]}
                       </div>
+                    </td>
+                    <td>
+                      <button className="btn btn-sm btn-primary disabled">
+                        Look up UU User
+                      </button>
                     </td>
                   </tr>
                 ) : null}
@@ -406,6 +435,11 @@ function ReferralSummary({
                           </div>
                         </span>
                       </td>
+                      <td>
+                        <button className="btn btn-sm btn-primary disabled">
+                          Check UU Consent
+                        </button>
+                      </td>
                     </tr>
                   );
                 })}
@@ -434,6 +468,11 @@ function ReferralSummary({
                           </div>
                         </span>
                       </td>
+                      <td>
+                        <button className="btn btn-sm btn-primary disabled">
+                          Check Document Status
+                        </button>
+                      </td>
                     </tr>
                   );
                 })}
@@ -450,7 +489,7 @@ function ReferralSummary({
                           {binary.resourceType} <IoOpenOutline />
                         </button>
                       </th>
-                      <td>
+                      <td colSpan="2">
                         <span>
                           Content type is{' '}
                           <div className="btn btn-outline-primary disabled">
@@ -528,6 +567,29 @@ function ReferralSummary({
                             was attached to the communication.
                           </div>
                         ) : null}
+                      </td>
+                      <td>
+                        {communication.resource.sender.reference.includes(
+                          'Practitioner/'
+                        ) ? (
+                          <button
+                            className="btn btn-sm btn-primary"
+                            onClick={() =>
+                              sendCommunicationNotification(
+                                communication.resource.id
+                              )
+                            }
+                          >
+                            Send Communication Notification
+                          </button>
+                        ) : (
+                          <button
+                            className="btn btn-sm btn-warning"
+                            onClick={() => showAddNoteWindow(referral)}
+                          >
+                            Add a new note
+                          </button>
+                        )}
                       </td>
                     </tr>
                   );

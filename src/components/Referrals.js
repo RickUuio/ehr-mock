@@ -14,6 +14,7 @@ function Referrals({
   profileName,
   updateReferralStatus,
   baseUrl,
+  sendCommunicationNotificationUU,
 }) {
   const [showNewReferral, setShowNewReferral] = useState(false);
   const [showSource, setShowSource] = useState(false);
@@ -128,6 +129,10 @@ function Referrals({
                       showFhirSource={showFhirSource}
                       editReferralStatus={editReferralStatus}
                       showAddNoteWindow={showAddNoteWindow}
+                      baseUrl={baseUrl}
+                      sendCommunicationNotificationUU={
+                        sendCommunicationNotificationUU
+                      }
                     />
                   ))}
                 </tbody>
