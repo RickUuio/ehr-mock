@@ -43,7 +43,7 @@ const EncounterSummary = ({
             className="btn btn-primary btn-block col mx-1"
             onClick={sendNotification}
           >
-            Send Notification to Unite Us
+            Send Encounter Notification
           </button>
         </div>
       </div>
