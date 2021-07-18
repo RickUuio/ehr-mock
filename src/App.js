@@ -121,7 +121,7 @@ function App() {
           display: provider.firstName + ' ' + provider.lastName,
         },
       ],
-      orderDetail: {
+      /*       orderDetail: {
         text: referral.serviceType.text,
         coding: [
           {
@@ -130,7 +130,7 @@ function App() {
             display: referral.serviceType.text,
           },
         ],
-      },
+      }, */
     };
 
     if (referral.attachDocument && sampleDocumentReference.length > 0) {
@@ -626,7 +626,44 @@ function App() {
     return data;
   };
 
-  const sendCommunicationNotification = async (fhirId) => {
+  const sendUUNotification = async (fhirId, type) => {
+    setToastMessage(`Sending ${type} notification to Unite Us ... `);
+    setProgress('25%');
+    setShowMessageToast(true);
+
+    const notification = {
+      resourceType: 'Bundle',
+      type: 'Event',
+      entry: [
+        {
+          fullUrl: baseUrl + '/' + type + '/' + fhirId,
+        },
+      ],
+    };
+    const url =
+      'https://fhir-crn.uniteustraining.com/rick/FhirNotificationWebService';
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        'x-api-key': 'sfsdfddfdsfsdfs32342343',
+      },
+      body: JSON.stringify(notification),
+    });
+
+    setProgress('80%');
+
+    const data = await res.json();
+
+    console.log('notification response: ', data);
+    setProgress('100%');
+    setToastMessage(data.statusCode + ': ' + data.message);
+    setProgress('hide');
+
+    return data;
+  };
+
+  /* const sendCommunicationNotification = async (fhirId) => {
     setToastMessage('Sending communication notification to Unite Us ... ');
     setProgress('25%');
     setShowMessageToast(true);
@@ -661,7 +698,7 @@ function App() {
     setProgress('hide');
 
     return data;
-  };
+  }; */
 
   const sendNotificationUU = async () => {
     setToastMessage('Sending encounter notification to Unite Us ... ');
@@ -912,7 +949,7 @@ function App() {
             profileName={currentProfileName}
             updateReferralStatus={updateReferralStatus}
             baseUrl={baseUrl}
-            sendCommunicationNotificationUU={sendCommunicationNotification}
+            sendUUNotification={sendUUNotification}
           />
         </div>
       </div>

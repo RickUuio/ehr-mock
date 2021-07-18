@@ -12,10 +12,10 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (!serviceType) {
+    /*     if (!serviceType) {
       alert('Please select a service for the referral!');
       return;
-    }
+    } */
 
     onCreate({
       serviceType,
@@ -89,7 +89,7 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
           </div>
 
           <div className="col-lg-6">
-            <div className="form-group">
+            {/* <div className="form-group">
               <label className="col-form-label">SERVICE TYPE</label>
               <div>
                 <select
@@ -112,7 +112,7 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
                 </select>
               </div>
             </div>
-
+ */}
             <div className="form-group">
               <label className="col-form-label">RECEIPIENT</label>
               <div>
@@ -127,8 +127,44 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
                   }
                 >
                   <option>Select an organization ...</option>
-                  <option value="14742">Housing California</option>
-                  <option value="14733">River City Food Bank</option>
+
+                  {/*                   <option value="15179">
+                    NC Housing & Transportation Services
+                  </option> */}
+                  <option value="15195">
+                    Asian Resource - SacramentoWorks
+                  </option>
+                  <option value="15191">
+                    BusRides Sustainable Transportation Act - BusRides Transport
+                  </option>
+                  <option value="15199">
+                    Cumberland Legal Assistance - Youth Services
+                  </option>
+                  <option value="14742">
+                    Housing California - Housing Assistance
+                  </option>
+                  <option value="15207">
+                    James Bentley Treatment Program - Mental Health Skill
+                    Building
+                  </option>
+                  <option value="15211">Kroger - Food Benefits Program</option>
+                  <option value="15215">Legal Aid - Housing Law</option>
+                  <option value="15219">
+                    Planned Parenthood Mohawk Hudson - Saratoga Springs Center -
+                    Youth Health Promoters
+                  </option>
+                  <option value="14733">
+                    River City Food Bank - Food Pantry
+                  </option>
+                  <option value="15183">
+                    Santa Fe Medical Clinic - Medical Services
+                  </option>
+                  <option value="15184">
+                    Santa Fe Medical Clinic - Dental Services
+                  </option>
+                  <option value="15200">
+                    St. Mary's Shelter - Men's Emergency Shelter
+                  </option>
                 </select>
               </div>
             </div>
