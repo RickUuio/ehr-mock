@@ -582,16 +582,23 @@ function ReferralSummary({
                         {communication.resource.sender.reference.includes(
                           'Practitioner/'
                         ) ? (
-                          <button
-                            className="btn btn-sm btn-primary"
-                            onClick={() =>
-                              sendCommunicationNotification(
-                                communication.resource.id
-                              )
-                            }
-                          >
-                            Send Communication Notification
-                          </button>
+                          communication.received ? (
+                            <button
+                              className="btn btn-sm btn-primary"
+                              onClick={() =>
+                                sendCommunicationNotification(
+                                  communication.resource.id
+                                )
+                              }
+                            >
+                              {' '}
+                              Send Communication Notification
+                            </button>
+                          ) : (
+                            <button className="btn btn-sm btn-outline-primary disabled">
+                              Communication Received
+                            </button>
+                          )
                         ) : (
                           <button
                             className="btn btn-sm btn-warning"

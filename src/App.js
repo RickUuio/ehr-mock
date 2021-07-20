@@ -389,6 +389,12 @@ function App() {
       const referralId = referral?.Task?.resource?.id;
       const communications = await fetchCommunications(referralId);
       referral.Communication = communications.entry;
+
+      for (let communication of referral.Communication) {
+        communication.received = await checkCommunication(
+          communication.resource.id
+        );
+      }
     }
 
     // Fetch DocumentReferences for each ServiceRequest
@@ -497,6 +503,26 @@ function App() {
     const data = await res.json();
     console.log('communications: ', data);
     return data;
+  };
+
+  const checkCommunication = async (fhirId) => {
+    const url =
+      'https://fhir-crn.uniteustraining.com/rick/mockapi/communication/read';
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        Accept: 'application/json',
+        'x-api-key': 'sfsdfddfdsfsdfs32342343',
+      },
+      body: JSON.stringify({
+        fullUrl: baseUrl + '/Communication/' + fhirId,
+      }),
+    });
+    const data = await res.json();
+    const item = data.response.item;
+    console.log('check communication ', fhirId, ' result ', item === undefined);
+    return item === undefined;
   };
 
   // Fetch DocumentReferences for a ServiceRequest
