@@ -8,6 +8,7 @@ import {
   Profile_Epic_2,
   Profile_Logica,
 } from './components/Profiles';
+import { Next } from 'react-bootstrap/esm/PageItem';
 
 function App() {
   const defaultProfile = Profile_Epic;
@@ -242,6 +243,7 @@ function App() {
       },
     };
 
+    resource.payload = [];
     if (referral.description.length > 0) {
       resource.payload = [
         {
@@ -388,8 +390,10 @@ function App() {
     for (let referral of referralList) {
       const referralId = referral?.Task?.resource?.id;
       const communications = await fetchCommunications(referralId);
+
       referral.Communication = communications.entry;
 
+      if (referral.Communication == null) continue;
       for (let communication of referral.Communication) {
         communication.received = await checkCommunication(
           communication.resource.id
@@ -666,8 +670,7 @@ function App() {
         },
       ],
     };
-    const url =
-      'https://fhir-crn.uniteustraining.com/rick/FhirNotificationWebService';
+    const url = notificationUrl;
     const res = await fetch(url, {
       method: 'POST',
       headers: {

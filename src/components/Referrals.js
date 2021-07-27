@@ -107,7 +107,7 @@ function Referrals({
               toggleShowNewReferral={toggleShowNewReferral}
             />
           ) : null}
-          {referralList.length > 0 ? (
+          {referralList?.length > 0 ? (
             <div className="table-responsive">
               <table className="table table-hover">
                 <thead>

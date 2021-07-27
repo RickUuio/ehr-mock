@@ -157,6 +157,18 @@ footer {
     1px 1px 5px 1px rgba(0, 0, 0, 0.26);
     */
   background-color: #013a63; /* rgba(0, 70, 110, 1); */
+  /* 
+  'my-blue': '#013a63',
+  'brand-blue': '#2C405A",
+  'dark-blue': '#182A44",
+  'action-blue': '#2874AF',
+  'action-light-blue': '#52B4FF',
+  'action-darker-blue': '#105890',
+  'pale-blue': '#F1F6FA',
+  'dark-pale-blue': '#CADEEE',
+  'purple': '#712F79',
+  'light-purple': '#EAA1F2',
+  */
   /*   
   background-color: rgba(0, 123, 167, 1);
   background-image: linear-gradient(

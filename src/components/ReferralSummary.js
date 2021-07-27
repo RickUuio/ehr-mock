@@ -83,6 +83,31 @@ function ReferralSummary({
     return item;
   };
 
+  const removeCommunication = async (communication) => {
+    const fullUrl = `${baseUrl}/Communication/${communication.resource.id}`;
+    console.log('remove communication: ', fullUrl);
+    const url =
+      'https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/communication/delete';
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        Accept: 'application/json',
+        'x-api-key': 'sfsdfddfdsfsdfs32342343',
+      },
+      body: JSON.stringify({
+        fullUrl: fullUrl,
+      }),
+    });
+    const data = await res.json();
+    const item = data.response;
+    communication.received = false;
+    referral.comNum = referral.comNum - 1;
+    setExpandReferralId('');
+    console.log('remove item: ', item);
+    return item;
+  };
+
   const sendCommunicationNotification = (fhirId) => {
     console.log('sending a communication notification to Unite Us...');
     sendUUNotification(fhirId, 'Communication');
@@ -595,8 +620,11 @@ function ReferralSummary({
                               Send Communication Notification
                             </button>
                           ) : (
-                            <button className="btn btn-sm btn-outline-primary disabled">
-                              Communication Received
+                            <button
+                              className="btn btn-sm btn-danger"
+                              onClick={() => removeCommunication(communication)}
+                            >
+                              Remove Communication Link
                             </button>
                           )
                         ) : (
