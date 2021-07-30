@@ -92,3 +92,21 @@ export const Profile_Logica = {
     'https://fhir-crn.uniteustraining.com/rick/FhirNotificationWebService',
   accessToken: '',
 };
+
+export const Stage_Staging = {
+  name: 'staging',
+  baseUrl: 'https://fhir-crn.uniteusdev.com/v1',
+  token: 'wOvYlZbrIW6THlB68QcJk6UlCwNPKYHfibNCMj03',
+};
+
+export const Stage_Training = {
+  name: 'training',
+  baseUrl: 'https://fhir-crn.uniteustraining.com/v1',
+  token: 'qgx2q5m35Q42q83kkM5FX67S0KHyFsCf4HVb5hpI',
+};
+
+export const Stage_POC = {
+  name: 'poc',
+  baseUrl: 'https://fhir-crn.uniteustraining.com/rick',
+  token: 'sfsdfddfdsfsdfs32342343',
+};

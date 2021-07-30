@@ -15,6 +15,7 @@ function Referrals({
   updateReferralStatus,
   baseUrl,
   sendUUNotification,
+  currentStage,
 }) {
   const [showNewReferral, setShowNewReferral] = useState(false);
   const [showSource, setShowSource] = useState(false);
@@ -131,6 +132,7 @@ function Referrals({
                       showAddNoteWindow={showAddNoteWindow}
                       baseUrl={baseUrl}
                       sendUUNotification={sendUUNotification}
+                      currentStage={currentStage}
                     />
                   ))}
                 </tbody>

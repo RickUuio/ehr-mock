@@ -11,6 +11,7 @@ function ReferralSummary({
   showAddNoteWindow,
   baseUrl,
   sendUUNotification,
+  currentStage,
 }) {
   const [expandReferralId, setExpandReferralId] = useState('');
 
@@ -62,14 +63,13 @@ function ReferralSummary({
   const removeReferral = async () => {
     const fullUrl = referral.trackingItem.full_url;
     console.log('remove referral: ', fullUrl);
-    const url =
-      'https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/resource_tracking/delete';
+    const url = `${currentStage.baseUrl}/mockapi/resource_tracking/delete`;
     const res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
         Accept: 'application/json',
-        'x-api-key': 'sfsdfddfdsfsdfs32342343',
+        'x-api-key': currentStage.token,
       },
       body: JSON.stringify({
         full_url: fullUrl,
@@ -86,14 +86,13 @@ function ReferralSummary({
   const removeCommunication = async (communication) => {
     const fullUrl = `${baseUrl}/Communication/${communication.resource.id}`;
     console.log('remove communication: ', fullUrl);
-    const url =
-      'https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/communication/delete';
+    const url = `${currentStage.baseUrl}/mockapi/communication/delete`;
     const res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
         Accept: 'application/json',
-        'x-api-key': 'sfsdfddfdsfsdfs32342343',
+        'x-api-key': currentStage.token,
       },
       body: JSON.stringify({
         fullUrl: fullUrl,
@@ -620,12 +619,27 @@ function ReferralSummary({
                               Send Communication Notification
                             </button>
                           ) : (
-                            <button
-                              className="btn btn-sm btn-danger"
-                              onClick={() => removeCommunication(communication)}
-                            >
-                              Remove Communication Link
-                            </button>
+                            <div>
+                              <button
+                                className="btn btn-sm btn-primary"
+                                onClick={() =>
+                                  sendCommunicationNotification(
+                                    communication.resource.id
+                                  )
+                                }
+                              >
+                                {' '}
+                                Send Communication Notification
+                              </button>
+                              <button
+                                className="btn btn-sm btn-danger"
+                                onClick={() =>
+                                  removeCommunication(communication)
+                                }
+                              >
+                                Remove Communication Link
+                              </button>
+                            </div>
                           )
                         ) : (
                           <button

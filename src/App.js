@@ -7,8 +7,10 @@ import {
   Profile_Epic,
   Profile_Epic_2,
   Profile_Logica,
+  Stage_Staging,
+  Stage_Training,
+  Stage_POC,
 } from './components/Profiles';
-import { Next } from 'react-bootstrap/esm/PageItem';
 
 function App() {
   const defaultProfile = Profile_Epic;
@@ -35,6 +37,12 @@ function App() {
   const [toastMessage, setToastMessage] = useState(defaultToastMessage);
   const [showMessageToast, setShowMessageToast] = useState(true);
   const toggleShowMessageToast = () => setShowMessageToast(!showMessageToast);
+
+  const defaultStage = Stage_Training;
+  const [currentStage, setCurrentStage] = useState(defaultStage);
+  const [currentStageBaseUrl, setCurrentStageBaseUrl] = useState(
+    defaultStage.baseUrl
+  );
 
   const [progress, setProgress] = useState('0%');
 
@@ -71,6 +79,27 @@ function App() {
     setShowMessageToast(false);
     setProgress('0%');
     //setToastMessage("");
+  };
+
+  const switchStage = async (stageName) => {
+    let newStage = currentStage;
+    switch (stageName) {
+      case 'training':
+        newStage = Stage_Training;
+        break;
+      case 'staging':
+        newStage = Stage_Staging;
+        break;
+      case 'poc':
+        newStage = Stage_POC;
+        break;
+      default:
+        newStage = defaultStage;
+    }
+    console.log('Switch to stage: ', newStage);
+    setCurrentStage(newStage);
+    setCurrentStageBaseUrl(newStage.baseUrl);
+    await changeCurrentEncounter(currentEncounter, baseUrl);
   };
 
   const refreshProfileSettings = async () => {
@@ -510,14 +539,13 @@ function App() {
   };
 
   const checkCommunication = async (fhirId) => {
-    const url =
-      'https://fhir-crn.uniteustraining.com/rick/mockapi/communication/read';
+    const url = `${currentStageBaseUrl}/mockapi/communication/read`;
     const res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
         Accept: 'application/json',
-        'x-api-key': 'sfsdfddfdsfsdfs32342343',
+        'x-api-key': currentStage.token,
       },
       body: JSON.stringify({
         fullUrl: baseUrl + '/Communication/' + fhirId,
@@ -602,14 +630,13 @@ function App() {
   };
 
   const lookupUUReferralId = async (fhirUrl) => {
-    const url =
-      'https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/resource_tracking/read';
+    const url = `${currentStageBaseUrl}/mockapi/resource_tracking/read`;
     const res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
         Accept: 'application/json',
-        'x-api-key': 'sfsdfddfdsfsdfs32342343',
+        'x-api-key': currentStage.token,
       },
       body: JSON.stringify({
         full_url: fhirUrl,
@@ -670,12 +697,12 @@ function App() {
         },
       ],
     };
-    const url = notificationUrl;
+    const url = `${currentStageBaseUrl}/FhirNotificationWebService`;
     const res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
-        'x-api-key': 'sfsdfddfdsfsdfs32342343',
+        'x-api-key': currentStage.token,
       },
       body: JSON.stringify(notification),
     });
@@ -707,7 +734,7 @@ function App() {
       ],
     };
     const url =
-      'https://fhir-crn.uniteustraining.com/rick/FhirNotificationWebService';
+      `${currentStageBaseUrl}/FhirNotificationWebService`;
     const res = await fetch(url, {
       method: 'POST',
       headers: {
@@ -734,7 +761,7 @@ function App() {
     setProgress('25%');
     setShowMessageToast(true);
 
-    const url = notificationUrl;
+    const url = `${currentStageBaseUrl}/FhirNotificationWebService`;
     const notification = {
       resourceType: 'Bundle',
       type: 'Event',
@@ -748,7 +775,7 @@ function App() {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
-        'x-api-key': 'sfsdfddfdsfsdfs32342343', //"wOvYlZbrIW6THlB68QcJk6UlCwNPKYHfibNCMj03",
+        'x-api-key': currentStage.token, //"wOvYlZbrIW6THlB68QcJk6UlCwNPKYHfibNCMj03",
       },
       body: JSON.stringify(notification),
     });
@@ -762,14 +789,13 @@ function App() {
   };
 
   const getAccessToken = async () => {
-    const url =
-      'https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/authentication/token';
+    const url = `${currentStageBaseUrl}/mockapi/authentication/token`;
     const res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
         Accept: 'application/json',
-        'x-api-key': 'sfsdfddfdsfsdfs32342343', //"wOvYlZbrIW6THlB68QcJk6UlCwNPKYHfibNCMj03",
+        'x-api-key': currentStage.token, //"wOvYlZbrIW6THlB68QcJk6UlCwNPKYHfibNCMj03",
       },
       body: JSON.stringify({
         privateKey: null,
@@ -788,14 +814,13 @@ function App() {
     setShowMessageToast(true);
 
     // fetch the Task first
-    let url =
-      'https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/request/read';
+    let url = `${currentStageBaseUrl}/mockapi/request/read`;
     let res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
         Accept: 'application/json',
-        'x-api-key': 'sfsdfddfdsfsdfs32342343',
+        'x-api-key': currentStage.token,
       },
       body: JSON.stringify({
         baseUrl: baseUrl,
@@ -835,14 +860,13 @@ function App() {
     console.log('new task: ', task);
 
     // send Task update requester
-    url =
-      'https://5yhugddpmk.execute-api.us-east-1.amazonaws.com/rick/mockapi/request/update';
+    url = `${currentStageBaseUrl}/mockapi/request/update`;
     res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
         Accept: 'application/json',
-        'x-api-key': 'sfsdfddfdsfsdfs32342343',
+        'x-api-key': currentStage.token,
       },
       body: JSON.stringify({
         baseUrl: baseUrl,
@@ -917,6 +941,8 @@ function App() {
         provider={provider}
         profileName={currentProfileName}
         switchProfile={switchProfile}
+        stageName={currentStage.name}
+        switchStage={switchStage}
       />
 
       <div
@@ -979,6 +1005,7 @@ function App() {
             updateReferralStatus={updateReferralStatus}
             baseUrl={baseUrl}
             sendUUNotification={sendUUNotification}
+            currentStage={currentStage}
           />
         </div>
       </div>

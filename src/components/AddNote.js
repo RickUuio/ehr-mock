@@ -11,7 +11,13 @@ import {
 import { IoOpenOutline, IoCloudDownloadSharp } from 'react-icons/io5';
 import { CgAttachment } from 'react-icons/cg';
 
-const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
+const AddNote = ({
+  showAddNote,
+  referral,
+  closeAddNote,
+  baseUrl,
+  currentStageBaseUrl,
+}) => {
   const [noteText, setNoteText] = useState('');
   const [callResponse, setCallResponse] = useState('');
   const [refreshCount, setRefreshCount] = useState(0);
@@ -31,8 +37,7 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
       setWaitMessage('Retriving communcation notes ...');
       setShowMessageToast(true);
 
-      const url =
-        'https://fhir-crn.uniteustraining.com/rick/mockapi/request/search';
+      const url = `${currentStageBaseUrl}/mockapi/request/search`;
 
       const res = await fetch(url, {
         method: 'POST',
@@ -67,8 +72,7 @@ const AddNote = ({ showAddNote, referral, closeAddNote, baseUrl }) => {
   const sendNote = async () => {
     setWaitMessage('Sending communication note ...');
     setShowMessageToast(true);
-    const url =
-      'https://fhir-crn.uniteustraining.com/rick/mockapi/communication_out/process';
+    const url = `${currentStageBaseUrl}/mockapi/communication_out/process`;
     const res = await fetch(url, {
       method: 'POST',
       headers: {

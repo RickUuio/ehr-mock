@@ -2,9 +2,18 @@ import PropTypes from 'prop-types';
 import Patient from './Patient';
 import Provider from './Provider';
 import ProfileSelector from './ProfileSelector';
+import StageSelector from './StageSelector';
 import { FaFire } from 'react-icons/fa';
 
-const Header = ({ title, patient, provider, profileName, switchProfile }) => {
+const Header = ({
+  title,
+  patient,
+  provider,
+  profileName,
+  switchProfile,
+  stageName,
+  switchStage,
+}) => {
   return (
     <header>
       <div id="navbarTop">
@@ -17,6 +26,7 @@ const Header = ({ title, patient, provider, profileName, switchProfile }) => {
               profileName={profileName}
               switchProfile={switchProfile}
             />
+            <StageSelector stageName={stageName} switchStage={switchStage} />
           </div>
 
           <div className="col-lg-3 col-md-6 order-lg-1">
