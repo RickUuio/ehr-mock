@@ -1,6 +1,6 @@
 const ProfileSelector = ({ profileName, switchProfile }) => {
   return (
-    <div className="border-bottom mx-1">
+    <div className="mx-1">
       <lable className="form-label px-2">FHIR SERVER :</lable>
       <div
         className="btn-group mb-2"

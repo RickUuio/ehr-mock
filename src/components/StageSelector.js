@@ -1,6 +1,6 @@
 const StageSelector = ({ stageName, switchStage }) => {
   return (
-    <div className="border-bottom mx-1">
+    <div className="mx-1">
       {/*      <div className="form-group">
         <label className="row-form-label">STAGE</label>
         <div>
@@ -15,7 +15,7 @@ const StageSelector = ({ stageName, switchStage }) => {
           </select>
         </div>
       </div> */}
-      <lable className="form-label px-2">STAGE :</lable>
+      <lable className="form-label px-2">UU SERVER :</lable>
       <div
         className="btn-group mb-2"
         role="group"
