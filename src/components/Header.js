@@ -22,11 +22,20 @@ const Header = ({
             <h2 className="pt-4">
               <FaFire style={{ color: '#d60c05ee' }} /> {title}
             </h2>
-            <ProfileSelector
-              profileName={profileName}
-              switchProfile={switchProfile}
-            />
-            <StageSelector stageName={stageName} switchStage={switchStage} />
+            <div className="row">
+              <div className="col-lg-auto">
+                <ProfileSelector
+                  profileName={profileName}
+                  switchProfile={switchProfile}
+                />
+              </div>
+              <div className="col-lg-auto">
+                <StageSelector
+                  stageName={stageName}
+                  switchStage={switchStage}
+                />
+              </div>
+            </div>
           </div>
 
           <div className="col-lg-3 col-md-6 order-lg-1">

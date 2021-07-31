@@ -97,16 +97,44 @@ export const Stage_Staging = {
   name: 'staging',
   baseUrl: 'https://fhir-crn.uniteusdev.com/v1',
   token: 'wOvYlZbrIW6THlB68QcJk6UlCwNPKYHfibNCMj03',
+  provider: {
+    firstName: 'Five',
+    lastName: 'Auto',
+    email: 'five@auto.com',
+    user_id: '184bd75d-e4da-4751-899c-b3a9da0599ba',
+    group_id: 'c31a43c0-c593-4c96-84ed-6f966e895649',
+    network_id: 'c88b9628-b76c-434b-ad58-62bb2ca9d6c0',
+    access_token_legacy:
+      'b6063af252fb95dea2a0e0a5e049035ddad33a14192f19804662b9f9896b6bd0',
+    access_token_core:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImZoaXJjcm5yZXF1ZXN0cyJ9.eyJpc3MiOm51bGwsInN1YiI6Ijk2NDA4MjA5LTA2YzktNGVjYi05ZjBkLWYyZjAxNTc4Y2QyZiIsImVtYWlsIjoiZmhpci5jcm4ucmVxdWVzdHNAdW5pdGV1cy5jb20iLCJhdWQiOltdLCJleHAiOjIxNDc0ODM2NDcsIm5iZiI6MTYyNjcxODMxOSwiaWF0IjoxNjI2NzE4MzE5LCJqdGkiOiIzY2U1MjE0ODhmM2RjZTgzZjVkNmM2MzgwYWFjMzYzZGU2MjI1ZTNlODU1ZGVmOWFiOSIsInVzZXJfaW50ZXJjb21faG1hYyI6ImEwYmY1NGI1OGUzYzg0MDI2MWUxMWMwZWI5Y2EyMGM2NDYzMTMwOWUzZjYxMWZhZjlhOTQwZjQyNDBlOTk4YzgifQ.JU3X_WOYWZlLr2dYSKf135LyvkDzjDqhtUbJYlZd0NM',
+  }.freeze,
 };
 
 export const Stage_Training = {
   name: 'training',
   baseUrl: 'https://fhir-crn.uniteustraining.com/v1',
   token: 'qgx2q5m35Q42q83kkM5FX67S0KHyFsCf4HVb5hpI',
+  provider: {
+    firstName: 'Case',
+    lastName: 'Manager',
+    fhirId: 'eaToFIkaJ32mO4K002q3BLw3',
+    uuid: '94e5f7ee-1425-42bc-8833-3474b687b125',
+    groupId: 'bf4aa373-81eb-4da5-9980-2d3e51c57b3c',
+    networkId: '145ca925-ba86-490d-b404-35f4fe5ada66',
+  },
 };
 
 export const Stage_POC = {
   name: 'poc',
   baseUrl: 'https://fhir-crn.uniteustraining.com/rick',
   token: 'sfsdfddfdsfsdfs32342343',
+  provider: {
+    firstName: 'Case',
+    lastName: 'Manager',
+    fhirId: 'eaToFIkaJ32mO4K002q3BLw3',
+    uuid: '94e5f7ee-1425-42bc-8833-3474b687b125',
+    groupId: 'bf4aa373-81eb-4da5-9980-2d3e51c57b3c',
+    networkId: '145ca925-ba86-490d-b404-35f4fe5ada66',
+  },
 };
