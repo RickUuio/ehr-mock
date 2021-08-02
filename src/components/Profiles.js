@@ -96,6 +96,7 @@ export const Profile_Logica = {
 export const Stage_Staging = {
   name: 'staging',
   baseUrl: 'https://fhir-crn.uniteusdev.com/v1',
+  appUrl: 'https://app.uniteusdev.com',
   token: 'wOvYlZbrIW6THlB68QcJk6UlCwNPKYHfibNCMj03',
   provider: {
     firstName: 'Five',
@@ -114,6 +115,7 @@ export const Stage_Staging = {
 export const Stage_Training = {
   name: 'training',
   baseUrl: 'https://fhir-crn.uniteustraining.com/v1',
+  appUrl: 'https://app.uniteustraining.com',
   token: 'qgx2q5m35Q42q83kkM5FX67S0KHyFsCf4HVb5hpI',
   provider: {
     firstName: 'Case',
@@ -128,6 +130,7 @@ export const Stage_Training = {
 export const Stage_POC = {
   name: 'poc',
   baseUrl: 'https://fhir-crn.uniteustraining.com/rick',
+  appUrl: 'https://app.uniteustraining.com',
   token: 'sfsdfddfdsfsdfs32342343',
   provider: {
     firstName: 'Case',

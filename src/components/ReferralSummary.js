@@ -188,7 +188,7 @@ function ReferralSummary({
         <td>
           {referral.trackingItem ? (
             <a
-              href={`https://app.uniteustraining.com/dashboard/referrals/sent/all/${referral.trackingItem.core_referral_id}`}
+              href={`${currentStage.appUrl}/dashboard/referrals/sent/all/${referral.trackingItem.core_referral_id}`}
               data-bs-toggle="tooltip"
               title={referral.trackingItem.core_referral_id}
               data-bs-placement="top"
@@ -227,7 +227,7 @@ function ReferralSummary({
                     <td>
                       Referral created in Unite Us{' '}
                       <a
-                        href={`https://app.uniteustraining.com/dashboard/referrals/sent/all/${referral.trackingItem.core_referral_id}`}
+                        href={`${currentStage.appUrl}/dashboard/referrals/sent/all/${referral.trackingItem.core_referral_id}`}
                         data-bs-toggle="tooltip"
                         title={referral.trackingItem.core_referral_id}
                         data-bs-placement="top"

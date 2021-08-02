@@ -165,6 +165,11 @@ export const CreateReferral = ({ onCreate, toggleShowNewReferral }) => {
                   <option value="15200">
                     St. Mary's Shelter - Men's Emergency Shelter
                   </option>
+                  <option value="15488">
+                    [STAGING] American Red Cross (Carolina Piedmont Region)
+                    Program
+                  </option>
+                  <option value="15482">[STAGING] Sushi - Spicy Tuna</option>
                 </select>
               </div>
             </div>
