@@ -171,6 +171,7 @@ function Referrals({
         communicationList={currentReferral?.Communication}
         closeAddNote={closeAddNote}
         baseUrl={baseUrl}
+        currentStageBaseUrl={currentStage.baseUrl}
       ></AddNote>
     </div>
   );

@@ -126,7 +126,8 @@ export const Stage_Training = {
 export const Stage_POC = {
   name: 'poc',
   baseUrl: 'https://fhir-crn.uniteustraining.com/rick',
-  appUrl: 'https://app.uniteusdev.com',
+  appUrl: 'https://devqa.uniteusdev.com/core-phase-3',
+  appUrl2: 'https://devqa.uniteusdev.com/core-phase-3',
   token: 'sfsdfddfdsfsdfs32342343',
   provider: {
     firstName: 'Case',

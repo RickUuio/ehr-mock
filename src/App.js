@@ -95,6 +95,8 @@ function App() {
     switch (profileName) {
       case 'Logica':
         newProfile = Profile_Logica;
+        if (currentStage.name === 'poc')
+          currentStage.appUrl = Stage_Staging.appUrl;
         break;
       case 'Logica2':
         // newProfile = Profile_Logica_2;
@@ -109,12 +111,18 @@ function App() {
           //setShowMessageToast(false);
           return;
         }
+        if (currentStage.name === 'poc')
+          currentStage.appUrl = Stage_POC.appUrl2;
         break;
       case 'Epic2':
         newProfile = Profile_Epic_2;
+        if (currentStage.name === 'poc')
+          currentStage.appUrl = Stage_POC.appUrl2;
         break;
       default:
         newProfile = Profile_Epic;
+        if (currentStage.name === 'poc')
+          currentStage.appUrl = Stage_POC.appUrl2;
     }
     setPatient(newProfile.defaultPatient);
     setProvider(newProfile.defaultProvider);
@@ -142,6 +150,9 @@ function App() {
         break;
       case 'poc':
         newStage = Stage_POC;
+        if (currentProfileName === 'Logica')
+          newStage.appUrl = Stage_Staging.appUrl;
+        else newStage.appUrl = Stage_POC.appUrl2;
         break;
       default:
         newStage = defaultStage;
