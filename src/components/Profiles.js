@@ -64,7 +64,6 @@ export const Profile_Epic_2 = {
 
 export const Profile_Logica = {
   name: 'Logica',
-
   defaultPatient: {
     firstName: 'Beverly',
     lastName: 'Ccm',
@@ -82,12 +81,9 @@ export const Profile_Logica = {
     groupId: 'bf4aa373-81eb-4da5-9980-2d3e51c57b3c',
     networkId: '145ca925-ba86-490d-b404-35f4fe5ada66',
   },
-
   defaultEncounter: '14801',
   defaultDocumentReference: '14740',
-
   defaultBaseUrl: 'https://api.logicahealth.org/uufhircrn/open',
-
   defaultNotificationUrl:
     'https://fhir-crn.uniteustraining.com/rick/FhirNotificationWebService',
   accessToken: '',
@@ -130,7 +126,7 @@ export const Stage_Training = {
 export const Stage_POC = {
   name: 'poc',
   baseUrl: 'https://fhir-crn.uniteustraining.com/rick',
-  appUrl: 'https://app.uniteustraining.com',
+  appUrl: 'https://app.uniteusdev.com',
   token: 'sfsdfddfdsfsdfs32342343',
   provider: {
     firstName: 'Case',

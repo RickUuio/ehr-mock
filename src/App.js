@@ -13,7 +13,7 @@ import {
 } from './components/Profiles';
 
 function App() {
-  const defaultProfile = Profile_Epic;
+  const defaultProfile = Profile_Logica;
   const defaultProfileName = defaultProfile.name;
   const [currentProfileName, setCurrentProfileName] =
     useState(defaultProfileName);
@@ -25,9 +25,6 @@ function App() {
   );
   const [accessToken, setAccessToken] = useState(defaultProfile.access_token);
   const [baseUrl, setBaseUrl] = useState(defaultProfile.defaultBaseUrl);
-  const [notificationUrl, setNotificationUrl] = useState(
-    defaultProfile.defaultNotificationUrl
-  );
   const [referrals, setReferrals] = useState([]);
   const [encounters, setEncounters] = useState([]);
 
@@ -46,18 +43,72 @@ function App() {
 
   const [progress, setProgress] = useState('0%');
 
-  const switchProfile = async (profileName) => {
+  const retrievePatientInfo = async (patientFhirId) => {
+    let newProfile = {
+      name: 'Logica2',
+      defaultPatient: {
+        fhirId: patientFhirId,
+        uuid: '',
+      },
+      defaultProvider: {
+        firstName: 'Demo',
+        lastName: 'Provider',
+        fhirId: '14734',
+        uuid: '94e5f7ee-1425-42bc-8833-3474b687b125',
+        groupId: 'bf4aa373-81eb-4da5-9980-2d3e51c57b3c',
+        networkId: '145ca925-ba86-490d-b404-35f4fe5ada66',
+      },
+      defaultEncounter: '14801',
+      defaultDocumentReference: '14740',
+      defaultBaseUrl: 'https://api.logicahealth.org/uufhircrn/open',
+    };
+
+    const url = baseUrl + '/Patient/' + patientFhirId;
+
+    const res = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json',
+        Accept: 'application/json',
+      },
+    });
+    if (res.status !== 200) return null;
+
+    const data = await res.json();
+    console.log('Patient received: ', data);
+    newProfile.defaultPatient.firstName = data.name[0]?.given[0];
+    newProfile.defaultPatient.lastName = data.name[0]?.family;
+    newProfile.defaultPatient.gender = data.gender;
+    newProfile.defaultPatient.dob = data.birthDate;
+    return newProfile;
+  };
+
+  const switchProfile = async (profileName, patientFhirId = '') => {
     //if (profileName === currentProfileName) return
     setProgress('0%');
     setToastMessage(defaultToastMessage);
     setShowMessageToast(true);
 
-    console.log('Switch to profile: ', profileName);
+    console.log('Switch to profile: ', profileName, patientFhirId);
     setCurrentProfileName(profileName);
     let newProfile; //'= profileName === "Logica" ? Profile_Logica : Profile_Epic;
     switch (profileName) {
       case 'Logica':
         newProfile = Profile_Logica;
+        break;
+      case 'Logica2':
+        // newProfile = Profile_Logica_2;
+        if (patientFhirId === '') {
+          setShowMessageToast(false);
+          return;
+        }
+        newProfile = await retrievePatientInfo(patientFhirId);
+        if (newProfile === null) {
+          setToastMessage('Invalid patient FHIR ID');
+          setProgress('error');
+          //setShowMessageToast(false);
+          return;
+        }
         break;
       case 'Epic2':
         newProfile = Profile_Epic_2;
@@ -68,9 +119,8 @@ function App() {
     setPatient(newProfile.defaultPatient);
     setProvider(newProfile.defaultProvider);
     setBaseUrl(newProfile.defaultBaseUrl);
-    setNotificationUrl(newProfile.defaultNotificationUrl);
-    if (newProfile.name === 'Logica') {
-      setAccessToken(newProfile.accessToken);
+    if (newProfile.name === 'Logica' || newProfile.name === 'Logica2') {
+      setAccessToken(patientFhirId);
     } else {
       let token = await getAccessToken();
       setAccessToken(token);
@@ -332,7 +382,11 @@ function App() {
       headers: {
         'Content-type': 'application/json',
         Accept: 'application/json',
-        Authorization: accessToken?.length > 0 ? 'bearer ' + accessToken : '',
+        Authorization:
+          accessToken?.length > 0 &&
+          currentProfileName.substring(0, 6) !== 'Logica'
+            ? 'bearer ' + accessToken
+            : '',
       },
     });
     const data = await res.json();
@@ -503,7 +557,8 @@ function App() {
         'Content-type': 'application/json',
         Accept: 'application/json',
         Authorization:
-          accessToken?.length > 0 && currentProfileName !== 'Logica'
+          accessToken?.length > 0 &&
+          currentProfileName.substring(0, 6) !== 'Logica'
             ? 'bearer ' + accessToken
             : '',
       },
@@ -530,7 +585,11 @@ function App() {
       headers: {
         'Content-type': 'application/json',
         Accept: 'application/json',
-        Authorization: accessToken?.length > 0 ? 'bearer ' + accessToken : '',
+        Authorization:
+          accessToken?.length > 0 &&
+          currentProfileName.substring(0, 6) !== 'Logica'
+            ? 'bearer ' + accessToken
+            : '',
       },
     });
     const data = await res.json();
@@ -571,7 +630,11 @@ function App() {
         headers: {
           'Content-type': 'application/json',
           Accept: 'application/json',
-          Authorization: accessToken?.length > 0 ? 'bearer ' + accessToken : '',
+          Authorization:
+            accessToken?.length > 0 &&
+            currentProfileName.substring(0, 6) !== 'Logica'
+              ? 'bearer ' + accessToken
+              : '',
         },
       });
       const data = await res.json();
@@ -595,7 +658,11 @@ function App() {
         headers: {
           'Content-type': 'application/json',
           Accept: 'application/fhir+json',
-          Authorization: accessToken?.length > 0 ? 'bearer ' + accessToken : '',
+          Authorization:
+            accessToken?.length > 0 &&
+            currentProfileName.substring(0, 6) !== 'Logica'
+              ? 'bearer ' + accessToken
+              : '',
         },
       });
       const data = await res.json();
@@ -610,7 +677,8 @@ function App() {
   // Fetch Consent for a Patient
   const fetchConsents = async (
     patientFhirId = patient.fhirId,
-    category = currentProfileName === 'Logica'
+    category = currentProfileName === 'Logica' ||
+    currentProfileName === 'Logica2'
       ? '64292-6'
       : 'http://loinc.org|64292-6',
     status = 'active'
@@ -621,7 +689,11 @@ function App() {
       headers: {
         'Content-type': 'application/json',
         Accept: 'application/json',
-        Authorization: accessToken?.length > 0 ? 'bearer ' + accessToken : '',
+        Authorization:
+          accessToken?.length > 0 &&
+          currentProfileName.substring(0, 6) !== 'Logica'
+            ? 'bearer ' + accessToken
+            : '',
       },
     });
     const data = await res.json();
@@ -832,7 +904,7 @@ function App() {
     let task = data.response.body;
     let headers = data.response.headers;
     let eTag =
-      currentProfileName === 'Logica'
+      currentProfileName === 'Logica' || currentProfileName === 'Logica2'
         ? headers['etag'][0]
         : headers['e-tag'][0];
     console.log('task: ', task);
@@ -847,7 +919,7 @@ function App() {
         coding: [
           {
             system:
-              currentProfileName === 'Logica'
+              currentProfileName.substring(0, 6) === 'Logica'
                 ? 'HTTPS://UNITEUS.COM/IO/STRUCTUREDEFINITION/STATUS-REASON'
                 : 'urn:oid:1.2.840.114350.1.13.0.1.7.4.698084.34025',
             code: epicCode.code,
@@ -947,7 +1019,13 @@ function App() {
 
       <div
         className={
-          showMessageToast ? 'toast bg-warning text-secondary show' : 'toast'
+          showMessageToast
+            ? progress === 'error'
+              ? 'toast bg-danger text-secondary show'
+              : progress === 'hide'
+              ? 'toast bg-info text-secondary show'
+              : 'toast bg-warning text-secondary show'
+            : 'toast'
         }
         role="alert"
         aria-live="assertive"
@@ -955,7 +1033,13 @@ function App() {
         id="messageToast"
       >
         <div className="toast-header">
-          <strong className="me-auto">Please Wait ...</strong>
+          {progress === 'error' ? (
+            <strong className="me-auto">Error</strong>
+          ) : progress === 'hide' ? (
+            <strong className="me-auto">Success</strong>
+          ) : (
+            <strong className="me-auto">Please Wait ...</strong>
+          )}
           <button
             type="button"
             class="btn-close"
@@ -968,7 +1052,7 @@ function App() {
         </div>
         <div className="toast-body">
           {toastMessage}
-          {progress === 'hide' ? null : (
+          {progress === 'hide' || progress === 'error' ? null : (
             <>
               <div className="spinner-border text-warning" role="status">
                 <span className="visually-hidden">...</span>

@@ -52,7 +52,7 @@ const StageSelector = ({ stageName, switchStage }) => {
         <label className="btn btn-outline-success" htmlFor="stageTraining">
           Training
         </label>
-        {/*         <input
+        <input
           type="radio"
           className="btn-check"
           name="btnStage"
@@ -66,7 +66,7 @@ const StageSelector = ({ stageName, switchStage }) => {
         />
         <label className="btn btn-outline-info" htmlFor="stagePOC">
           POC
-        </label> */}
+        </label>
       </div>
     </div>
   );

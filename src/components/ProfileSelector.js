@@ -53,6 +53,36 @@ const ProfileSelector = ({ profileName, switchProfile }) => {
         <label className="btn btn-outline-info" htmlFor="profileLogica">
           Beverly @Logica
         </label>
+        <input
+          type="radio"
+          className="btn-check"
+          name="btnProfile"
+          id="profileLogica2"
+          autoComplete="off"
+          defaultChecked={profileName === 'Logica2'}
+          onClick={() => {
+            profileName = 'Logica2';
+            switchProfile('Logica2');
+          }}
+        />
+
+        {profileName === 'Logica2' ? (
+          <input
+            type="text"
+            className="input-group-text text-primary"
+            placeholder="Patient FHIR ID"
+            size="14"
+            style={{ borderColor: '#5bc0de', fontWeight: 'bold' }}
+            onBlur={(e) => {
+              profileName = 'Logica2';
+              switchProfile('Logica2', e.target.value);
+            }}
+          ></input>
+        ) : (
+          <label className="btn btn-outline-info" htmlFor="profileLogica2">
+            Enter ID
+          </label>
+        )}
       </div>
     </div>
   );
