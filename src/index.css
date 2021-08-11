@@ -23,7 +23,7 @@ code {
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: aliceblue;
+  background-color: white;
   height: 100%;
 }
 
@@ -219,7 +219,7 @@ footer {
   border-color: lightgray;
   border-style: solid;
   border-width: 2px;
-  background-color: ghostwhite;
+  background-color: white;
 }
 
 .referrals {
@@ -294,7 +294,7 @@ footer {
 }
 
 .list-hover.selected {
-  background-color: white;
+  background-color: aliceblue;
   border-width: thin;
 }
 

@@ -1,20 +1,6 @@
 const StageSelector = ({ stageName, switchStage }) => {
   return (
     <div className="mx-1">
-      {/*      <div className="form-group">
-        <label className="row-form-label">STAGE</label>
-        <div>
-          <select
-            className="row-form-select"
-            value={stageName}
-            onChange={(e) => switchStage(e)}
-          >
-            <option value="staging">Staging</option>
-            <option value="training">Training</option>
-            <option value="poc">POC</option>
-          </select>
-        </div>
-      </div> */}
       <lable className="form-label px-2">UU SERVER :</lable>
       <div
         className="btn-group mb-2"
