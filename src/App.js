@@ -622,7 +622,7 @@ function App() {
       }),
     });
     const data = await res.json();
-    const item = data.response.item;
+    const item = data?.response?.item;
     console.log('check communication ', fhirId, ' result ', item === undefined);
     return item === undefined;
   };

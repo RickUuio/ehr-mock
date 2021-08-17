@@ -25,7 +25,7 @@ export const Profile_Epic = {
   defaultBaseUrl:
     'https://apporchard.epic.com/interconnect-aocurprd-oauth/api/FHIR/R4',
   defaultNotificationUrl:
-    'https://fhir-crn.uniteustraining.com/rick/FhirNotificationWebService',
+    'https://fhir-crn.uniteustraining.com/poc/FhirNotificationWebService',
   accessToken:
     'e2a4575581b3f57203e182b0b1f3dcea479baecd31bef125cc57f6dd4b8905ac',
 };
@@ -57,7 +57,7 @@ export const Profile_Epic_2 = {
   defaultBaseUrl:
     'https://apporchard.epic.com/interconnect-aocurprd-oauth/api/FHIR/R4',
   defaultNotificationUrl:
-    'https://fhir-crn.uniteustraining.com/rick/FhirNotificationWebService',
+    'https://fhir-crn.uniteustraining.com/poc/FhirNotificationWebService',
   accessToken:
     'e2a4575581b3f57203e182b0b1f3dcea479baecd31bef125cc57f6dd4b8905ac',
 };
@@ -85,7 +85,7 @@ export const Profile_Logica = {
   defaultDocumentReference: '14740',
   defaultBaseUrl: 'https://api.logicahealth.org/uufhircrn/open',
   defaultNotificationUrl:
-    'https://fhir-crn.uniteustraining.com/rick/FhirNotificationWebService',
+    'https://fhir-crn.uniteustraining.com/poc/FhirNotificationWebService',
   accessToken: '',
 };
 
@@ -125,10 +125,10 @@ export const Stage_Training = {
 
 export const Stage_POC = {
   name: 'poc',
-  baseUrl: 'https://fhir-crn.uniteustraining.com/rick',
+  baseUrl: 'https://fhir-crn.uniteustraining.com/poc',
   appUrl: 'https://devqa.uniteusdev.com/core-phase-3',
   appUrl2: 'https://devqa.uniteusdev.com/core-phase-3',
-  token: 'sfsdfddfdsfsdfs32342343',
+  token: 'USZEkhXmZO8vDzg2aArT16bsPregoov66fetdapY', //'sfsdfddfdsfsdfs32342343',
   provider: {
     firstName: 'Case',
     lastName: 'Manager',
