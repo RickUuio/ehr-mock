@@ -123,12 +123,41 @@ export const Stage_Training = {
   },
 };
 
+export const Stage_Dev_QA = {
+  name: 'devqa',
+  baseUrl: 'https://fhir-crn.uniteustraining.com/devqa',
+  appUrl: 'https://devqa.uniteusdev.com/core-phase-3',
+  token: 'A6LwsORK0P65BUApUEbU9tZyRPm34VXrhKaumI10',
+  provider: {
+    firstName: 'Case',
+    lastName: 'Manager',
+    fhirId: 'eaToFIkaJ32mO4K002q3BLw3',
+    uuid: '94e5f7ee-1425-42bc-8833-3474b687b125',
+    groupId: 'bf4aa373-81eb-4da5-9980-2d3e51c57b3c',
+    networkId: '145ca925-ba86-490d-b404-35f4fe5ada66',
+  },
+};
+
 export const Stage_POC = {
   name: 'poc',
   baseUrl: 'https://fhir-crn.uniteustraining.com/poc',
-  appUrl: 'https://devqa.uniteusdev.com/core-phase-3',
-  appUrl2: 'https://devqa.uniteusdev.com/core-phase-3',
+  appUrl: 'https://app.uniteustraining.com',
   token: 'USZEkhXmZO8vDzg2aArT16bsPregoov66fetdapY', //'sfsdfddfdsfsdfs32342343',
+  provider: {
+    firstName: 'Case',
+    lastName: 'Manager',
+    fhirId: 'eaToFIkaJ32mO4K002q3BLw3',
+    uuid: '94e5f7ee-1425-42bc-8833-3474b687b125',
+    groupId: 'bf4aa373-81eb-4da5-9980-2d3e51c57b3c',
+    networkId: '145ca925-ba86-490d-b404-35f4fe5ada66',
+  },
+};
+
+export const Stage_Rick = {
+  name: 'rick',
+  baseUrl: 'https://fhir-crn.uniteustraining.com/rick',
+  appUrl: 'https://app.uniteustraining.com',
+  token: 'sfsdfddfdsfsdfs32342343',
   provider: {
     firstName: 'Case',
     lastName: 'Manager',

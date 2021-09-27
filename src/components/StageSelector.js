@@ -42,6 +42,21 @@ const StageSelector = ({ stageName, switchStage }) => {
           type="radio"
           className="btn-check"
           name="btnStage"
+          id="stageDevqa"
+          autoComplete="off"
+          defaultChecked={stageName === 'devqa'}
+          onClick={() => {
+            stageName = 'devqa';
+            switchStage('devqa');
+          }}
+        />
+        <label className="btn btn-outline-danger" htmlFor="stageDevqa">
+          Dev QA
+        </label>
+        <input
+          type="radio"
+          className="btn-check"
+          name="btnStage"
           id="stagePOC"
           autoComplete="off"
           defaultChecked={stageName === 'poc'}
@@ -53,6 +68,22 @@ const StageSelector = ({ stageName, switchStage }) => {
         <label className="btn btn-outline-info" htmlFor="stagePOC">
           POC
         </label>
+
+        {/*         <input
+          type="radio"
+          className="btn-check"
+          name="btnStage"
+          id="stageRick"
+          autoComplete="off"
+          defaultChecked={stageName === 'rick'}
+          onClick={() => {
+            stageName = 'rick';
+            switchStage('rick');
+          }}
+        />
+        <label className="btn btn-outline-info" htmlFor="stageRick">
+          Rick
+        </label> */}
       </div>
     </div>
   );
